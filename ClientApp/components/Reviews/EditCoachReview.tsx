@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
-import {  HttpResult, CoachReview, CoachBasic } from '../../data/serverModels';
-import { CreatePostObject, EnterPressed} from '../../Helpers/Functions';
+import { HttpResult, CoachReview, CoachBasic } from '../../data/serverModels';
+import { CreatePostObject, EnterPressed } from '../../Helpers/Functions';
 import '../../css/coachfinderAddCoach.css';
 import { CenterTitleWithLine, Icon, IconType } from '../Widgets/Widgets';
 import { Loader } from '../Widgets/Loaders';
@@ -30,7 +30,6 @@ interface ModuleProps {
 }
 
 export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
-
     constructor(props) {
         super(props);
 
@@ -43,7 +42,6 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
 
         if (reviewFromLinkState && coachFromLinkState) {
             reviewFromLinkState.coachId = coachFromLinkState.id;
-
         }
 
         this.state = {
@@ -74,10 +72,7 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
         }
     }
 
-   
-
     private GetReview(coachid: number) {
-
         this.setState({
             ValidationString: "Loading...",
             Saving: true
@@ -86,7 +81,6 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
         fetch('/api/Reviews/GetMyCoachReview?coachID=' + coachid)
             .then(response => response.json() as Promise<HttpResult<CoachReview>>)
             .then(data => {
-
                 if (data.ok) {
                     this.setState({
                         Review: data.data,
@@ -104,15 +98,10 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
                         Saving: false
                     })
                 }
-               
             });
     }
-    
-
-    
 
     private Validate(r: CoachReview): { valid: boolean, message: string } {
-
         let valid = true;
         let message = "";
 
@@ -134,15 +123,13 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
         if (r.badPoints.length == 0) {
             message += "Please add at least one Bad Bit\n";
         }
-        
 
         valid = message.length == 0;
 
-        return { valid, message};
+        return { valid, message };
     }
 
     private Save() {
-
         //Catch any good/bad points that user left in entry area expecting it to automatically save
         this.AddGoodPoint();
         this.AddBadPoint();
@@ -150,28 +137,19 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
         r.goodPoints = this.state.GoodPoints.join(';;;');
         r.badPoints = this.state.BadPoints.join(';;;');
 
-
         let validation = this.Validate(this.state.Review);
 
         if (validation.valid) {
-
-            
-
-           
             this.setState({
                 Review: r,
                 ValidationString: "Saving...",
                 Saving: true
             })
 
-
-
             fetch('api/Reviews/AddEditCoachReview', CreatePostObject(this.state.Review))
                 .then(response => response.json() as Promise<HttpResult<CoachReview>>)
                 .then(data => {
-
                     if (data.ok) {
-
                         this.props.Props.history.push(`${Pages.viewCoach}/${data.data.coachId}/${this.state.SelectedCoach.name}`)
 
                         ////set for viewing afterwards
@@ -180,7 +158,6 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
                         //    ValidationString: "Saved!",
                         //    Saving: false,
                         //});
-                        
                     }
                     else {
                         this.setState({
@@ -199,16 +176,11 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
                 Saving: false
             })
         }
-       
     }
 
-
-
     private CoachSelected(c: CoachBasic) {
-
         let r = new CoachReview;
         r.coachId = c.id;
-
 
         this.setState({
             Review: r,
@@ -220,13 +192,9 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
         })
 
         this.GetReview(c.id);
-      
     }
 
-    
-
     public render() {
-
         let s = this.state.SelectedCoach;
         let hideFormAreas = this.state.SelectedCoach.id == 0 && this.state.Review.id == 0;
 
@@ -249,13 +217,9 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
 
                 <h3 className="text-center" style={{ color: 'var(--black)' }}>Coach Review</h3>
 
-              
-
                 <form key={this.state.KeyCount} hidden={this.state.Finished || this.state.Saving}>
 
                     <div hidden={!hideFormAreas}>
-
-                      
 
                         <CenterTitleWithLine Title="Coach" LineColour="cornflowerblue" />
 
@@ -301,26 +265,25 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
                                     </div>
 
                                     {
-                                    this.state.SelectedCoach.id > 0
-                                        ? <table className="full-width">
-                                            <tbody>
-                                                <tr>
-                                                    <td width="70px">
+                                        this.state.SelectedCoach.id > 0
+                                            ? <table className="full-width">
+                                                <tbody>
+                                                    <tr>
+                                                        <td width="70px">
                                                             <img style={{ height: '50px', width: '50px', margin: 'auto', display: 'block' }}
                                                                 src={s.pic && s.pic.length > 0
                                                                     ? s.pic
-                                                                : '/dist/images/coachfinder/default-coach.jpg'} />
-                                                    </td>
-                                                    <td>
-                                                        <div style={{ color: 'var(--black)' }}>{s.name}</div>
-                                                        <div style={{ color: '#666', fontSize: '13px' }}>{s.cityName}, {s.countryName}</div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        : null
-
-                                }</div>
+                                                                    : '/dist/images/coachfinder/default-coach.jpg'} />
+                                                        </td>
+                                                        <td>
+                                                            <div style={{ color: 'var(--black)' }}>{s.name}</div>
+                                                            <div style={{ color: '#666', fontSize: '13px' }}>{s.cityName}, {s.countryName}</div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            : null
+                                    }</div>
                             </div>
 
                         </div>
@@ -347,9 +310,7 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
 
                         </div>
 
-
                         <CenterTitleWithLine Title="Review" LineColour="cornflowerblue" />
-                       
 
                         <textarea className="form-control" style={{ minHeight: '150px' }} value={this.state.Review.mainReview}
                             onChange={(e) => {
@@ -360,15 +321,12 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
                         Characters: <span style={{ color: this.state.Review.mainReview.length > 1000 ? 'red' : 'initial' }}>
                             {this.state.Review.mainReview.length}
                         </span> / 1000
-    
+
                 </div>
-
-
 
                     <div hidden={hideFormAreas}>
 
                         <CenterTitleWithLine Title="Good Bits " LineColour="cornflowerblue" />
-
 
                         <div className="row">
                             <div className="col-md-12">
@@ -406,21 +364,20 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
                                                     }}
                                                     placeholder="Start your list here"
                                                     onKeyUp={(e) => EnterPressed(e, this.AddGoodPoint)} />
-                                        </td>
+                                            </td>
                                             <td className="text-right">
                                                 <button type="button" className="btn btn-secondary btn-sm" onClick={this.AddGoodPoint}>Add</button>
-                                        </td>
-                                                </tr>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
-                    </div>
+                        </div>
 
                         <CenterTitleWithLine Title="Bad Bits" LineColour="cornflowerblue" />
 
-
                         <div className="row">
-                          
+
                             <div className="col-md-12">
                                 <table className="full-width">
                                     <tbody>
@@ -466,7 +423,7 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
                             </div>
                         </div>
 
-                        <br/>
+                        <br />
 
                         <CenterTitleWithLine Title="" LineColour="cornflowerblue" />
 
@@ -482,18 +439,16 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
                     <Loader CentreAlign ContainerMargin='20px 0 20px 0' Height='80px' />
                 </div>
 
-
                 <div className="text-center">
                     <br />
                     <span className="hasLineBreaks" style={{ color: 'red' }}>{this.state.ValidationString}</span>
                 </div>
 
-               
             </div>
 
         </div>
     }
-    private AddGoodPoint(){
+    private AddGoodPoint() {
         if (this.state.GoodPointInput.length > 0) {
             this.state.GoodPoints.push(this.state.GoodPointInput);
             this.setState({
@@ -540,7 +495,6 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
 
     private Delete() {
         if (confirm('Delete Review: Are you sure?')) {
-
             fetch('api/Reviews/DeleteCoachReview/' + this.state.Review.id,
                 {
                     method: 'POST',
@@ -552,7 +506,6 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
                 })
                 .then(response => response.json() as Promise<HttpResult<any>>)
                 .then(res => {
-
                     if (res.ok) {
                         this.props.Props.history.push(`${Pages.viewCoach}/${this.state.SelectedCoach.id}/${this.state.SelectedCoach.name}`);
                     }
@@ -561,8 +514,6 @@ export class EditCoachReview extends React.Component<ModuleProps, ModuleState> {
                     }
                 })
                 .catch((e: Error) => alert(e.message));
-
         }
     }
 }
-

@@ -43,7 +43,7 @@ enum ImageLabel {
     Logo,
     Image1,
     Image2,
-    Image3,   
+    Image3,
     None,
 }
 
@@ -55,7 +55,6 @@ const newImagesArray = [
 ]
 
 export class MyGym extends React.Component<ModuleProps, ModuleState> {
-
     constructor(props) {
         super(props);
 
@@ -66,7 +65,7 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
         //if no luck, get from props instead
         if (gym == undefined)
             gym = this.props.Gym;
-        else {    
+        else {
             selectedCity.cityName = gym.locationCityName;
             selectedCity.countryName = gym.locationCountryName;
         }
@@ -85,7 +84,7 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
             OnPreview: false
         };
 
-       // this.Add = this.Add.bind(this);
+        // this.Add = this.Add.bind(this);
         this.Save = this.Save.bind(this);
         this.CitySelected = this.CitySelected.bind(this);
         this.onFileSelect = this.onFileSelect.bind(this);
@@ -97,18 +96,15 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
     }
 
     componentDidMount() {
-
         if (!AdminLoggedIn() && !UserLoggedIn()) {
             this.props.Props.history.push(Pages.dashboard)
         }
         else if (AdminLoggedIn()) {
-
         }
         else if (this.state.Gym.id == 0)//not on edit gym, so check elsewhere
         {
             this.GetMyGym();
         }
-
     }
 
     private createImageDetails(gym: GymFinderGym): ImageDetails[] {
@@ -125,11 +121,9 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
     }
 
     private GetMyGym() {
-
         fetch('/api/GymFinder/GetMyGym')
             .then(response => response.json() as Promise<HttpResult<GymFinderGym>>)
             .then(data => {
-
                 if (data.ok) {
                     this.setState({
                         Gym: data.data,
@@ -140,14 +134,10 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
                 else {
                     console.log("GetMyGym: " + data.message);
                 }
-               
-
             });
     }
-    
 
     private onFileSelect(event, label: ImageLabel) {
-
         let component = this;
 
         let images = component.state.Images;
@@ -165,7 +155,6 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
         let files = event.target.files as Array<File>;
 
         if (FileReader && files && files.length) {
-
             if (files[0].type.indexOf("image") == -1) {
                 component.setState({
                     ValidationString: "Invalid file type!"
@@ -192,13 +181,10 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
                 }
                 fr.readAsDataURL(files[0]);
             }
-
         }
     }
 
-    
     private SaveImages(images: ImageDetails[], stage: ImgUploadStage, gymID: number) {
-
         this.setState({
             Saving: true,
             ValidationString: "Uploading Images..."
@@ -212,7 +198,6 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
         let g = this.state.Gym;
 
         for (let i = 0; i < images.length; i++) {
-
             let fileName = "";
 
             if (stage == ImgUploadStage.Images) {
@@ -247,8 +232,6 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
             formData.append(fileName, images[i].ImageFile);
         }
 
-        
-
         let uri = stage == ImgUploadStage.Logo
             ? `api/GymFinder/AddUpdateGymLogo?gymID=${gymID.toString()}&${cropDataString}`
             : `api/GymFinder/AddUpdateGymImages?gymID=${gymID.toString()}`;
@@ -261,11 +244,8 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
             .then(response => response.json() as Promise<HttpResult<GymFinderGym>>)
             .then(data => {
                 try {
-                   
                     if (data.ok) {
-
                         switch (stage) {
-
                             case ImgUploadStage.Logo:
 
                                 this.DeselectImage(ImageLabel.Logo);
@@ -291,9 +271,7 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
                                 });
 
                                 break;
-
                         }
-                    
                     }
                     else {
                         alert(data.message);
@@ -303,33 +281,28 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
                     console.log(error);
                 }
             });
-
     }
 
     private onSelectedImage(crop) {
-
         this.setState({
             Crop: crop
         })
     }
 
     private onCropComplete(crop, pixelCrop) {
-
         this.setState({
             FinalCrop: pixelCrop
         })
-
     }
 
     private Validate(gym: GymFinderGym): { valid: boolean, message: string } {
-
         let valid = true;
         let message = "";
 
         if (gym.name.length == 0) {
             message += "Gym Name\n";
         }
-        if (gym.streetAddress.length  == 0) {
+        if (gym.streetAddress.length == 0) {
             message += "Address\n";
         }
         if (gym.description.length > 450) {
@@ -338,12 +311,10 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
 
         valid = message.length == 0;
 
-        return { valid, message};
+        return { valid, message };
     }
 
     private Save() {
-
-
         if (this.state.Gym.id == 0)
             this.state.Gym.ownerID = GetUserID();
         //New gym, so give it an owner ID (returns 0 if logged in as Admin)
@@ -351,7 +322,6 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
         let validation = this.Validate(this.state.Gym);
 
         if (validation.valid) {
-
             this.setState({
                 ValidationString: "Saving...",
                 Saving: true
@@ -360,20 +330,14 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
             fetch('api/GymFinder/AddUpdateGymFinderGym', CreatePostObject(this.state.Gym))
                 .then(response => response.json() as Promise<HttpResult<GymFinderGym>>)
                 .then(data => {
-
                     if (data.ok) {
-
                         //set new gym for viewing afterwards
                         this.setState({
                             Gym: data.data
                         });
 
-
                         //logo (then other images upload after logo upload)
                         this.SaveImages(this.state.Images.filter(x => x.Label == ImageLabel.Logo), ImgUploadStage.Logo, data.data.id);
-
-
-                        
                     }
                     else {
                         this.setState({
@@ -392,10 +356,7 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
                 Saving: false
             })
         }
-       
     }
-
-
 
     private CitySelected(city: CityGeoBasic) {
         this.state.Gym.locationCityId = city.cityGeoId;
@@ -403,11 +364,9 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
             SelectedCity: city,
             Gym: this.state.Gym
         })
-      
     }
 
     private GetSRC(label: ImageLabel): string {
-
         try {
             let g = this.state.Gym;
             let img = this.state.Images.filter(x => x.Label == label)[0];
@@ -425,7 +384,6 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
                         return g.imageLocation3 ? g.imageLocation3 : "";
                     default:
                         return "";
-
                 }
             }
         }
@@ -433,11 +391,9 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
             console.log(e);
             return "";
         }
-       
     }
 
     public render() {
-
         let hideFormAreas = this.state.SelectedCity.id == 0 && this.state.Gym.id == 0;
 
         let g = this.state.Gym;
@@ -473,7 +429,6 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
                     removed or transferred to the rightful owner without notice.
                     </div>
 
-
                 <div hidden={!this.state.Finished || this.state.Saving}>
 
                     <br />
@@ -490,7 +445,6 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
                     <div className="text-center" hidden={this.state.SelectedCity.id == 0 && this.state.Gym.id == 0}>
                         {editButtons}
                     </div>
-                   
 
                     <CenterTitleWithLine Title="Location" LineColour="cornflowerblue" />
 
@@ -498,7 +452,7 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
                         <div className="col-md-6">
                             <CitiesAutosuggest key={this.state.KeyCount} CitySelected={this.CitySelected} />
                         </div>
-                        <div className="col-md-6" 
+                        <div className="col-md-6"
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -516,22 +470,17 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
                                 this.state.SelectedCity.id > 0
                                     ? `${this.state.SelectedCity.cityName}, ${this.state.SelectedCity.countryName}`
                                     : `${this.state.Gym.locationCityName}, ${this.state.Gym.locationCountryName}`
-
                             }</div>
                         </div>
                     </div>
 
-                    
-
-
                     <div hidden={hideFormAreas}>
-
 
                         <CenterTitleWithLine Title="Details" LineColour="cornflowerblue" />
 
                         <div className="row">
                             <div className="col-md-12">
-                                
+
                                 <input className="form-control searchInput" placeholder="Gym Name" value={this.state.Gym.name} onChange={(e) => { this.state.Gym.name = e.target.value; this.setState({ Gym: this.state.Gym }) }} />
                             </div>
 
@@ -547,7 +496,6 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
 
                             </div>
                         </div>
-
 
                         <CenterTitleWithLine LineColour={Colours.Blue} Title="Social" />
 
@@ -651,9 +599,6 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
                                 </div>
                             </div>
                         </div>
-                       
-
-
 
                         <div className="">
                             <CenterTitleWithLine Title="Facilities" LineColour="cornflowerblue" />
@@ -739,8 +684,6 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
 
                             </div>
 
-
-
                         </div>
 
                         <CenterTitleWithLine Title="Description" LineColour="cornflowerblue" />
@@ -754,17 +697,14 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
                         Characters: <span style={{ color: this.state.Gym.description.length > 450 ? 'red' : 'initial' }}>
                             {this.state.Gym.description.length}
                         </span> / 450
-    
+
                 </div>
-
-
 
                     <div hidden={hideFormAreas}>
 
                         <CenterTitleWithLine Title="Logo" LineColour="cornflowerblue" />
 
                         <div style={{ minHeight: '250px', marginBottom: '20px' }}>
-
 
                             <div className="row justify-content-center" style={{
                                 minHeight: '150px'
@@ -806,13 +746,9 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
                                             onImageLoaded={(image, pixelCrop) => this.onCropComplete(null, pixelCrop)}
                                         />
 
-
-
                                     </div>
-                                   
-                                </div>
-                               
 
+                                </div>
 
                             </div>
 
@@ -903,11 +839,10 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
                         <CenterTitleWithLine Title="" LineColour="cornflowerblue" />
 
                         {editButtons}
-                        
+
                     </div>
 
                 </form>
-
 
                 <div hidden={!this.state.OnPreview} className="text-center">
                     {editButtons}
@@ -920,15 +855,12 @@ export class MyGym extends React.Component<ModuleProps, ModuleState> {
                     <Loader CentreAlign ContainerMargin='20px 0 20px 0' Height='80px' />
                 </div>
 
-
-               
             </div>
 
         </div>
     }
 
     private DeselectImage(Label: ImageLabel): void {
-
         let images = this.state.Images;
         let removingImg = images.filter(x => x.Label == Label)[0];
         let index = images.indexOf(removingImg);

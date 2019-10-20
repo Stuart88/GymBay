@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {   HttpResult, NewsFeedPostSingle, UpvoteItems, NewsFeedPost } from '../../data/serverModels';
+import { HttpResult, NewsFeedPostSingle, UpvoteItems, NewsFeedPost } from '../../data/serverModels';
 import * as moment from 'moment';
 import '../../css/newsFeed.css';
 import ReactQuill from 'react-quill';
@@ -9,7 +9,6 @@ import { Pages } from '../../Helpers/Globals';
 import { AdminLoggedIn, OnMobile } from '../../Helpers/Functions';
 import $ from 'jquery';
 import { UpvoteComponent } from '../Widgets/UpvoteComponent';
-
 
 interface ModuleProps {
     Post: NewsFeedPostSingle
@@ -24,7 +23,6 @@ interface ModuleState {
 }
 
 export class NewsfeedItem extends React.Component<ModuleProps, ModuleState> {
-
     constructor(props) {
         super(props);
 
@@ -36,7 +34,6 @@ export class NewsfeedItem extends React.Component<ModuleProps, ModuleState> {
     }
 
     public render() {
-
         let p = this.state.Post;
 
         if ((!p.imageUrl && !p.videoUrl) || (p.imageUrl.length == 0 && p.videoUrl.length == 0))
@@ -46,13 +43,11 @@ export class NewsfeedItem extends React.Component<ModuleProps, ModuleState> {
     }
 
     private renderTextOnly() {
-
         let p = this.state.Post;
 
         let postDate = moment(p.postDate).format('Do MMM YYYY[, ]HH:mm');
 
         return <div key={p.id} id={`newsfeed-Item-${p.id}`} style={{ maxWidth: '600px', margin: 'auto', paddingTop: '10px' }} >
-
 
             <div className="feedItemContainer">
 
@@ -86,9 +81,7 @@ export class NewsfeedItem extends React.Component<ModuleProps, ModuleState> {
                                 readOnly />
                         </div>
 
-
                         <div style={{ display: 'flow-root' }}>
-
 
                             <UpvoteComponent ItemID={p.id} UpvoteItem={UpvoteItems.NewsFeedPost} Upvotes={p.upvotes} BelongsToUser={false}
                                 onVoteComplete={(voteString) => { this.state.Post.upvotes = voteString; this.setState({ Post: this.state.Post }) }}
@@ -98,34 +91,25 @@ export class NewsfeedItem extends React.Component<ModuleProps, ModuleState> {
                                     Read More
                             </NavLink>
 
-
                                 <NavLink to={`${Pages.newsItem}/${p.id}/${p.title}`} className="btn btn-primary btn-sm" >
                                     {this.props.Post.commentsCount} Comments
                             </NavLink>
                             </div>
                         </div>
 
-                        
-
-
                     </div>
-                   
+
                 </div>
 
             </div>
-
-
-
 
         </div>;
     }
 
     private renderWithPicVideo() {
-
         let p = this.state.Post;
 
         let postDate = moment(p.postDate).format('Do MMM YYYY[, ]HH:mm');
-
 
         let adminBtns = <div hidden={!AdminLoggedIn() || this.props.InEditor}>
             <Link className="btn btn-primary btn-sm" to={{
@@ -142,10 +126,7 @@ export class NewsfeedItem extends React.Component<ModuleProps, ModuleState> {
                 }}>Delete</button>
         </div>
 
-        
-
         let showvid = Boolean(p.videoUrl && p.videoUrl.length > 0);
-
 
         let titleSection = <div className={showvid ? 'text-center' : ''}>
             <h2>{p.title}</h2>
@@ -156,15 +137,15 @@ export class NewsfeedItem extends React.Component<ModuleProps, ModuleState> {
 
         let picSection = <div hidden={showvid} style={{ display: 'flex' }} >
             {p.imageUrl && p.imageUrl.length > 0
-                ? <div  className="feedItemImage" style={{ backgroundImage: `url('${p.imageUrl}')` }}></div>
+                ? <div className="feedItemImage" style={{ backgroundImage: `url('${p.imageUrl}')` }}></div>
                 : null}
 
         </div>
 
         let vidSection = <div hidden={!showvid} className="videoWrapper">
             {p.videoUrl && p.videoUrl.length > 0
-                ? <iframe  src={p.videoUrl}></iframe>
-        : null}
+                ? <iframe src={p.videoUrl}></iframe>
+                : null}
         </div>
 
         let textSection = <div className="feedItemContent">
@@ -178,9 +159,8 @@ export class NewsfeedItem extends React.Component<ModuleProps, ModuleState> {
         let commentsBtn = <div hidden={!this.props.OnNewsFeed} className={OnMobile() ? 'text-center' : "text-right"} style={{ float: 'right', marginRight: OnMobile() ? '30%' : '20px' }}>
 
             <NavLink to={`${Pages.newsItem}/${p.id}/${p.title}`} className="btn btn-primary btn-sm" style={{ marginRight: '5px' }} >
-            Read More
+                Read More
                             </NavLink>
-
 
             <NavLink to={`${Pages.newsItem}/${p.id}/${p.title}`} className="btn btn-primary btn-sm" >
                 {this.props.Post.commentsCount} Comments
@@ -188,7 +168,6 @@ export class NewsfeedItem extends React.Component<ModuleProps, ModuleState> {
         </div>
 
         return <div key={p.id} id={`newsfeed-Item-${p.id}`} className="max-width" style={{ paddingTop: '10px' }} >
-
 
             <div className="feedItemContainer">
 
@@ -199,9 +178,7 @@ export class NewsfeedItem extends React.Component<ModuleProps, ModuleState> {
                         ? <div className="row home-row">
                             <div hidden={showvid} className='col-md-6' style={{ padding: '5px' }}>
 
-
                                 {picSection}
-                               
 
                             </div>
 
@@ -227,12 +204,9 @@ export class NewsfeedItem extends React.Component<ModuleProps, ModuleState> {
                         </div>
                 }
 
-
-
                 {vidSection}
 
                 {textSection}
-
 
                 <div style={{ display: 'flow-root' }}>
                     <UpvoteComponent ItemID={p.id} UpvoteItem={UpvoteItems.NewsFeedPost} Upvotes={p.upvotes} BelongsToUser={false}
@@ -243,16 +217,11 @@ export class NewsfeedItem extends React.Component<ModuleProps, ModuleState> {
 
             </div>
 
-
-
-
         </div>;
     }
 
     private Delete() {
         if (confirm("Delete: Are you sure?")) {
-
-
             fetch('api/News/DeleteNewsfeedPost/' + this.props.Post.newsFeedPost.id,
                 {
                     method: 'POST',
@@ -264,7 +233,6 @@ export class NewsfeedItem extends React.Component<ModuleProps, ModuleState> {
                 })
                 .then(response => response.json() as Promise<HttpResult<NewsfeedItem>>)
                 .then(res => {
-
                     if (res.ok) {
                         $(`#newsfeed-Item-${this.props.Post.newsFeedPost.id}`).html('');
                     }
@@ -275,5 +243,4 @@ export class NewsfeedItem extends React.Component<ModuleProps, ModuleState> {
                 .catch((e: Error) => alert(e.message));
         }
     }
-  
 }

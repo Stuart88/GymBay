@@ -4,10 +4,11 @@
     margin: auto;
     display: flex;
 }
+
     .searchBarDesktopRow > div {
         margin: auto;
         align-self: center;
-        align-items:center;
+        align-items: center;
         display: flex;
     }
 
@@ -67,6 +68,7 @@
     color: white;
     font-weight: bold;
 }
+
 .homeToggleLabel {
     margin: 3px 5px 5px 5px;
     display: inline-flex;
@@ -83,6 +85,7 @@
     border-radius: 5px;
     font-weight: bold;
 }
+
     .loginBtn:hover {
         background: white;
         color: var(--blue);
@@ -113,8 +116,9 @@
     color: var(--blue);
     background: white;
     border-radius: 16px;
-    text-decoration:none;
+    text-decoration: none;
 }
+
 .searchBarLink:hover {
     color: var(--blue);
     background: white;
@@ -126,9 +130,10 @@
 .socialBtnsContainer img {
     border-radius: 25px;
 }
-.socialBtnsContainer img:hover{
-    border: 1px solid white;
-}
+
+    .socialBtnsContainer img:hover {
+        border: 1px solid white;
+    }
 
 @media (max-width: 767px) {
     .homeSearchBar {
@@ -136,6 +141,4 @@
         position: fixed;
         top: 50px;
     }
-    
-
 }

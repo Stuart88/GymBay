@@ -13,10 +13,7 @@ interface MenuState {
     siteMenuOpen: boolean;
 }
 
-
-
 export class NavMenu extends React.Component<{}, MenuState> {
-
     constructor(props) {
         super(props);
 
@@ -28,7 +25,7 @@ export class NavMenu extends React.Component<{}, MenuState> {
     }
 
     private closeMenu() {
-        this.setState({ siteMenuOpen:false})
+        this.setState({ siteMenuOpen: false })
     }
 
     private renderMenuOptions() {
@@ -39,46 +36,46 @@ export class NavMenu extends React.Component<{}, MenuState> {
             <ul className='nav navbar-nav menuOptions'>
                 <li>
                     <NavLink className="navMenuLink" to={Pages.home} exact activeClassName='navMenuActive' onClick={this.closeMenu}>
-                         Home
+                        Home
                             </NavLink>
                 </li>
                 {
                     UserLoggedIn()
                         ? <li>
                             <NavLink className="navMenuLink" to={Pages.profile} exact activeClassName='navMenuActive' onClick={this.closeMenu}>
-                                 Profile
+                                Profile
                             </NavLink>
                         </li>
                         : <li>
                             <NavLink className="navMenuLink" to={Pages.dashboard} exact activeClassName='navMenuActive' onClick={this.closeMenu}>
-                                 Dashboard
+                                Dashboard
                             </NavLink>
                         </li>
                 }
-               
+
                 <li>
                     <NavLink className="navMenuLink" to={Pages.gymfinder} activeClassName='navMenuActive' onClick={this.closeMenu}>
-                         Gym Finder
+                        Gym Finder
                             </NavLink>
                 </li>
                 <li>
                     <NavLink className="navMenuLink" to={Pages.coachfinder} activeClassName='navMenuActive' onClick={this.closeMenu}>
-                         Coach Finder
+                        Coach Finder
                             </NavLink>
                 </li>
-               
+
                 <li>
                     <NavLink className="navMenuLink" to={Pages.about} activeClassName='navMenuActive' onClick={this.closeMenu}>
-                         About
+                        About
                             </NavLink>
-                </li>               
+                </li>
             </ul>
 
             <div className="contactIconsDiv">
-                <a href="https://www.instagram.com/the_gymbay" className=""  target="_blank">
+                <a href="https://www.instagram.com/the_gymbay" className="" target="_blank">
                     <Icon Hidden={false} Name="instagram" Class="profileSocialIcon" Type={IconType.SocialWhite} />
                 </a>
-                <a href="mailto:thegymbay@gmail.com" className=""  target="_blank">
+                <a href="mailto:thegymbay@gmail.com" className="" target="_blank">
                     <Icon Hidden={false} Name="email" Class="profileSocialIcon" Type={IconType.SocialWhite} />
                 </a>
                 <a href="https://www.facebook.com/thegymbay" className="" target="_blank">
@@ -91,12 +88,7 @@ export class NavMenu extends React.Component<{}, MenuState> {
         </div>
     }
 
-
-
     public render() {
-
-
-
         return OnMobile()
             ? < Menu
                 id="publicMenu"
@@ -112,12 +104,8 @@ export class NavMenu extends React.Component<{}, MenuState> {
 
             </Menu>
             : null
-
-       
     }
 }
-
-
 
 interface UserNavMenuState {
     profileMenuOpen: boolean;
@@ -127,9 +115,7 @@ interface UserNavMenuProps {
     profileMenuOpen: boolean
 }
 
-
 export class UserNavMenu extends React.Component<UserNavMenuProps, UserNavMenuState> {
-
     constructor(props) {
         super(props);
 
@@ -141,7 +127,6 @@ export class UserNavMenu extends React.Component<UserNavMenuProps, UserNavMenuSt
     }
 
     shouldComponentUpdate() {
-
         this.setState({
             profileMenuOpen: this.props.profileMenuOpen
         })
@@ -165,7 +150,6 @@ export class UserNavMenu extends React.Component<UserNavMenuProps, UserNavMenuSt
                         My Profile
                             </NavLink>
                 </li>
-                
 
                 <li>
                     <NavLink className="navMenuLink" to={Pages.mygym} activeClassName='navMenuActive' onClick={this.closeMenu}>
@@ -174,24 +158,18 @@ export class UserNavMenu extends React.Component<UserNavMenuProps, UserNavMenuSt
                 </li>
 
                 <li>
-                    <NavLink className="navMenuLink" to={Pages.home} exact  onClick={() => { LogoutUser(() => { this.closeMenu() }) }}>
+                    <NavLink className="navMenuLink" to={Pages.home} exact onClick={() => { LogoutUser(() => { this.closeMenu() }) }}>
                         Logout
                             </NavLink>
                 </li>
-               
+
             </ul>
 
-         
         </div>
     }
 
-
-
     public render() {
-
-
-
-        return <div id = "profileMenu" >
+        return <div id="profileMenu" >
             <Menu
                 //key={this.state.siteMenuOpen ? 1 : 0}
 
@@ -206,14 +184,9 @@ export class UserNavMenu extends React.Component<UserNavMenuProps, UserNavMenuSt
                 {this.renderMenuOptions()}
 
             </Menu>
-            </div>
-
-
+        </div>
     }
 }
 
-
-
 // 20190912142514
 // https://sendeyo.com/up/4da3ab229c18863b988ddb9936fa57b1.json
-

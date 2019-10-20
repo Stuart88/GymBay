@@ -28,7 +28,6 @@ enum HomeTabEnum {
 }
 
 export class Home extends React.Component<RouteComponentProps<{}>, ModuleState> {
-
     constructor(props) {
         super(props);
 
@@ -49,13 +48,9 @@ export class Home extends React.Component<RouteComponentProps<{}>, ModuleState> 
     }
 
     public render() {
-
-
-
         let posts = this.state.NewsFeed;
 
-
-        return <div style={{ backgroundColor: '#f3f3f3'}}>
+        return <div style={{ backgroundColor: '#f3f3f3' }}>
             <HeaderSearchBarArea Props={this.props} />
 
             <NavLink id="adminnn" hidden={OnMobile()} className="hover-pointer" to={Pages.admin} style={{ opacity: 0, position: 'absolute', bottom: '0', left: '0', color: '#eaeaea', zIndex: 1 }}>
@@ -81,7 +76,7 @@ export class Home extends React.Component<RouteComponentProps<{}>, ModuleState> 
                 <div className={OnMobile() ? '' : "col-3"} style={{ paddingLeft: OnMobile() ? '0px' : '5px' }} hidden={OnMobile() && this.state.Tab != HomeTabEnum.Updates}>
 
                     <div className="welcomeContainer">
-                        <h5 className="text-center">Welcome to<br/>Gym-Bay.com</h5>
+                        <h5 className="text-center">Welcome to<br />Gym-Bay.com</h5>
 
                         <img className="welcomeImg img-fluid" src="/dist/images/Gym-Bay_logo.png" />
 
@@ -92,7 +87,7 @@ export class Home extends React.Component<RouteComponentProps<{}>, ModuleState> 
                             <div className="newUpdateContainer">
                                 <p>
                                     <b>06-Sept-2019</b>
-                            </p>
+                                </p>
 
                                 <p>
                                     Logged-in users can now add comments and/or upvotes to the following:
@@ -104,15 +99,12 @@ export class Home extends React.Component<RouteComponentProps<{}>, ModuleState> 
                                     </ul>
                                 </p>
 
-
-                                
                             </div>
-
 
                             <div className="newUpdateContainer">
                                 <p>
                                     <b>03-Aug-2019</b>
-                            <br />
+                                    <br />
                                     Gym-Bay.com is now live.
                             </p>
 
@@ -146,7 +138,7 @@ export class Home extends React.Component<RouteComponentProps<{}>, ModuleState> 
                 </div>
 
                 <div className={OnMobile() ? "" : "col-6"} hidden={OnMobile() && this.state.Tab != HomeTabEnum.NewsFeed}>
-                    <div style={{ height: `calc(100vh - ${CSSValues.TopBarHeight}`, width:'100%', overflowY: 'auto' }} >
+                    <div style={{ height: `calc(100vh - ${CSSValues.TopBarHeight}`, width: '100%', overflowY: 'auto' }} >
 
                         <InfiniteScroll
                             initialLoad={this.state.InitialLoad}
@@ -159,15 +151,11 @@ export class Home extends React.Component<RouteComponentProps<{}>, ModuleState> 
 
                             {
                                 //backgroundCollection
-
                             }
 
                             <div id="homeMainArea" >
 
-
                                 <div className="max-width">
-
-
 
                                     {
                                         posts.map((p, i) => <NewsfeedItem Props={this.props} Post={p} OnNewsFeed={true} Index={i} InEditor={false} />)
@@ -183,22 +171,15 @@ export class Home extends React.Component<RouteComponentProps<{}>, ModuleState> 
                                         <br />
                                     </div>
 
-                                    <div className="text-center" style={{ margin: 'auto', display:'block' }} hidden={!this.state.LoadingPosts}>
+                                    <div className="text-center" style={{ margin: 'auto', display: 'block' }} hidden={!this.state.LoadingPosts}>
                                         <Loader CentreAlign ContainerMargin="20px 0 20px 0" Height="40px" />
                                     </div>
 
                                 </div>
 
-
                             </div>
 
                         </InfiniteScroll>
-
-
-
-
-
-
 
                     </div>
                 </div>
@@ -212,7 +193,7 @@ export class Home extends React.Component<RouteComponentProps<{}>, ModuleState> 
                 }} hidden={OnMobile() && this.state.Tab != HomeTabEnum.Featured}>
 
                     <div className="featuredContainer">
-                        
+
                         <h5 className="">Top Gyms</h5>
 
                         <FeaturedGyms Props={this.props} />
@@ -221,22 +202,16 @@ export class Home extends React.Component<RouteComponentProps<{}>, ModuleState> 
 
                         <FeaturedCoaches Props={this.props} />
 
-                     
-                       
                     </div>
 
                 </div>
             </div>
-      
+
         </div>;
     }
 
-  
-
     private GetNewsFeedPosts() {
-
         if (!this.state.LoadingPosts) {
-            
             this.setState({
                 LoadingPosts: true,
             });
@@ -244,13 +219,11 @@ export class Home extends React.Component<RouteComponentProps<{}>, ModuleState> 
             fetch('api/News/NewsFeed?page=' + this.state.PageNum)
                 .then(response => response.json() as Promise<HttpResult<{ posts: NewsFeedPostSingle[], total: number }>>)
                 .then(data => {
-
                     if (data.ok) {
                         let postList = new Array<NewsFeedPostSingle>();
 
                         postList = this.state.NewsFeed.concat(data.data.posts);
 
-                        
                         //increments page here, but is reset back to 0 if incrementPage is false in next call
 
                         this.setState({
@@ -275,8 +248,5 @@ export class Home extends React.Component<RouteComponentProps<{}>, ModuleState> 
                     alert(e.message);
                 });
         }
-
     }
-
-    
 }

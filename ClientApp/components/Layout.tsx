@@ -15,17 +15,14 @@ interface LayoutState {
 export const burgerMenuWidth = 300;
 
 export class Layout extends React.Component<LayoutProps, LayoutState> {
-
     constructor(props) {
         super(props);
 
         this.state = {
             mobileMenuOpen: false
-
         }
 
         this.toggleMenu = this.toggleMenu.bind(this);
-
     }
 
     componentWillMount() {
@@ -33,7 +30,6 @@ export class Layout extends React.Component<LayoutProps, LayoutState> {
     }
 
     public render() {
-
         let onMobile = OnMobile();
 
         let outercontainerStyle: React.CSSProperties = {
@@ -45,17 +41,15 @@ export class Layout extends React.Component<LayoutProps, LayoutState> {
             width: '100%'
         }
 
-
         let profileSRC = UserState.Profile.profilePic
             ? UserState.Profile.profilePic
             : `/dist/images/users/default-user.jpg`;
 
         return <div id="outer-container" className="row" style={outercontainerStyle}>
-            
+
             <NavMenu />
 
             <UserNavMenu profileMenuOpen={this.state.mobileMenuOpen} toggleMenu={this.toggleMenu} />
-
 
             <div id="page-wrap" className={'col-12'} style={mainContainerStyle}>
                 {
@@ -78,7 +72,7 @@ export class Layout extends React.Component<LayoutProps, LayoutState> {
                                 position: 'absolute',
                                 top: 6,
                                 right: 10
-                        }}>
+                            }}>
 
                             <div hidden={!UserLoggedIn()} style={{
                                 display: 'flex',
@@ -89,15 +83,11 @@ export class Layout extends React.Component<LayoutProps, LayoutState> {
                                     <img key={UserState.Profile.profilePic} className="avatarIcon" src={profileSRC} />
                                 </a>
 
-
                             </div>
-
-
 
                             <NavLink hidden={UserLoggedIn()} to={Pages.dashboard} >
                                 <button className="loginBtn">Login</button>
                             </NavLink>
-
 
                         </div>
 
@@ -109,7 +99,6 @@ export class Layout extends React.Component<LayoutProps, LayoutState> {
                     height: `calc(100vh - ${CSSValues.TopBarHeight} - ${CSSValues.SearchBarHeight})`,
                     overflowY: 'auto'
                 }}>
-
 
                     {this.props.children}
                 </div>

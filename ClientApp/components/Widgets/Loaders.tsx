@@ -5,23 +5,17 @@ interface InlineLoaderProps {
     Loading: boolean
 }
 
-
 export class InlineLoader extends React.Component<InlineLoaderProps, {}> {
-
     constructor(props) {
         super(props);
-        
     }
 
-
     public render() {
-
         return this.props.Loading
             ? <span>{this.props.Text} <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"> </span>
 
             </span>
             : <span>{this.props.Text}</span>
-        
     }
 }
 
@@ -32,15 +26,11 @@ interface LoaderProps {
 }
 
 export class Loader extends React.Component<LoaderProps, {}> {
-
     constructor(props) {
         super(props);
-
     }
 
-
     public render() {
-
         return <div style={{ margin: this.props.ContainerMargin }}>
             <img style={{
                 margin: this.props.CentreAlign ? 'auto' : '0',
@@ -50,6 +40,5 @@ export class Loader extends React.Component<LoaderProps, {}> {
                 className="img-fluid"
                 src="/dist/general/loading.svg" />
         </div>
-
     }
 }

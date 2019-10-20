@@ -16,7 +16,6 @@ interface ModuleProps {
 }
 
 export class FeaturedGyms extends React.Component<ModuleProps, ModuleState> {
-
     constructor(props) {
         super(props);
 
@@ -28,10 +27,7 @@ export class FeaturedGyms extends React.Component<ModuleProps, ModuleState> {
         fetch('api/GymFinder/GetFeaturedGyms')
             .then(response => response.json() as Promise<HttpResult<FeaturedGym[]>>)
             .then(data => {
-
                 if (data.ok) {
-                  
-
                     this.setState({
                         Gyms: data.data,
                         Loading: false,
@@ -52,9 +48,7 @@ export class FeaturedGyms extends React.Component<ModuleProps, ModuleState> {
             });
     }
 
-
     public render() {
-
         return this.state.Loading
             ? <div className="text-center"><InlineLoader Loading Text="Loading..." /></div>
             : <div className="featuredItemHomeContainer">
@@ -66,7 +60,5 @@ export class FeaturedGyms extends React.Component<ModuleProps, ModuleState> {
 
                 </div>)}
             </div>
-        
     }
 }
-

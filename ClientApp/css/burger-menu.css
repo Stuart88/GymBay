@@ -59,6 +59,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
 .bm-item {
     display: inline-block;
 }
+
     .bm-item:focus {
         outline: none;
     }
@@ -68,13 +69,9 @@ Note: Beware of modifying this element as it can break the animations - you shou
     background: rgba(0, 0, 0, 0.3);
 }
 
-
 /*DESKTOP*/
 
-
-
 @media (min-width: 768px) {
-
     .bm-cross-button {
         height: 0;
         width: 24px;
@@ -84,7 +81,6 @@ Note: Beware of modifying this element as it can break the animations - you shou
     /* Color/shape of close button cross */
     .bm-cross {
         background: none;
-        display:none;
+        display: none;
     }
-
 }

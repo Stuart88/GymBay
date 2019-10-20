@@ -1,5 +1,4 @@
-﻿
-.filtersContainer {
+﻿.filtersContainer {
     max-width: 360px;
     width: 100vw;
     margin: auto;
@@ -14,11 +13,13 @@
     display: inline-flex;
     cursor: pointer;
 }
-.filterOptionContainer input[type=checkbox]{
-    display:none;
-}
-    .filterOptionContainer:hover{
-        cursor:pointer;
+
+    .filterOptionContainer input[type=checkbox] {
+        display: none;
+    }
+
+    .filterOptionContainer:hover {
+        cursor: pointer;
     }
 
     .filterOptionContainer label {
@@ -27,9 +28,9 @@
         cursor: pointer;
     }
 
-    .filterOptionContainer label :hover {
-        cursor:pointer;
-    }
+        .filterOptionContainer label :hover {
+            cursor: pointer;
+        }
 
 .filterOptionContainerChecked {
     background-color: #444;

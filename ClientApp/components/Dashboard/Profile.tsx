@@ -28,12 +28,9 @@ interface ModuleState {
     FinalCrop: Crop;//final value of crop
 }
 
-
 export class UserProfilePage extends React.Component<RouteComponentProps<{}>, ModuleState> {
-
     constructor(props) {
         super(props);
-
 
         this.state = {
             ValidationText: "",
@@ -59,14 +56,12 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
     }
 
     private emptyImage(): ImageDetails {
-
         let newImage: ImageDetails = new ImageDetails();
 
         newImage = { ImageFile: new File([], ""), ImageSRC: "", Label: 0, };
 
         return newImage;
     }
-
 
     componentDidMount() {
         this.GetUser();
@@ -77,7 +72,6 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
             .then(response => response.json() as Promise<HttpResult<UserProfile>>)
             .then(resp => {
                 if (resp.ok) {
-
                     UserState.Profile = resp.data;
 
                     this.setState({
@@ -91,7 +85,6 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
                 }
                 else {
                     if (resp.message == "Not logged in!") {
-
                         LogoutUser(() => this.props.history.push('/dashboard'));
                     }
                     else {
@@ -100,13 +93,11 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
                             Saving: false,
                         })
                     }
-                   
                 }
             })
     }
 
     private Validate(): boolean {
-
         let validationText = '';
 
         let u = this.state.User;
@@ -142,7 +133,6 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
     }
 
     private CancelCrop() {
-
         //let component = this;
         //console.log(this.state.Image.ImageFile.size);
         //this.setState({
@@ -157,17 +147,13 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
             Image: this.emptyImage(),
             KeyCounter: this.state.KeyCounter + 1
         });
-
-
     }
 
     private UpdateProfile() {
-
         if (this.Validate()) {
             this.setState({
                 Saving: true,
                 ValidationText: ''
-
             });
 
             fetch('api/User/UpdateUser',
@@ -181,9 +167,7 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
                 })
                 .then(response => response.json() as Promise<HttpResult<UserProfile>>)
                 .then(data => {
-
                     if (data.ok) {
-
                         UserState.Profile = data.data;
 
                         this.setState({
@@ -194,8 +178,6 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
 
                         if (this.state.OriginalImageSRC != this.GetSRC())
                             this.SaveImage();
-
-
                     }
                     else {
                         this.setState({
@@ -208,11 +190,9 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
                     Saving: false
                 }));
         }
-       
     }
 
-    private onFileSelect(event,) {
-
+    private onFileSelect(event, ) {
         let component = this;
 
         let thisImage = this.state.Image;
@@ -224,7 +204,6 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
         let files = event.target.files as Array<File>;
 
         if (FileReader && files && files.length) {
-
             if (files[0].type.indexOf("image") == -1) {
                 component.setState({
                     ImgValidation: "Invalid file type!"
@@ -250,12 +229,10 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
                 }
                 fr.readAsDataURL(files[0]);
             }
-
         }
     }
 
     private SaveImage() {
-
         this.setState({
             Saving: true,
             ImgValidation: "Uploading..."
@@ -266,8 +243,6 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
         const formData = new FormData();
 
         let u = this.state.User;
-
-        
 
         formData.append("image", this.state.Image.ImageFile);
 
@@ -280,11 +255,9 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
             .then(response => response.json() as Promise<HttpResult<UserProfile>>)
             .then(data => {
                 try {
-
                     if (data.ok) {
-
                         UserState.Profile = data.data;
-                        
+
                         this.setState({
                             Image: this.emptyImage(),
                             User: data.data,
@@ -295,7 +268,6 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
                             FinalCrop: new Crop,
                             OriginalImageSRC: data.data.profilePic
                         });
-
                     }
                     else {
                         throw (new Error(data.message))
@@ -309,11 +281,9 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
                     });
                 }
             });
-
     }
 
     private DeselectImage(): void {
-
         this.state.User.profilePic = '';
 
         this.setState({
@@ -323,9 +293,7 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
         })
     }
 
-
     private GetSRC(): string {
-
         try {
             let u = this.state.User;
             let img = this.state.Image;
@@ -337,32 +305,26 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
                 return img.ImageSRC ? img.ImageSRC : "";
             else {
                 return u.profilePic ? u.profilePic : "";
-
             }
         }
         catch (e) {
             return "";
         }
-
     }
 
     private onSelectedImage(crop) {
-
         this.setState({
             Crop: crop
         })
     }
 
     private onCropComplete(crop, pixelCrop) {
-
         this.setState({
             FinalCrop: pixelCrop
         })
-
     }
 
     public render() {
-
         let u = this.state.User;
 
         let profileimage =
@@ -380,9 +342,6 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
 
             <div className="max-width dashboardArea" style={{ marginTop: CSSValues.DashNavHeight }} >
 
-
-                
-
                 <div hidden={!this.state.Saving}>
                     <Loader CentreAlign Height="100px" ContainerMargin="25vh 0 20px 0" />
                 </div>
@@ -398,11 +357,8 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
 
                     <CenterTitleWithLine LineColour={Colours.Blue} Title="My Profile" />
 
-                   
-
                     <div className="row">
                         <div className="col-md-4" style={{ margin: 'auto' }} hidden={this.state.Image.ImageFile.size > 0}>
-
 
                             <div className="profilePicContainer">
                                 {profileimage}
@@ -420,7 +376,6 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
                                 <button type="button" className="btn btn-secondary bt-sm" onClick={() => ClickElement('imageUploaderBrowseBtn')}>Browse</button>
                                 <button hidden={this.GetSRC().length == 0}
                                     type="button" className="btn btn-danger bt-sm" onClick={this.DeselectImage}>Delete</button>
-                               
 
                             </label>
                         </div>
@@ -428,7 +383,7 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
 
                             <div style={{ color: 'blue', textAlign: 'center' }}>Click and drag across image to crop desired area, then click 'Save Image' below.</div>
 
-                            <div  className="imageCropContainer">
+                            <div className="imageCropContainer">
 
                                 <ReactCrop
                                     src={this.GetSRC()}
@@ -438,19 +393,15 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
                                     onImageLoaded={(image, pixelCrop) => this.onCropComplete(null, pixelCrop)}
                                 />
 
-
-                                
                             </div>
                             <label className="profileimgBrowseLabel">
 
                                 <button type="button" className="btn btn-primary bt-sm" onClick={this.CancelCrop}>Cancel</button>
 
                                 <button type="button" className="btn btn-primary bt-sm" onClick={this.SaveImage}>Save Image</button>
-                                
+
                             </label>
                         </div>
-
-                        
 
                     </div>
 
@@ -514,7 +465,7 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
                                 <Toggle
                                     key={u.isCoach}
                                     className="adminGymToggle"
-                                    
+
                                     defaultChecked={u.isCoach == 1}
                                     onChange={() => {
                                         this.state.User.isCoach = this.state.User.isCoach == 1
@@ -529,7 +480,7 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
                             <div className="profile-coachToggleInfo">
 
                                 With this option selected, your profile will be listed in the Find a Coach database. <br />
-                                
+
                                 <div hidden={u.isCoach != 1}>
                                     Once saved, your public coach profile will be accessible via this link:
                                     <br />
@@ -619,7 +570,7 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
                                 <label htmlFor="coachOther">Other</label>
                             </div>
 
-                            <div style={{color: 'var(--grey)'}}>If your coaching area is not listed, please select 'Other' and add further details your Coach Bio below.</div>
+                            <div style={{ color: 'var(--grey)' }}>If your coaching area is not listed, please select 'Other' and add further details your Coach Bio below.</div>
 
                         </div>
 
@@ -638,8 +589,6 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
                         </div>
 
                     </div>
-
-                  
 
                     <CenterTitleWithLine LineColour={Colours.Blue} Title="What I Enjoy" />
 
@@ -695,7 +644,7 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
                     <CenterTitleWithLine LineColour={Colours.Blue} Title="Personal Bio" />
 
                     <div className="row">
-                        
+
                         <div className="col-md-12">
                             <textarea className="form-control" style={{ minHeight: '150px' }} value={this.state.User.bio}
                                 onChange={(e) => {
@@ -808,11 +757,9 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
                             </div>
                         </div>
                     </div>
-                    
 
-                        <br />
                     <br />
-
+                    <br />
 
                     <div className="text-right" style={{ backgroundColor: 'white' }} >
                         <span style={{ color: 'red' }}>{this.state.ValidationText}</span>
@@ -820,7 +767,7 @@ export class UserProfilePage extends React.Component<RouteComponentProps<{}>, Mo
                         <button type="button" className="btn btn-primary" onClick={this.UpdateProfile}>Save</button>
                     </div>
                 </form>
-               
+
             </div>
 
         </div>

@@ -1,19 +1,14 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { Pages } from '../Helpers/Globals';
-import {  Footer } from './Widgets/Widgets';
+import { Footer } from './Widgets/Widgets';
 
 import '../css/about.css';
 import { Link } from 'react-router-dom';
 import { HeaderSearchBarArea } from './Widgets/HeaderSearchArea';
 
-
 export class About extends React.Component<RouteComponentProps<{}>, {}> {
-
     public render() {
-
-       
-
         let backGround = <div id="about-background">
 
         </div>
@@ -54,9 +49,9 @@ export class About extends React.Component<RouteComponentProps<{}>, {}> {
                     <br />
                     The gym users of the world need a community hub they can call on for anything. This is it.
                 <br />
-                <br />
-            </p>
-                <hr/>
+                    <br />
+                </p>
+                <hr />
 
                 <h3>Gyms, Coaches & Sellers</h3>
                 <br />
@@ -75,8 +70,8 @@ export class About extends React.Component<RouteComponentProps<{}>, {}> {
                     Reviews will be monitored for fakes and spam. We will also background check any gym, coach
                     and seller accounts to avoid fakes, as this will dilute the authenticity of the site.
                 <br />
-                <br />
-            </p>
+                    <br />
+                </p>
                 <hr />
 
                 <h3>Everyone</h3>
@@ -98,12 +93,11 @@ export class About extends React.Component<RouteComponentProps<{}>, {}> {
                     <br />
                     The <u>Gym-Bay.com</u> team
                     <br />
-            </p>
-
+                </p>
 
             </div>
 
-            <Footer/>
+            <Footer />
 
         </div>
     }

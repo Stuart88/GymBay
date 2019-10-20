@@ -8,7 +8,6 @@ import { GymReviewComponent } from '../Reviews/GymReviewComponent';
 import { Pages } from '../../Helpers/Globals';
 import { Loader } from '../Widgets/Loaders';
 
-
 interface ModuleState {
     Gym: GymFinderGym
     Reviews: Array<GymReviewPublic>
@@ -17,7 +16,6 @@ interface ModuleState {
 }
 
 export class GymSinglePage extends React.Component<RouteComponentProps<{}>, ModuleState> {
-
     constructor(props) {
         super(props);
 
@@ -27,7 +25,7 @@ export class GymSinglePage extends React.Component<RouteComponentProps<{}>, Modu
             GymID: Number(this.props.match.params["gymID"]),
             Loading: true
         }
-        
+
         this.GetGym = this.GetGym.bind(this);
         this.GetReviews = this.GetReviews.bind(this);
     }
@@ -37,18 +35,15 @@ export class GymSinglePage extends React.Component<RouteComponentProps<{}>, Modu
     }
 
     componentDidUpdate(prevProps, prevSate) {
-
         if (Number(this.props.match.params["gymID"]) != prevSate.GymID) {
             this.setState({
                 GymID: Number(this.props.match.params["gymID"])
             })
             this.GetGym();
         }
-           
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-
         //console.log(this.props.match.params["gymID"] != nextProps.match.params["gymID"]
         //    || this.state != nextState)
 
@@ -57,12 +52,9 @@ export class GymSinglePage extends React.Component<RouteComponentProps<{}>, Modu
     }
 
     public render() {
-
-
         let g = this.state.Gym;
 
         let r = this.state.Reviews;
-
 
         return <div style={{ backgroundColor: 'rgb(243, 243, 243)', minHeight: '100%', paddingBottom: '70px', paddingTop: OnMobile() ? null : '30px' }}>
 
@@ -70,33 +62,31 @@ export class GymSinglePage extends React.Component<RouteComponentProps<{}>, Modu
 
             <div hidden={this.state.Loading} className="max-width" style={{ marginBottom: '100px' }}>
 
-
                 <GymFinderGymView BackgroundColor='white' Gym={g} Hidden={false} imageViewerSRCs={GymImagesArray(g)} ListView={false} />
 
-                <br/>
+                <br />
                 <h3 className="text-center">Reviews</h3>
 
                 <div className="reviewContainer text-center" hidden={g.ownerID == GetUserID()}>
                     <Link
-                        
-                        className="btn btn-primary" 
+
+                        className="btn btn-primary"
                         to={UserLoggedIn()
                             ? {
                                 pathname: Pages.gymreview,
                                 state: { review: new GymReview, gym: toGymFinderBasic(g) }
-                                }   
+                            }
                             : {
                                 pathname: Pages.dashboard,
                                 state: { returnPath: Pages.gymreview, returnState: { review: new GymReview, gym: toGymFinderBasic(g) } }
-                              }
-                            } 
+                            }
+                        }
 
                     >{r.filter(x => x.review.reviewerId == GetUserID()).length > 0
                         ? 'Edit my Review'
                         : 'Add Review'}
                     </Link>
 
-                   
                 </div>
 
                 {
@@ -121,7 +111,6 @@ export class GymSinglePage extends React.Component<RouteComponentProps<{}>, Modu
     }
 
     private GetGym() {
-
         this.setState({
             Loading: true
         });
@@ -129,7 +118,6 @@ export class GymSinglePage extends React.Component<RouteComponentProps<{}>, Modu
         fetch('/api/GymFinder/GetGym?gymID=' + this.state.GymID)
             .then(response => response.json() as Promise<HttpResult<GymFinderGym>>)
             .then(data => {
-
                 if (data.ok) {
                     this.setState({
                         Gym: data.data,
@@ -141,17 +129,13 @@ export class GymSinglePage extends React.Component<RouteComponentProps<{}>, Modu
                     console.log("GetGym: " + data.message);
                     this.props.history.push(Pages.gymfinder)
                 }
-
-
             });
     }
 
     private GetReviews() {
-
         fetch('/api/Reviews/GetGymReviews?gymID=' + this.state.GymID)
             .then(response => response.json() as Promise<HttpResult<GymReviewPublic[]>>)
             .then(data => {
-
                 if (data.ok) {
                     this.setState({
                         Reviews: data.data,
@@ -161,12 +145,6 @@ export class GymSinglePage extends React.Component<RouteComponentProps<{}>, Modu
                 else {
                     console.log("Get Reviews: " + data.message);
                 }
-
-
             });
     }
-
-  
 }
-
-

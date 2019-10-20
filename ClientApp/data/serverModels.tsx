@@ -1,5 +1,4 @@
-﻿
-export interface HttpResult<T>  {
+﻿export interface HttpResult<T> {
     ok: boolean;
     data: T;
     message: string;
@@ -115,7 +114,6 @@ export class GymFinderGym {
     skype: string = "";
     youtube: string = "";
     featured: number = 0;
-    
 }
 
 export class GymFinderBasic {
@@ -209,7 +207,7 @@ export class GymSearch {
     status: number = GymStatus.Any;
 }
 
-export class UserProfile{
+export class UserProfile {
     id: number = 0;
     creationDate: Date = new Date("1990-01-01");
     modifiedDate: Date = new Date("1990-01-01");
@@ -267,8 +265,6 @@ export class UserProfile{
     skype: string = "";
     website: string = "";
     featuredCoach: number = 0;
-
-   
 }
 
 export class CoachSearch {
@@ -298,7 +294,6 @@ export class CoachSearch {
 }
 
 export class NewsFeedPost {
-    
     creationDate: Date = new Date("1990-01-01");
     modifiedDate: Date = new Date("1990-01-01");
     id: number = 0;
@@ -384,7 +379,7 @@ export class CoachReviewPublic {
 export class FeaturedGym {
     gymId: number = 0;
     gymName: string = "";
-    imageUrl: string = ""; 
+    imageUrl: string = "";
     location: string = "";
 }
 

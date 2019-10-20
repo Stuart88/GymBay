@@ -1,3 +1,7 @@
+using GymBay.Helpers;
+using GymBay.Models.DbClasses;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -5,18 +9,26 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using GymBay.Helpers;
-using GymBay.Models.DbClasses;
-using GymBay.Models.General;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using static GymBay.Controllers.UserController;
 
 namespace GymBay.Controllers
 {
     public class HomeController : Controller
     {
-        readonly GymBayContext db = new GymBayContext();
+        #region Private Fields
+
+        private readonly GymBayContext db = new GymBayContext();
+
+        #endregion Private Fields
+
+        #region Public Methods
+
+        public IActionResult Error()
+        {
+            ViewData["RequestId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+            return View(Request);
+        }
+
         public async Task<IActionResult> Index()
         {
             if (Request.QueryString.Value.Contains("code"))
@@ -24,7 +36,6 @@ namespace GymBay.Controllers
                 string linkedInOuthCode = Request.Query["code"];
 
                 return await LinkedInLogin("", linkedInOuthCode);
-
             }
             return View(Request);
         }
@@ -34,7 +45,6 @@ namespace GymBay.Controllers
             BasicRegistrationDetails model = new BasicRegistrationDetails();
 
             bool linkedInLogin = !string.IsNullOrEmpty(code);
-
 
             if (linkedInLogin)
             {
@@ -71,7 +81,6 @@ namespace GymBay.Controllers
             await db.SaveChangesAsync();
 
             return View(Request);
-
         }
 
         public async Task<BasicRegistrationDetails> ProcessLinkedInLogin(string code)
@@ -96,8 +105,6 @@ namespace GymBay.Controllers
                     { "client_secret", "iBRWgS57GiNZCBCU" }
                 };
 
-
-
                 var content = new FormUrlEncodedContent(parameters);
 
                 var postResponse = await client.PostAsync("https://www.linkedin.com/oauth/v2/accessToken", content);
@@ -116,8 +123,6 @@ namespace GymBay.Controllers
                 model.FirstName = responseObject_2["firstName"]["localized"]["en_US"] ?? "";
                 model.LastName = responseObject_2["lastName"]["localized"]["en_US"] ?? "";
 
-
-
                 var emailRequest = await client.GetAsync("https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))");
                 string emailString = await emailRequest.Content.ReadAsStringAsync();
                 dynamic emailResponseObject = JsonConvert.DeserializeObject(emailString);
@@ -130,10 +135,11 @@ namespace GymBay.Controllers
             }
             catch (Exception)
             {
-
                 return new BasicRegistrationDetails();
             }
         }
+
+        #endregion Public Methods
 
         //public class LoginModel
         //{
@@ -141,13 +147,5 @@ namespace GymBay.Controllers
         //    public string UserType { get; set; }
         //    public string Username { get; set; }
         //}
-
-        public IActionResult Error()
-        {
-            ViewData["RequestId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
-            return View(Request);
-        }
-
-        
     }
 }

@@ -1,15 +1,12 @@
 ﻿import { OnMobile, UserLoggedIn } from "./Functions";
 import { UserProfile, HttpResult } from "../data/serverModels";
 
-
-
 export class Colours {
     static Blue: string = 'var(--blue)';
     static Black: string = 'var(--black)';
 }
 
 export class UserState {
-
     public static Profile: UserProfile = new UserProfile();
 
     public static GetProfilePic(): string {
@@ -22,27 +19,19 @@ export class UserState {
     }
 
     public static FetchProfile(): void {
-
         if (UserLoggedIn()) {
             fetch('/api/User/GetUser/false')
                 .then(response => response.json() as Promise<HttpResult<UserProfile>>)
                 .then(resp => {
-
                     if (resp.ok) {
-
                         UserState.Profile = resp.data;
-
                     }
                 })
         }
-        
     }
-
-    
 }
 
 export class GymSearchState {
-
     private static GymState: any = undefined;
 
     public static HasState(): boolean {
@@ -59,7 +48,6 @@ export class GymSearchState {
 }
 
 export class CoachSearchState {
-
     private static CoachState: any = undefined;
 
     public static HasState(): boolean {
@@ -76,7 +64,6 @@ export class CoachSearchState {
 }
 
 export class Pages {
-
     static home: string = '/';
     static newsItem: string = '/newsItem';
     static gymfinder: string = '/gymfinder';
@@ -101,7 +88,7 @@ export class Pages {
     static newsfeedpost: string = '/newsfeedpost';
 }
 
-export class SiteDetails{
+export class SiteDetails {
     static SiteURL: string = 'https://gym-bay.com'
     static MaxRating: number = 10.0;
 }

@@ -11,9 +11,7 @@ interface ModuleProps {
     CountrySelected: Function
 }
 
-
 export class CountriesAutosuggest extends React.Component<ModuleProps, ModuleState> {
-
     constructor(props) {
         super(props);
 
@@ -22,10 +20,7 @@ export class CountriesAutosuggest extends React.Component<ModuleProps, ModuleSta
         }
     }
 
-
     public render() {
-
-     
         return <DropdownList
             filter
             data={(AllCountries as Array<CountryGeo>)}
@@ -34,6 +29,5 @@ export class CountriesAutosuggest extends React.Component<ModuleProps, ModuleSta
             defaultValue={this.state.SelectedCountry.countryName}
             onChange={(c) => this.props.CountrySelected(c)}
         />
-        
     }
 }

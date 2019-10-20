@@ -1,9 +1,9 @@
 ﻿import * as React from 'react';
 import { UserLoggedIn, AdminLoggedIn, CreatePostObject, GetUserID } from '../../Helpers/Functions';
 import { HeaderSearchBarArea } from '../Widgets/HeaderSearchArea';
-import { HttpResult, NewsFeedPostSingle, NewsFeedComment, NewsFeedCommentPublic, PostStatus, UpvoteItems} from '../../data/serverModels';
+import { HttpResult, NewsFeedPostSingle, NewsFeedComment, NewsFeedCommentPublic, PostStatus, UpvoteItems } from '../../data/serverModels';
 import { RouteComponentProps, Link } from 'react-router-dom';
-import {  UserState, Pages } from '../../Helpers/Globals';
+import { UserState, Pages } from '../../Helpers/Globals';
 import { Loader } from '../Widgets/Loaders';
 import { NewsfeedItem } from './NewsfeedItem';
 import * as moment from 'moment';
@@ -17,7 +17,6 @@ interface ModuleState {
 }
 
 export class NewsItemSinglePage extends React.Component<RouteComponentProps<{}>, ModuleState> {
-
     constructor(props) {
         super(props);
 
@@ -27,7 +26,7 @@ export class NewsItemSinglePage extends React.Component<RouteComponentProps<{}>,
             CommentText: "",
             ValidationString: ""
         }
-        
+
         this.GetNewsItem = this.GetNewsItem.bind(this);
         this.PostComment = this.PostComment.bind(this);
         this.Delete = this.Delete.bind(this);
@@ -37,10 +36,7 @@ export class NewsItemSinglePage extends React.Component<RouteComponentProps<{}>,
         this.GetNewsItem(Number(this.props.match.params["itemID"]));
     }
 
-
     public render() {
-
-
         let comments = this.state.NewsItem.comments;
 
         let userLoggedIn = UserLoggedIn();
@@ -50,7 +46,6 @@ export class NewsItemSinglePage extends React.Component<RouteComponentProps<{}>,
             <HeaderSearchBarArea Props={this.props} />
 
             <div hidden={this.state.LoadingAll} className="max-width">
-
 
                 <NewsfeedItem key={this.state.NewsItem.newsFeedPost.id} Index={0} Post={this.state.NewsItem} OnNewsFeed={false} Props={this.props} InEditor={false} />
 
@@ -85,11 +80,8 @@ export class NewsItemSinglePage extends React.Component<RouteComponentProps<{}>,
 
                 </div>
 
-               
                 {
                     comments.map((c, i) => <div className="commentContainer">
-
-                        
 
                         <div className="commentAuthorTable">
                             <table className="full-width">
@@ -100,7 +92,7 @@ export class NewsItemSinglePage extends React.Component<RouteComponentProps<{}>,
                                         </td>
                                         <td>
                                             <div className="commentAuthor">
-                                            {c.authorName}
+                                                {c.authorName}
                                             </div>
                                             <div className="commentDate">
                                                 {moment(c.creationDate).format('Do MMM YYYY[,  ]HH:mm')}
@@ -120,18 +112,13 @@ export class NewsItemSinglePage extends React.Component<RouteComponentProps<{}>,
                             </table>
                         </div>
 
-                       
-
                         <div className={`commentText hasLineBreaks ${c.status != PostStatus.Live ? 'commentDeleted' : null}`}>
                             {c.comment}
                         </div>
 
-                       
-
                         <div hidden={c.status != PostStatus.Live} style={{ display: 'flow-root' }}>
                             <UpvoteComponent ItemID={c.id} UpvoteItem={UpvoteItems.NewsFeedComment} Upvotes={c.upvotes} BelongsToUser={c.authorId == GetUserID()}
                                 onVoteComplete={(voteString) => {
-
                                     let updatingComment = c;
                                     updatingComment.upvotes = voteString;
                                     let index = this.state.NewsItem.comments.indexOf(updatingComment);
@@ -144,8 +131,6 @@ export class NewsItemSinglePage extends React.Component<RouteComponentProps<{}>,
                     </div>)
                 }
 
-               
-
             </div>
 
             <div hidden={!this.state.LoadingAll} style={{ paddingTop: '100px' }}>
@@ -156,7 +141,6 @@ export class NewsItemSinglePage extends React.Component<RouteComponentProps<{}>,
     }
 
     private IsButtonHidden(c: NewsFeedCommentPublic): boolean {
-
         //admin can see
         if (AdminLoggedIn())
             return false;
@@ -165,7 +149,7 @@ export class NewsItemSinglePage extends React.Component<RouteComponentProps<{}>,
         if (!AdminLoggedIn() && c.status == PostStatus.DeletedByModerator)
             return true;
 
-        //user can see 
+        //user can see
         else if (c.authorId == UserState.Profile.id && UserLoggedIn())
             return false;
 
@@ -174,8 +158,6 @@ export class NewsItemSinglePage extends React.Component<RouteComponentProps<{}>,
     }
 
     private GetNewsItem(itemID: number) {
-
-        
         this.setState({
             LoadingAll: true
         });
@@ -183,25 +165,20 @@ export class NewsItemSinglePage extends React.Component<RouteComponentProps<{}>,
         fetch('/api/News/NewsFeedPost?postID=' + itemID)
             .then(response => response.json() as Promise<HttpResult<NewsFeedPostSingle>>)
             .then(data => {
-
                 if (data.ok) {
                     this.setState({
                         NewsItem: data.data,
                         LoadingAll: false
                     });
-
                 }
                 else {
                     alert(data.message)
                     console.log("GetGym: " + data.message);
                 }
-
-
             });
     }
 
     private PostComment() {
-
         let comment = new NewsFeedComment();
         comment.authorId = UserState.Profile.id;
         comment.postId = this.state.NewsItem.newsFeedPost.id;
@@ -213,15 +190,10 @@ export class NewsItemSinglePage extends React.Component<RouteComponentProps<{}>,
         })
 
         if (this.state.CommentText.length <= 1024 && this.state.CommentText.length > 0) {
-
-            
-
             fetch('api/News/AddEditComment', CreatePostObject(comment))
                 .then(response => response.json() as Promise<HttpResult<NewsFeedCommentPublic>>)
                 .then(data => {
-
                     if (data.ok) {
-
                         this.state.NewsItem.comments.push(data.data);
 
                         this.setState({
@@ -229,7 +201,6 @@ export class NewsItemSinglePage extends React.Component<RouteComponentProps<{}>,
                             CommentText: "",
                             ValidationString: ""
                         })
-
                     }
                     else {
                         this.setState({
@@ -248,16 +219,12 @@ export class NewsItemSinglePage extends React.Component<RouteComponentProps<{}>,
                 ValidationString: "Check comment length!"
             })
         }
-
     }
-   
 
     private Delete(comment: NewsFeedCommentPublic) {
-
         fetch('api/News/ToggleDeleteComment/', CreatePostObject(comment))
             .then(response => response.json() as Promise<HttpResult<NewsFeedCommentPublic>>)
             .then(res => {
-
                 if (res.ok) {
                     let updated = this.state.NewsItem.comments.filter(c => c.id == res.data.id)[0];
                     let index = this.state.NewsItem.comments.indexOf(updated);
@@ -275,5 +242,3 @@ export class NewsItemSinglePage extends React.Component<RouteComponentProps<{}>,
             .catch((e: Error) => alert(e.message));
     }
 }
-
-

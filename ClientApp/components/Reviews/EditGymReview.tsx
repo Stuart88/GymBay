@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
-import { HttpResult,  GymReview, GymFinderBasic } from '../../data/serverModels';
-import { CreatePostObject, EnterPressed, UserLoggedIn} from '../../Helpers/Functions';
+import { HttpResult, GymReview, GymFinderBasic } from '../../data/serverModels';
+import { CreatePostObject, EnterPressed, UserLoggedIn } from '../../Helpers/Functions';
 import '../../css/gymfinderAddGym.css';
 import { CenterTitleWithLine, Icon, IconType } from '../Widgets/Widgets';
 import { Loader } from '../Widgets/Loaders';
@@ -30,7 +30,6 @@ interface ModuleProps {
 }
 
 export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
-
     constructor(props) {
         super(props);
 
@@ -42,7 +41,6 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
 
         if (reviewFromLinkState && gymFromLinkState) {
             reviewFromLinkState.gymId = gymFromLinkState.id;
-
         }
 
         this.state = {
@@ -73,10 +71,7 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
         }
     }
 
-   
-
     private GetReview(gymid: number) {
-
         this.setState({
             ValidationString: "Loading...",
             Saving: true
@@ -85,7 +80,6 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
         fetch('/api/Reviews/GetMyGymReview?gymID=' + gymid)
             .then(response => response.json() as Promise<HttpResult<GymReview>>)
             .then(data => {
-
                 if (data.ok) {
                     this.setState({
                         Review: data.data,
@@ -103,15 +97,10 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
                         Saving: false
                     })
                 }
-               
             });
     }
-    
-
-    
 
     private Validate(r: GymReview): { valid: boolean, message: string } {
-
         let valid = true;
         let message = "";
 
@@ -133,15 +122,13 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
         if (r.badPoints.length == 0) {
             message += "Please add at least one Bad Bit\n";
         }
-        
 
         valid = message.length == 0;
 
-        return { valid, message};
+        return { valid, message };
     }
 
     private Save() {
-
         //Catch any good/bad points that user left in entry area expecting it to automatically save
         this.AddGoodPoint();
         this.AddBadPoint();
@@ -152,7 +139,6 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
         let validation = this.Validate(this.state.Review);
 
         if (validation.valid) {
-
             this.setState({
                 Review: r,
                 ValidationString: "Saving...",
@@ -162,11 +148,8 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
             fetch('api/Reviews/AddEditGymReview', CreatePostObject(this.state.Review))
                 .then(response => response.json() as Promise<HttpResult<GymReview>>)
                 .then(data => {
-
                     if (data.ok) {
-
                         this.props.Props.history.push(`${Pages.viewgym}/${data.data.gymId}/${this.state.SelectedGym.name}`)
-                        
                     }
                     else {
                         this.setState({
@@ -185,12 +168,10 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
                 Saving: false
             })
         }
-       
     }
 
     private Delete() {
         if (confirm('Delete Review: Are you sure?')) {
-
             fetch('api/Reviews/DeleteGymReview/' + this.state.Review.id,
                 {
                     method: 'POST',
@@ -202,7 +183,6 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
                 })
                 .then(response => response.json() as Promise<HttpResult<any>>)
                 .then(res => {
-
                     if (res.ok) {
                         this.props.Props.history.push(`${Pages.viewgym}/'${this.state.SelectedGym.id}/${this.state.SelectedGym.name}`);
                     }
@@ -211,15 +191,12 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
                     }
                 })
                 .catch((e: Error) => alert(e.message));
-
         }
     }
 
     private GymSelected(g: GymFinderBasic) {
-
         let r = new GymReview;
         r.gymId = g.id;
-
 
         this.setState({
             Review: r,
@@ -231,13 +208,9 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
         })
 
         this.GetReview(g.id);
-      
     }
 
-    
-
     public render() {
-
         let s = this.state.SelectedGym;
         let hideFormAreas = this.state.SelectedGym.id == 0 && this.state.Review.id == 0;
 
@@ -246,9 +219,8 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
         for (let i = 1; i <= SiteDetails.MaxRating; i++) {
             ratingsOptions.push(<label className={`hover-pointer ratingLabel ${i <= this.state.Review.rating ? 'ratingSelected' : ''}`} htmlFor={`rating${i}`}>
                 <input hidden id={`rating${i}`} type="radio" value={`${i}`} checked={this.state.Review.rating == i} name="group1" onChange={(e) => this.RatingSelected(e.target.value)} />
-                 ★
+                ★
                                 </label>);
-
         }
 
         console.log(this.state.KeyCount);
@@ -261,8 +233,6 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
             <div id="reviewWholePage" style={{ padding: '10px', maxWidth: '700px', margin: 'auto', paddingBottom: '80px', marginTop: CSSValues.DashNavHeight }}>
 
                 <h3 className="text-center" style={{ color: 'var(--black)' }}>Gym Review</h3>
-
-              
 
                 <form key={this.state.KeyCount} hidden={this.state.Finished || this.state.Saving}>
 
@@ -293,8 +263,8 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
                             <button type="button" className="btn btn-primary btn-sm" onClick={this.ResetForm}>Change Gym</button>
                         </div>
 
-                        <br/>
-                        <br/>
+                        <br />
+                        <br />
                         <br />
 
                         <div className="text-right">
@@ -313,26 +283,25 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
                                     </div>
 
                                     {
-                                    this.state.SelectedGym.id > 0
-                                        ? <table className="full-width">
-                                            <tbody>
-                                                <tr>
-                                                    <td width="70px">
-                                                        <img style={{ height: '50px', width: '50px', margin: 'auto', display: 'block' }}
-                                                            src={s.logo && s.logo.length > 0
-                                                                ? s.logo
-                                                                : '/dist/images/gymfinder/default-gym.svg'} />
-                                                    </td>
-                                                    <td>
-                                                        <div style={{ color: 'var(--black)' }}>{s.name}</div>
-                                                        <div style={{ color: '#666', fontSize: '13px' }}>{s.cityName}, {s.countryName}</div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        : null
-
-                                }</div>
+                                        this.state.SelectedGym.id > 0
+                                            ? <table className="full-width">
+                                                <tbody>
+                                                    <tr>
+                                                        <td width="70px">
+                                                            <img style={{ height: '50px', width: '50px', margin: 'auto', display: 'block' }}
+                                                                src={s.logo && s.logo.length > 0
+                                                                    ? s.logo
+                                                                    : '/dist/images/gymfinder/default-gym.svg'} />
+                                                        </td>
+                                                        <td>
+                                                            <div style={{ color: 'var(--black)' }}>{s.name}</div>
+                                                            <div style={{ color: '#666', fontSize: '13px' }}>{s.cityName}, {s.countryName}</div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            : null
+                                    }</div>
                             </div>
 
                         </div>
@@ -370,15 +339,12 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
                         Characters: <span style={{ color: this.state.Review.mainReview.length > 1000 ? 'red' : 'initial' }}>
                             {this.state.Review.mainReview.length}
                         </span> / 1000
-    
+
                 </div>
-
-
 
                     <div hidden={hideFormAreas}>
 
                         <CenterTitleWithLine Title="Good Bits " LineColour="cornflowerblue" />
-
 
                         <div className="row">
                             <div className="col-md-12">
@@ -416,21 +382,20 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
                                                     }}
                                                     placeholder="Start your list here"
                                                     onKeyUp={(e) => EnterPressed(e, this.AddGoodPoint)} />
-                                        </td>
+                                            </td>
                                             <td className="text-right">
                                                 <button type="button" className="btn btn-secondary btn-sm" onClick={this.AddGoodPoint}>Add</button>
-                                        </td>
-                                                </tr>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
-                    </div>
+                        </div>
 
                         <CenterTitleWithLine Title="Bad Bits" LineColour="cornflowerblue" />
 
-
                         <div className="row">
-                          
+
                             <div className="col-md-12">
                                 <table className="full-width">
                                     <tbody>
@@ -475,7 +440,7 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
                                 </table>
                             </div>
                         </div>
-                    
+
                         <br />
 
                         <CenterTitleWithLine Title="" LineColour="cornflowerblue" />
@@ -492,20 +457,17 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
                     <Loader CentreAlign ContainerMargin='20px 0 20px 0' Height='80px' />
                 </div>
 
-
                 <div className="text-center">
                     <br />
                     <span className="hasLineBreaks" style={{ color: 'red' }}>{this.state.ValidationString}</span>
                 </div>
 
-               
             </div>
 
         </div>
     }
 
     private ResetForm() {
-
         this.setState({
             Review: new GymReview,
             GoodPoints: [],
@@ -519,7 +481,6 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
             Finished: false,
             KeyCount: this.state.KeyCount + 1
         });
-
     }
 
     private AddGoodPoint() {
@@ -550,6 +511,4 @@ export class EditGymReview extends React.Component<ModuleProps, ModuleState> {
             })
         }
     }
-
 }
-

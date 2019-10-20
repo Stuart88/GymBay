@@ -1,6 +1,6 @@
 ﻿import { GymFinderGym, HttpResult, GymFinderBasic, CoachBasic, UserProfile } from "../data/serverModels";
 import { ImageDecorator } from "react-viewer/lib/ViewerProps";
-import  Cookie from 'universal-cookie';
+import Cookie from 'universal-cookie';
 const cookies = new Cookie();
 
 export function OnMobile() {
@@ -21,13 +21,10 @@ export function StartsWith(s: string, startsWith: string): boolean {
         return false;
 
     return s.substr(0, startsWith.length) == startsWith;
-        
 }
 
 export function GymImagesArray(g: GymFinderGym): Array<ImageDecorator> {
-
     let images = new Array<ImageDecorator>();
-
 
     if (g.imageLocation1 && g.imageLocation1.length > 0)
         images.push({ src: g.imageLocation1, alt: g.name });
@@ -38,14 +35,11 @@ export function GymImagesArray(g: GymFinderGym): Array<ImageDecorator> {
     if (g.imageLocation3 && g.imageLocation3.length > 0)
         images.push({ src: g.imageLocation3, alt: g.name });
 
-
     return images;
 }
 
-///Clicks given element. Does nothing if element does not exist 
+///Clicks given element. Does nothing if element does not exist
 export function ClickElement(id: string) {
-
-
     let element = document.getElementById(id) as HTMLElement
 
     if (element != null) {
@@ -62,8 +56,7 @@ interface AuthHeaderObj {
     credentials: string
 }
 
-export function CreateAuthHeaderObject(email: string, pass: string, body: any): RequestInit  {
-
+export function CreateAuthHeaderObject(email: string, pass: string, body: any): RequestInit {
     let authHeader = 'Basic ' + btoa(`${email}:${pass}`);
 
     return {
@@ -134,7 +127,7 @@ export function UserLoggedIn(): boolean {
     return cookies.get('UserID') > 0;
 }
 
-export function GetUserID(): number{
+export function GetUserID(): number {
     if (UserLoggedIn()) {
         return cookies.get('UserID');
     }
@@ -142,7 +135,6 @@ export function GetUserID(): number{
         return 0;
 }
 export function toGymFinderBasic(g: GymFinderGym): GymFinderBasic {
-
     return {
         name: g.name,
         cityName: g.locationCityName,
@@ -165,7 +157,7 @@ export function toCoachBasic(c: UserProfile): CoachBasic {
     }
 }
 
-export function CopytoClipboard(text):void {
+export function CopytoClipboard(text): void {
     var input = document.createElement('input');
     input.setAttribute('value', text);
     document.body.appendChild(input);

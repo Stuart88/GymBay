@@ -1,16 +1,16 @@
 ﻿using GymBay.Models.DbClasses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GymBay.Models.Reviews
 {
     public class GymReviewPublic
     {
+        #region Public Properties
+
         public GymReview Review { get; set; }
         public string ReviewerName { get; set; }
         public string ReviewerPic { get; set; }
         public string Upvotes { get; set; }
+
+        #endregion Public Properties
     }
 }

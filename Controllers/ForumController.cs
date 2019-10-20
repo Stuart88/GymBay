@@ -1,22 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using GymBay.Helpers;
 using GymBay.Models.DbClasses;
 using GymBay.Models.Forum;
 using GymBay.Models.General;
-using ImageMagick;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GymBay.Controllers
 {
     [Route("api/Forum")]
     public class ForumController : Controller
     {
-        readonly GymBayContext db = new GymBayContext();
+        #region Private Fields
+
+        private readonly GymBayContext db = new GymBayContext();
+
+        #endregion Private Fields
+
+        #region Public Methods
 
         [HttpPost("AddEditPost")]
         public async Task<HttpResult> AddEditPost([FromBody] ForumPostPublic post)
@@ -25,8 +28,6 @@ namespace GymBay.Controllers
             {
                 if (!Functions.UserLoggedIn(Request, out User user))
                     throw new Exception("Not logged in!");
-
-              
 
                 DateTime now = DateTime.Now;
 
@@ -58,50 +59,15 @@ namespace GymBay.Controllers
                         Category = post.Category,
                         Status = (int)Enums.PostStatus.Live
                     };
-                  
 
                     db.ForumPost.Add(adding);
 
                     await db.SaveChangesAsync();
-
                 }
 
                 return new HttpResult(true, post, "");
             }
             catch (Exception e)
-            {
-                return new HttpResult(false, null, Functions.ErrorMessage(e));
-            }
-
-        }
-
-        [HttpGet("GetThreads")]
-        public HttpResult GetThreads([FromQuery]int page, [FromQuery]int? category)
-        {
-            try
-            {
-                int amountPerPage = 50;
-
-                var query = (from p in db.ForumPost
-                             join u in db.User
-                             on p.AuthorId equals u.Id
-                             where p.Category == category || category == null
-                             && p.PostLevel == (int)Enums.ForumPostLevel.Base
-                             orderby p.CreationDate descending
-                             select new { post = p, user = u });
-
-                int total = query.Count();
-
-                int pages = total / amountPerPage;
-
-                var threads = query.Skip(page * amountPerPage)
-                         .Take(50)
-                         .AsEnumerable()
-                         .Select(s => new ForumPostPublic(s.post, s.user, false, null));
-
-                return new HttpResult(true, new { threads, total, pages}, "");
-            }
-            catch(Exception e)
             {
                 return new HttpResult(false, null, Functions.ErrorMessage(e));
             }
@@ -137,8 +103,6 @@ namespace GymBay.Controllers
                                   .Select(s => s.Split(",").Where(x => !string.IsNullOrEmpty(x)).ToArray())
                                   .Sum(s => s.Count());
 
-
-
                 return new HttpResult(true, thread, "");
             }
             catch (Exception e)
@@ -147,6 +111,38 @@ namespace GymBay.Controllers
             }
         }
 
+        [HttpGet("GetThreads")]
+        public HttpResult GetThreads([FromQuery]int page, [FromQuery]int? category)
+        {
+            try
+            {
+                int amountPerPage = 50;
 
+                var query = (from p in db.ForumPost
+                             join u in db.User
+                             on p.AuthorId equals u.Id
+                             where p.Category == category || category == null
+                             && p.PostLevel == (int)Enums.ForumPostLevel.Base
+                             orderby p.CreationDate descending
+                             select new { post = p, user = u });
+
+                int total = query.Count();
+
+                int pages = total / amountPerPage;
+
+                var threads = query.Skip(page * amountPerPage)
+                         .Take(50)
+                         .AsEnumerable()
+                         .Select(s => new ForumPostPublic(s.post, s.user, false, null));
+
+                return new HttpResult(true, new { threads, total, pages }, "");
+            }
+            catch (Exception e)
+            {
+                return new HttpResult(false, null, Functions.ErrorMessage(e));
+            }
+        }
+
+        #endregion Public Methods
     }
 }

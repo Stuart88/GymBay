@@ -1,16 +1,19 @@
-﻿using GymBay.Helpers;
-using GymBay.Models.DbClasses;
+﻿using GymBay.Models.DbClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using static GymBay.Helpers.Enums;
 
 namespace GymBay.Models.Forum
 {
     public class ForumPostPublic
     {
-        public ForumPostPublic() { }
+        #region Public Constructors
+
+        public ForumPostPublic()
+        {
+        }
+
         public ForumPostPublic(ForumPost p, User u, bool getChildPosts, GymBayContext db)
         {
             Id = p.Id;
@@ -48,20 +51,31 @@ namespace GymBay.Models.Forum
                          .Select(s => new ForumPostPublic(s.post, s.user, s.post.PostLevel != (int)ForumPostLevel.Max, db));
             }
         }
-        public int Id { get; set; }
-        public DateTime CreationDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
         public int AuthorId { get; set; }
         public string AuthorName { get; set; }
         public string AuthorPic { get; set; }
         public int Category { get; set; }
-        public int PostLevel { get; set; }
-        public string Title { get; set; }
         public string Content { get; set; }
-        public string Upvotes { get; set; }
+        public DateTime CreationDate { get; set; }
+        public int Id { get; set; }
+        public DateTime ModifiedDate { get; set; }
         public int? ParentId { get; set; }
+        public int PostLevel { get; set; }
         public int Status { get; set; }
+        public string Title { get; set; }
+        public string Upvotes { get; set; }
 
-        IEnumerable<ForumPostPublic> ChildPosts { get; set; }
+        #endregion Public Properties
+
+        #region Private Properties
+
+        private IEnumerable<ForumPostPublic> ChildPosts { get; set; }
+
+        #endregion Private Properties
     }
 }

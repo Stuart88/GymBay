@@ -27,7 +27,6 @@ export enum LoginOptionsEnum {
 }
 
 export class Dashboard extends React.Component<RouteComponentProps<{}>, ModuleState> {
-
     constructor(props) {
         super(props);
 
@@ -53,11 +52,9 @@ export class Dashboard extends React.Component<RouteComponentProps<{}>, ModuleSt
         this.FBresponse = this.FBresponse.bind(this);
         this.LogoutSuccess = this.LogoutSuccess.bind(this);
         this.GoogleResponse = this.GoogleResponse.bind(this);
-        
     }
 
     private GoogleResponse(response: any) {
-
         //console.log(response);
         if (!response.profileObj) {
             this.setState({
@@ -76,19 +73,15 @@ export class Dashboard extends React.Component<RouteComponentProps<{}>, ModuleSt
                 SignupValidationText: "",
             })
 
-
             let authHeader = CreateAuthHeaderObject(email, "", loginData.ToForm());
 
             fetch('api/User/GoogleLogin', authHeader)
-                .then(response => response.json() as Promise<HttpResult<{newUser: boolean}>>)
+                .then(response => response.json() as Promise<HttpResult<{ newUser: boolean }>>)
                 .then(data => {
-
                     if (data.ok) {
-                        
                         UserState.FetchProfile();
 
                         this.props.history.push({ pathname: this.state.ReturnTo, state: this.state.ReturnState });
-
                     }
                     else {
                         this.setState({
@@ -102,11 +95,9 @@ export class Dashboard extends React.Component<RouteComponentProps<{}>, ModuleSt
                     })
                 })
         }
-        
     }
 
     private FBresponse(response: any) {
-
         if (!response.email) {
             this.setState({
                 SignupValidationText: "Facebook login failed!",
@@ -119,26 +110,21 @@ export class Dashboard extends React.Component<RouteComponentProps<{}>, ModuleSt
             fbData.PicURL = `http://graph.facebook.com/${response.id}/picture?type=large`;
             let email = response.email;
 
-
             this.setState({
                 Loading: true,
                 SignupValidationText: "",
             })
-
 
             let authHeader = CreateAuthHeaderObject(email, "", fbData.ToForm());
 
             fetch('api/User/FacebookLogin', authHeader)
                 .then(response => response.json() as Promise<HttpResult<{ newUser: boolean }>>)
                 .then(data => {
-
                     if (data.ok) {
-
                         UserState.FetchProfile();
 
                         this.props.history.push({ pathname: this.state.ReturnTo, state: this.state.ReturnState });
                         this.props.history.push({ pathname: this.state.ReturnTo, state: this.state.ReturnState });
-
                     }
                     else {
                         this.setState({
@@ -152,28 +138,23 @@ export class Dashboard extends React.Component<RouteComponentProps<{}>, ModuleSt
                     })
                 })
         }
-
-       
     }
 
     componentDidMount() {
         if (location.search.indexOf("code") > -1)
             location.search = 'dashboard';//remove code stuff from browser URL after oauth login, otherwise page refresh throws error
-
     }
 
     private LinkedInLoginStart() {
-
         var data = {
             response_type: 'code',
             client_id: '81jgok12c4g7jl',
-            redirect_uri: location.href.indexOf('localhost') > -1 ? 'http://localhost:59850/' : `${SiteDetails.SiteURL}` ,
+            redirect_uri: location.href.indexOf('localhost') > -1 ? 'http://localhost:59850/' : `${SiteDetails.SiteURL}`,
             state: "",
             scope: 'r_emailaddress%20r_liteprofile'
         };
 
         window.open(`https://www.linkedin.com/oauth/v2/authorization?response_type=${data.response_type}&client_id=${data.client_id}&redirect_uri=${data.redirect_uri}&state=&scope=${data.scope}`, '_self');
-
     }
 
     private LogoutSuccess() {
@@ -185,7 +166,6 @@ export class Dashboard extends React.Component<RouteComponentProps<{}>, ModuleSt
     }
 
     public render() {
-
         let googleStyle: React.CSSProperties = {
             backgroundColor: 'rgb(234, 39, 39)',
             color: 'white',
@@ -193,7 +173,7 @@ export class Dashboard extends React.Component<RouteComponentProps<{}>, ModuleSt
         }
 
         let googleLogin = <GoogleLogin
-            
+
             style={googleStyle}
             clientId="494990878218-qj14itjmckd44gf002pb2racnjlpd5sq.apps.googleusercontent.com"
             buttonText="Google Login"
@@ -228,7 +208,7 @@ export class Dashboard extends React.Component<RouteComponentProps<{}>, ModuleSt
                     </tr>
                 </tbody>
             </table>
-           
+
         </div>
 
         let linkedInLogin = <div className="linkedinLoginArea">
@@ -252,7 +232,7 @@ export class Dashboard extends React.Component<RouteComponentProps<{}>, ModuleSt
 
                     <h5 hidden={this.state.ReturnTo != Pages.profile}>Your coach profile on Gym Bay</h5>
 
-                    <br/>
+                    <br />
 
                     <img src="/dist/images/Gym-Bay_logo.png" className="img-fluid gymbayLoginLogo" />
 
@@ -262,8 +242,7 @@ export class Dashboard extends React.Component<RouteComponentProps<{}>, ModuleSt
 
                     <h5>It's easy!</h5>
 
-
-                    <br/>
+                    <br />
 
                     {facebookLogin}
 
@@ -283,26 +262,22 @@ export class Dashboard extends React.Component<RouteComponentProps<{}>, ModuleSt
                     </div>
 
                     <div className="noPasswordDiv">
-                        <span>Why no password login?</span> gym-bay.com prefers to use social media login options. Using this method, the only thing 
+                        <span>Why no password login?</span> gym-bay.com prefers to use social media login options. Using this method, the only thing
                         we ever gain access to is your email address. It's more secure for you, and doesn't require a new password.
                     </div>
                 </div>
 
             </div>
 
-           
-
-            <div className="text-center" style={{color: 'red'}}>{this.state.SignupValidationText}</div>
+            <div className="text-center" style={{ color: 'red' }}>{this.state.SignupValidationText}</div>
 
             <div hidden={!this.state.Loading}>
                 <Loader CentreAlign ContainerMargin="25px 0 25px 0" Height="80px" />
             </div>
 
-
         </div>
     }
 }
-
 
 class FBLoginData {
     FirstName: string = "";

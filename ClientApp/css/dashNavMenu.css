@@ -1,12 +1,9 @@
-
-
 .dashmenuContainer {
     display: table;
     width: 100%;
-    
 }
+
 .dashboardNavItem {
-    
 }
 
 .dashMenuLink {
@@ -21,6 +18,7 @@
     vertical-align: middle;
     min-height: 50px;
 }
+
     .dashMenuLink:hover {
         text-decoration: none;
         color: white;
@@ -34,9 +32,10 @@
 
 @media (max-width: 767px) {
     .dashmenuContainer {
-        top:unset;
+        top: unset;
         bottom: 0;
     }
+
     .dashMenuLink {
         font-size: 12px;
     }

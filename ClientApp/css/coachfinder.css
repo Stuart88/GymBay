@@ -1,5 +1,4 @@
-﻿
-#searchpage-logo {
+﻿#searchpage-logo {
     width: 250px;
     height: 250px;
     margin: auto auto;
@@ -9,6 +8,7 @@
     opacity: 0.2;
     animation: searchpage-logo-anim 2s infinite ease-in-out;
 }
+
 .coachSearchRow {
     margin: 10px auto;
     box-shadow: 1px 0px 11px -3px #eee;
@@ -16,15 +16,18 @@
     padding: 5px;
 }
 
-.coachSearchRow:hover{
-    background-color:#eaeaea;
+    .coachSearchRow:hover {
+        background-color: #eaeaea;
+    }
+
+.logoRatingArea {
+    margin: auto;
 }
-.logoRatingArea{
-    margin:auto;
-}
+
 .coachImageLogoContainer {
     /*padding: 0 5%;*/
 }
+
 .coachImageLogo {
     margin: auto;
 }
@@ -39,23 +42,28 @@
     font-size: 19px;
     margin-bottom: 4px;
 }
+
 .coachAddress {
     font-size: 12px;
     color: gray;
     text-decoration: underline;
 }
+
 .coachRatingText {
     font-size: 12px;
 }
-.coachRating{
-    color:yellow;
-    background-color:yellow;
-    width:100%;
-    height:5px
+
+.coachRating {
+    color: yellow;
+    background-color: yellow;
+    width: 100%;
+    height: 5px
 }
+
     .coachRating::-webkit-progress-value {
         background: yellow;
     }
+
     .coachRating::-moz-progress-bar {
         background: yellow;
     }
@@ -66,19 +74,23 @@
     margin-bottom: 5px;
     color: #666;
 }
+
 .allCoachIcons {
 }
+
 .smallCoachIconContainer {
     display: inline-table;
     width: auto;
     height: auto;
     vertical-align: middle;
 }
+
 .smallCoachIcon {
     margin: 7px 5px;
     height: 25px;
     width: 25px;
 }
+
 .coachIconContainer {
     display: inline-table;
     width: 120px;
@@ -87,12 +99,14 @@
     margin: 5px 2px;
     background: beige;
 }
+
 .coachIcon {
     color: green;
     display: table-cell;
     vertical-align: middle;
     width: 30px;
 }
+
 .coachIconLabel {
     color: #444;
     font-size: 12px;
@@ -105,9 +119,11 @@
     text-align: center;
     padding: 15px 0;
 }
-.moreInfoArea{
-    padding:10px;
+
+.moreInfoArea {
+    padding: 10px;
 }
+
 .aboutCoachTitle {
     font-size: 18px;
     margin-top: 5px;
@@ -115,13 +131,16 @@
     font-weight: bold;
     color: var(--blue);
 }
+
 .aboutCoach {
-    padding-top:40px;
+    padding-top: 40px;
     padding-bottom: 20px;
 }
-.socialIconsContainer{
-    display:inline-table;
+
+.socialIconsContainer {
+    display: inline-table;
 }
+
 .socialIcon {
     max-width: 30px;
     margin: 5px 5px;
@@ -130,9 +149,11 @@
 .adminCoachToggle {
     margin-right: 5px;
 }
+
     .adminCoachToggle.react-toggle--checked .react-toggle-track {
         background-color: var(--blue);
     }
+
 .adminCoachToggleLabel {
     margin: 0 5px 0 0;
     display: inline-flex;
@@ -147,7 +168,7 @@
     height: 150px;
 }*/
 
-.forCoaches-sections{
+.forCoaches-sections {
     padding-top: 45px;
     padding-bottom: 45px;
 }
@@ -158,7 +179,7 @@
     }
     /*.coachImage {
         width: calc((100vw / 3) - 10px);
-        height: calc(((100vw / 3) - 10px) / 2); 
+        height: calc(((100vw / 3) - 10px) / 2);
     }*/
     .coachInfoBox {
         border: 1px solid rgba(0, 119, 216, 0.09);
@@ -167,19 +188,16 @@
         height: 100%;
         background-color: rgb(249, 249, 249);
     }
+
     .coachSearchRow {
         margin: 0;
         box-shadow: none;
         border: none;
         padding: 35px 10px;
     }
-
 }
 
-
-
 @keyframes searchpage-logo-anim {
-
     50% {
         opacity: 0.2
     }

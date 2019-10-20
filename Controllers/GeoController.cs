@@ -1,71 +1,28 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using GymBay.Helpers;
 using GymBay.Models.DbClasses;
-using GymBay.Models.General;
 using GymBay.Models.Geo;
-using GymBay.Models.GymFinder;
 using Microsoft.AspNetCore.Mvc;
-using NetTopologySuite;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GymBay.Controllers
 {
     [Route("api/Geo")]
     public class GeoController : Controller
     {
-        readonly GymBayContext db = new GymBayContext();
+        #region Private Fields
+
+        private readonly GymBayContext db = new GymBayContext();
+
+        #endregion Private Fields
+
+        #region Public Methods
 
         [HttpGet("GetCountries")]
         public IEnumerable<CountryGeo> GetCountries()
         {
             return db.CountryGeo.OrderBy(x => x.CountryName).AsEnumerable();
-        }
-
-        [HttpGet("SearchCities")]
-        public IEnumerable<CitySearchResult> SearchCities([FromQuery]int countryID)
-        {
-            
-            string countryName = "";
-            if(countryID > 0)
-            {
-                countryName = db.CountryGeo.Find(countryID).CountryName;
-            }
-            bool noCountry = countryID == 0;
-
-            //int takeAmount = noCity ? 5 : 20;
-
-            List<CitySearchResult> cities;
-            try
-            {//need try catch because it keeps timing out on this search...
-               cities = (from c in db.CityGeoBasic
-                              where (c.CountryName == countryName || noCountry)
-                              select new CitySearchResult
-                              {
-                                  CityID = c.Id,
-                                  CityName = c.CityName,
-                                  NearestCity = c.NearestCity
-                              })
-                        .OrderBy(x => x.CityName)
-                        .ToList();
-            }
-            catch(Exception e)
-            {
-                cities = new List<CitySearchResult>
-                {
-                    new CitySearchResult
-                    {
-                        CityID = 0,
-                        CityName = "Error!",
-                        NearestCity = Functions.ErrorMessage(e)
-                    }
-                };
-            }
-
-            return cities;
-
         }
 
         [HttpGet("QueryCities")]
@@ -93,15 +50,56 @@ namespace GymBay.Controllers
             {
                 return new List<CityGeoBasic>();
             }
-
-
         }
+
+        [HttpGet("SearchCities")]
+        public IEnumerable<CitySearchResult> SearchCities([FromQuery]int countryID)
+        {
+            string countryName = "";
+            if (countryID > 0)
+            {
+                countryName = db.CountryGeo.Find(countryID).CountryName;
+            }
+            bool noCountry = countryID == 0;
+
+            //int takeAmount = noCity ? 5 : 20;
+
+            List<CitySearchResult> cities;
+            try
+            {//need try catch because it keeps timing out on this search...
+                cities = (from c in db.CityGeoBasic
+                          where (c.CountryName == countryName || noCountry)
+                          select new CitySearchResult
+                          {
+                              CityID = c.Id,
+                              CityName = c.CityName,
+                              NearestCity = c.NearestCity
+                          })
+                         .OrderBy(x => x.CityName)
+                         .ToList();
+            }
+            catch (Exception e)
+            {
+                cities = new List<CitySearchResult>
+                {
+                    new CitySearchResult
+                    {
+                        CityID = 0,
+                        CityName = "Error!",
+                        NearestCity = Functions.ErrorMessage(e)
+                    }
+                };
+            }
+
+            return cities;
+        }
+
+        #endregion Public Methods
 
         //[HttpGet("CityMake")]
         //public async Task<HttpResult> CityMake()
         //{
         //    System.Diagnostics.Debug.WriteLine("Starting city make...");
-
 
         //    GeoAPI.Geometries.IGeometryFactory geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
 
@@ -114,7 +112,7 @@ namespace GymBay.Controllers
         //    foreach (var c in allCities)
         //    {
         //        counter++;
-                
+
         //        //onyl need refresh filtered list if country has changed
         //        if(c.CountryName != currentCountry)
         //        {
@@ -136,7 +134,6 @@ namespace GymBay.Controllers
         //        {
         //            GeoAPI.Geometries.IPoint cityLocation = geometryFactory.CreatePoint(new GeoAPI.Geometries.Coordinate((double)c.Latitude, (double)c.Longitude));
 
-
         //            basicCities.Add(new CityGeoBasic
         //            {
         //                CityName = c.CityName,
@@ -150,7 +147,6 @@ namespace GymBay.Controllers
         //        }
 
         //        //CityGeo cCity = allCities.FirstOrDefault(x => x.Id == c.Id);
-               
 
         //        if(counter%1000 == 0)
         //        {
@@ -165,7 +161,7 @@ namespace GymBay.Controllers
         //            {
         //                return new HttpResult(false, null, Functions.ErrorMessage(e));
         //            }
-                   
+
         //        }
         //    }
 

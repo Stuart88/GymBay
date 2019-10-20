@@ -1,10 +1,8 @@
 ﻿import * as React from 'react';
 import { UserLoggedIn } from '../../Helpers/Functions';
-import { UserState} from '../../Helpers/Globals';
+import { UserState } from '../../Helpers/Globals';
 import { UpvoteItems, HttpResult } from '../../data/serverModels';
 import ReactTooltip from 'react-tooltip'
-
-
 
 interface ModuleProps {
     UpvoteItem: UpvoteItems
@@ -14,18 +12,14 @@ interface ModuleProps {
     BelongsToUser: boolean
 }
 
-
 export class UpvoteComponent extends React.Component<ModuleProps, {}> {
-
     constructor(props) {
         super(props);
 
         this.SubmitVote = this.SubmitVote.bind(this);
     }
 
-
     public render() {
-
         //to deal with risk of 'value undefined' error
         let voteString = this.props.Upvotes ? this.props.Upvotes : "";
 
@@ -74,13 +68,9 @@ export class UpvoteComponent extends React.Component<ModuleProps, {}> {
             </div>
 
         </div>;
-
     }
 
-        
     private SubmitVote() {
-
-
         if (UserLoggedIn() && !this.props.BelongsToUser) {
             fetch(`api/User/Upvote?itemType=${this.props.UpvoteItem}&itemID=${this.props.ItemID}`,
                 {
@@ -93,7 +83,6 @@ export class UpvoteComponent extends React.Component<ModuleProps, {}> {
                 })
                 .then(response => response.json() as Promise<HttpResult<string>>)
                 .then(res => {
-
                     if (res.ok) {
                         this.props.onVoteComplete(res.data)
                     }
@@ -102,7 +91,6 @@ export class UpvoteComponent extends React.Component<ModuleProps, {}> {
                     }
                 })
                 .catch((e: Error) => alert(e.message));
-
         }
     }
 }

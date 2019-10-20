@@ -11,16 +11,13 @@ interface ModuleState {
     LoadingCoaches: boolean
     SearchTerm: string
     LastSearchTerm: string
-
 }
 
 interface ModuleProps {
     CoachSelected: Function
 }
 
-
 export class CoachSearchAutosuggest extends React.Component<ModuleProps, ModuleState> {
-
     constructor(props) {
         super(props);
 
@@ -35,19 +32,13 @@ export class CoachSearchAutosuggest extends React.Component<ModuleProps, ModuleS
         this.QueryCoaches = this.QueryCoaches.bind(this);
         this.onSearch = this.onSearch.bind(this);
         this.SearchPoll = this.SearchPoll.bind(this);
-
-        
     }
 
     componentDidMount() {
         let component = this;
 
         setInterval(function () { component.SearchPoll(); }, 900);
-
-       
     }
-
-    
 
     private SearchPoll() {
         if (this.state.SearchTerm != this.state.LastSearchTerm && this.state.SearchTerm.length > 0) {
@@ -56,21 +47,15 @@ export class CoachSearchAutosuggest extends React.Component<ModuleProps, ModuleS
         }
     }
 
-  
-
     private QueryCoaches(q: string) {
-
         if (q.length > 0) {
             this.setState({
                 LoadingCoaches: true
             });
 
-
-
             fetch(`api/CoachFinder/QuickSearch?q=${q}`)
                 .then(response => response.json() as Promise<Array<CoachBasic>>)
                 .then(data => {
-
                     for (let i = 0; i < data.length; i++) {
                         data[i].allData = `${data[i].name} ${data[i].cityName} ${data[i].countryName}`;
                     }
@@ -79,25 +64,19 @@ export class CoachSearchAutosuggest extends React.Component<ModuleProps, ModuleS
                         Coaches: data,
                         LoadingCoaches: false,
                     });
-
                 });
         }
-
     }
 
-
-    private onSearch(searchTerm: string):void {
-
-
+    private onSearch(searchTerm: string): void {
         this.setState({
             SearchTerm: searchTerm,
         })
     }
-   
-    public render() {
 
+    public render() {
         let GroupHeading = ({ item }) => (
-            <strong style={{color: 'orange'}}>{item.cityName}</strong>
+            <strong style={{ color: 'orange' }}>{item.cityName}</strong>
         );
 
         let ListItem = ({ item }) => (
@@ -112,7 +91,7 @@ export class CoachSearchAutosuggest extends React.Component<ModuleProps, ModuleS
                         </td>
                         <td>
                             <div style={{ color: 'var(--black)' }}>{item.name}</div>
-                            <div style={{ color: '#666', fontSize:'13px' }}>{item.cityName}, {item.countryName}</div>
+                            <div style={{ color: '#666', fontSize: '13px' }}>{item.cityName}, {item.countryName}</div>
                         </td>
                         <td width="40px">
                             {
@@ -135,8 +114,8 @@ export class CoachSearchAutosuggest extends React.Component<ModuleProps, ModuleS
             emptyList: "",
             emptyFilter: this.state.LoadingCoaches ? "Loading..." : "No results",
             filterPlaceholder: "enter coach name or location"
-    }
-       
+        }
+
         return <div>
 
             <DropdownList
@@ -160,8 +139,5 @@ export class CoachSearchAutosuggest extends React.Component<ModuleProps, ModuleS
                 containerClassName="form-control searchInput"
             />
         </div>
-
     }
-
 }
-

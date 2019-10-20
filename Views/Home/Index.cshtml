@@ -1,7 +1,6 @@
 @model Microsoft.AspNetCore.Http.HttpRequest
 
 @{
-    
 
     @using GymBay.Helpers
 
@@ -41,8 +40,6 @@
 
                 keywords = string.Format("{0}, gyms in {1}, gyms in {2}", gym.Name, gym.LocationCityName, gym.LocationCountryName);
 
-              
-
             }
             else if (Model.Path.Value.Contains("viewCoach/") && int.TryParse(pathData[1], out int coachID))
             {
@@ -54,12 +51,10 @@
 
                 if (!string.IsNullOrEmpty(coach.ProfilePic))
                 {
-                     shareImageURL = string.Format("{0}/api/Images/CoachShareImage?coachid={1}", siteURL, coachID);
+                    shareImageURL = string.Format("{0}/api/Images/CoachShareImage?coachid={1}", siteURL, coachID);
                 }
 
                 keywords = string.Format("{0} {1}, coaches in {2}, coaches in {3}", coach.FirstName, coach.LastName, coach.CityName, coach.CountryName);
-
-              
 
             }
             else if (Model.Path.Value.Contains("newsItem/") && int.TryParse(pathData[1], out int newsItemID))
@@ -80,7 +75,7 @@
                 keywords = string.Format("{0}, gym news, training news", item.Title);
 
             }
-             else if (Model.Path.Value.Contains("gymfinder"))
+            else if (Model.Path.Value.Contains("gymfinder"))
             {
                 ogTitle = "Gym Bay - Gym Finder";
                 ogDescription = "Find and review the best gyms near you, or add your own!";
@@ -98,7 +93,7 @@
                         "@("@")context": "https://schema.org",
                         "@("@")type": "Organization",
                         "mainEntityOfPage": {
-                            "@("@")type": "WebPage",
+                        "@("@")type": "WebPage",
                         "@("@")id": "https://gym-bay.com/"
                         },
                         "url": "https://gym-bay.com/",
@@ -116,9 +111,6 @@
     }
 
 }
-
-
-
 
 @section head  {
     <meta http-equiv="content-language" content="en">
@@ -143,7 +135,6 @@
 
 }
 
-
 <div id="react-app">
 
     <div style="display:flex;align-items:center;height:100vh;width:100vw">
@@ -158,7 +149,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 @section scripts {

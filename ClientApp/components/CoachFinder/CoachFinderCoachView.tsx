@@ -24,16 +24,14 @@ interface ModuleState {
 }
 
 export class CoachFinderCoachView extends React.Component<ModuleProps, ModuleState> {
-
     constructor(props) {
-
         super(props);
 
         this.state = {
             toggleChecked: this.props.coach.isVerified == VerifiedSatus.Verfifed,
             featuredToggleChecked: this.props.coach.featuredCoach == FeaturedState.Featured
         }
-        
+
         this.ToggleStatus = this.ToggleStatus.bind(this);
         this.ToggleFeatured = this.ToggleFeatured.bind(this);
     }
@@ -43,7 +41,6 @@ export class CoachFinderCoachView extends React.Component<ModuleProps, ModuleSta
     }
 
     public render() {
-
         let c = this.props.coach;
 
         let ratingStars: Array<JSX.Element> = [];
@@ -54,12 +51,10 @@ export class CoachFinderCoachView extends React.Component<ModuleProps, ModuleSta
 
         return <div id={`coachSearchRow-${c.id}`} className="coachSearchRow max-width" style={{ backgroundColor: this.props.BackgroundColor }}>
 
-            
             <div id={`coachviewArea-${c.id}`} >
 
-               
                 {
-                    AdminLoggedIn() 
+                    AdminLoggedIn()
                         ? <div style={{
                             display: 'flex',
                             alignItems: 'center',
@@ -110,7 +105,7 @@ export class CoachFinderCoachView extends React.Component<ModuleProps, ModuleSta
                                 </div>
                                 <div >
 
-                                    <progress hidden={!OnMobile()}  className="coachRating" value={c.averageRating / SiteDetails.MaxRating} />
+                                    <progress hidden={!OnMobile()} className="coachRating" value={c.averageRating / SiteDetails.MaxRating} />
 
                                     <div hidden={OnMobile()}>
                                         {ratingStars}
@@ -121,7 +116,7 @@ export class CoachFinderCoachView extends React.Component<ModuleProps, ModuleSta
                             </div>
                         </div>
                     </div>
-                    <div className='col-9' style={{ padding: '1px'}}>
+                    <div className='col-9' style={{ padding: '1px' }}>
 
                         <div className="coachInfoBox" style={{ padding: '10px' }}>
                             <table className={`coachInfo ${OnMobile() ? 'full-width' : ''}`}>
@@ -133,7 +128,7 @@ export class CoachFinderCoachView extends React.Component<ModuleProps, ModuleSta
 
                                             </div>
                                         </td>
-                                       
+
                                     </tr>
                                     <tr>
                                         <td width="20px" style={{ paddingRight: '4px' }}>
@@ -145,7 +140,7 @@ export class CoachFinderCoachView extends React.Component<ModuleProps, ModuleSta
                                             </div>
                                         </td>
                                     </tr>
-                                   
+
                                 </tbody>
                             </table>
 
@@ -162,37 +157,37 @@ export class CoachFinderCoachView extends React.Component<ModuleProps, ModuleSta
                                 <div className="smallCoachIconContainer" data-tip="Crossfit" hidden={c.coachCrossfit != 1}>
                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="CrossfitCoach" />
                                 </div>
-                                <div className="smallCoachIconContainer" data-tip="Dance"  hidden={c.coachDance != 1}>
+                                <div className="smallCoachIconContainer" data-tip="Dance" hidden={c.coachDance != 1}>
                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="DanceCoach" />
                                 </div>
-                                <div className="smallCoachIconContainer" data-tip="Massage"  hidden={c.coachMasseuse != 1}>
+                                <div className="smallCoachIconContainer" data-tip="Massage" hidden={c.coachMasseuse != 1}>
                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="MasseueseCoach" />
                                 </div>
-                                <div className="smallCoachIconContainer" data-tip="Nutrition"  hidden={c.coachNutrition != 1}>
+                                <div className="smallCoachIconContainer" data-tip="Nutrition" hidden={c.coachNutrition != 1}>
                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="NutritionCoach" />
                                 </div>
-                                <div className="smallCoachIconContainer" data-tip="Olympic Lifting"  hidden={c.coachOlympicLifting != 1}>
+                                <div className="smallCoachIconContainer" data-tip="Olympic Lifting" hidden={c.coachOlympicLifting != 1}>
                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="OlympicLiftingCoach" />
                                 </div>
-                                <div className="smallCoachIconContainer" data-tip="One on One"  hidden={c.coachOneOnOne != 1}>
+                                <div className="smallCoachIconContainer" data-tip="One on One" hidden={c.coachOneOnOne != 1}>
                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="OneOnOneCoach" />
                                 </div>
-                                <div className="smallCoachIconContainer" data-tip="Online Available"  hidden={c.coachOnlineAvailable != 1}>
+                                <div className="smallCoachIconContainer" data-tip="Online Available" hidden={c.coachOnlineAvailable != 1}>
                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="OnlineCoachingAvaialbleCoach" />
                                 </div>
                                 <div className="smallCoachIconContainer" data-tip="Online Only" hidden={c.coachOnlineOnly != 1}>
                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="OnlineOnlyCoach" />
                                 </div>
-                                <div className="smallCoachIconContainer" data-tip="Physio"  hidden={c.coachPhysio != 1}>
+                                <div className="smallCoachIconContainer" data-tip="Physio" hidden={c.coachPhysio != 1}>
                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="PhysioCoach" />
                                 </div>
-                                <div className="smallCoachIconContainer" data-tip="Powerlifting"  hidden={c.coachPowerlifting != 1}>
+                                <div className="smallCoachIconContainer" data-tip="Powerlifting" hidden={c.coachPowerlifting != 1}>
                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="PowerliftingCoach" />
                                 </div>
-                                <div className="smallCoachIconContainer" data-tip="Programs Only"  hidden={c.coachProgramOnly != 1}>
+                                <div className="smallCoachIconContainer" data-tip="Programs Only" hidden={c.coachProgramOnly != 1}>
                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="ProgramOnlyCoach" />
                                 </div>
-                                <div className="smallCoachIconContainer" data-tip="Strongman"  hidden={c.coachStrongman != 1}>
+                                <div className="smallCoachIconContainer" data-tip="Strongman" hidden={c.coachStrongman != 1}>
                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="StrongmanCoach" />
                                 </div>
                                 <div className="smallCoachIconContainer" data-tip="Weight Loss" hidden={c.coachWeightLoss != 1}>
@@ -201,15 +196,12 @@ export class CoachFinderCoachView extends React.Component<ModuleProps, ModuleSta
                             </div>
                         </div>
 
-
-
                     </div>
 
                 </div>
 
-
                 <div className="seeMoreToggle" hidden={!this.props.ListView}>
-                  
+
                     <Link className="btn btn-primary btn-sm"
                         to={`${Pages.viewCoach}/${c.id}/${c.firstName}-${c.lastName}`}
 
@@ -298,7 +290,7 @@ export class CoachFinderCoachView extends React.Component<ModuleProps, ModuleSta
                                 <a data-tip={c.website} className="" hidden={!c.website || c.website.length == 0} href={c.website} target="_blank">
                                     <Icon Hidden={false} Name="010-website" Class="profileSocialIcon" Type={IconType.Social} />
                                 </a>
-                               
+
                             </div>
                         </div>
                         <div className="col-md-9">
@@ -312,15 +304,15 @@ export class CoachFinderCoachView extends React.Component<ModuleProps, ModuleSta
                                     <span className="coachIconLabel">Classes Available</span>
                                 </div>
                                 <div className="coachIconContainer" hidden={c.coachCrossfit != 1}>
-                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="CrossfitCoach" />
+                                    <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="CrossfitCoach" />
                                     <span className="coachIconLabel">Crossfit</span>
                                 </div>
                                 <div className="coachIconContainer" hidden={c.coachDance != 1}>
-                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="DanceCoach" />
+                                    <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="DanceCoach" />
                                     <span className="coachIconLabel">Dance</span>
                                 </div>
                                 <div className="coachIconContainer" hidden={c.coachMasseuse != 1}>
-                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="MasseueseCoach" />
+                                    <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="MasseueseCoach" />
                                     <span className="coachIconLabel">Massage</span>
                                 </div>
                                 <div className="coachIconContainer" hidden={c.coachNutrition != 1}>
@@ -328,23 +320,23 @@ export class CoachFinderCoachView extends React.Component<ModuleProps, ModuleSta
                                     <span className="coachIconLabel">Nutrition</span>
                                 </div>
                                 <div className="coachIconContainer" hidden={c.coachOlympicLifting != 1}>
-                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="OlympicLiftingCoach" />
+                                    <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="OlympicLiftingCoach" />
                                     <span className="coachIconLabel">Olympic Lifting</span>
                                 </div>
                                 <div className="coachIconContainer" hidden={c.coachOneOnOne != 1}>
-                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="OneOnOneCoach" />
+                                    <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="OneOnOneCoach" />
                                     <span className="coachIconLabel">One on One</span>
                                 </div>
                                 <div className="coachIconContainer" hidden={c.coachOnlineAvailable != 1}>
-                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="OnlineCoachingAvaialbleCoach" />
+                                    <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="OnlineCoachingAvaialbleCoach" />
                                     <span className="coachIconLabel">Online Available</span>
                                 </div>
                                 <div className="coachIconContainer" hidden={c.coachOnlineOnly != 1}>
-                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="OnlineOnlyCoach" />
+                                    <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="OnlineOnlyCoach" />
                                     <span className="coachIconLabel">Online Only</span>
                                 </div>
                                 <div className="coachIconContainer" hidden={c.coachPhysio != 1}>
-                                     <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="PhysioCoach" />
+                                    <Icon Hidden={false} Class="smallCoachIcon" Type={IconType.CoachFinder} Name="PhysioCoach" />
                                     <span className="coachIconLabel">Physio</span>
                                 </div>
                                 <div className="coachIconContainer" hidden={c.coachPowerlifting != 1}>
@@ -370,8 +362,6 @@ export class CoachFinderCoachView extends React.Component<ModuleProps, ModuleSta
                         </div>
                     </div>
 
-
-
                 </div>
 
             </div>
@@ -396,7 +386,6 @@ export class CoachFinderCoachView extends React.Component<ModuleProps, ModuleSta
             })
             .then(response => response.json() as Promise<HttpResult<boolean>>)
             .then(res => {
-
                 if (res.ok) {
                     this.setState({
                         toggleChecked: res.data
@@ -421,7 +410,6 @@ export class CoachFinderCoachView extends React.Component<ModuleProps, ModuleSta
             })
             .then(response => response.json() as Promise<HttpResult<boolean>>)
             .then(res => {
-
                 if (res.ok) {
                     this.setState({
                         featuredToggleChecked: res.data
@@ -434,5 +422,3 @@ export class CoachFinderCoachView extends React.Component<ModuleProps, ModuleSta
             .catch((e: Error) => alert(e.message));
     }
 }
-
-

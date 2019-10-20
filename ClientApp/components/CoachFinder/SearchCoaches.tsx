@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { CountryGeo, CityGeoBasic, HttpResult , UserProfile, CoachSearch, VerifiedSatus } from '../../data/serverModels';
+import { CountryGeo, CityGeoBasic, HttpResult, UserProfile, CoachSearch, VerifiedSatus } from '../../data/serverModels';
 import { EnterPressed, OnMobile, GymImagesArray, AdminLoggedIn, UserLoggedIn } from '../../Helpers/Functions';
 import { InlineLoader, Loader } from '../Widgets/Loaders';
 import { CitiesAutosuggest } from '../Geo/CitiesAutosuggest';
@@ -31,7 +31,6 @@ interface ModuleState {
 }
 
 export class CoachSearchPage extends React.Component<RouteComponentProps<{}>, ModuleState> {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -58,7 +57,6 @@ export class CoachSearchPage extends React.Component<RouteComponentProps<{}>, Mo
         this.ClearFilters = this.ClearFilters.bind(this);
     }
 
-
     componentDidMount() {
         if (!CoachSearchState.HasState()) {
             this.SearchCoaches();
@@ -66,7 +64,6 @@ export class CoachSearchPage extends React.Component<RouteComponentProps<{}>, Mo
     }
 
     private ClearFilters() {
-
         let q = this.state.Query;
 
         q.coachBodybuilding = 0;
@@ -102,17 +99,13 @@ export class CoachSearchPage extends React.Component<RouteComponentProps<{}>, Mo
         CoachSearchState.SetState(this.state);
     }
 
-
-    
     private SearchCoaches(incrementPage: boolean = false) {
-
         //
         this.setState({
             ValidationString: "",
             ModalOpen: false
         });
         CoachSearchState.SetState(this.state);
-       
 
         if (!this.state.LoadingCoaches) {
             if (!incrementPage)
@@ -135,12 +128,10 @@ export class CoachSearchPage extends React.Component<RouteComponentProps<{}>, Mo
                 })
                 .then(response => response.json() as Promise<HttpResult<{ coaches: UserProfile[], total: number }>>)
                 .then(data => {
-
                     if (data.ok) {
                         let coachList = new Array<UserProfile>();
 
                         if (incrementPage) {
-
                             coachList = this.state.Coaches.concat(data.data.coaches);
                         }
                         else {
@@ -182,12 +173,9 @@ export class CoachSearchPage extends React.Component<RouteComponentProps<{}>, Mo
                     CoachSearchState.SetState(this.state);
                 });
         }
-       
     }
 
-
     public render() {
-
         const modalStyles = {
             content: {
                 top: '55%',
@@ -198,7 +186,6 @@ export class CoachSearchPage extends React.Component<RouteComponentProps<{}>, Mo
                 transform: 'translate(-50%, -50%)',
                 border: '3px solid var(--blue)'
             }
-
         };
         let coachList = this.state.Coaches.length > 0
             ? this.state.Coaches.map((c, i) => <CoachFinderCoachView key={i.toString() + c.id.toString()}
@@ -206,18 +193,16 @@ export class CoachSearchPage extends React.Component<RouteComponentProps<{}>, Mo
                 ListView={true}
             />)
             : this.state.Coaches.length == 0 && this.state.LoadingCoaches
-                ? <div className = "text-center" >
+                ? <div className="text-center" >
                     <Loader CentreAlign ContainerMargin="20px 0 20px 0" Height="80px" />
                     Searching...
                     </div>
                 : <div className="text-center" >
-                    
+
                 </div>
 
-        
-
         return <div>
-            
+
             <HeaderSearchBarArea Props={this.props} />
             <div style={{ backgroundColor: '#eaeaea' }}>
 
@@ -230,7 +215,6 @@ export class CoachSearchPage extends React.Component<RouteComponentProps<{}>, Mo
                 }}>
                     <div className="row max-width" >
                         <div className="col-md-6">
-
 
                             <div>
                                 <table className="full-width">
@@ -247,7 +231,7 @@ export class CoachSearchPage extends React.Component<RouteComponentProps<{}>, Mo
                                                     }} placeholder="Keywords" />
 
                                             </td>
-                                            <td style={{ minWidth: '125px', textAlign: 'center', verticalAlign: 'middle'}}>
+                                            <td style={{ minWidth: '125px', textAlign: 'center', verticalAlign: 'middle' }}>
 
                                                 <button hidden={this.state.LoadingCoaches} className="btn btn-primary btn-sm" style={{ marginRight: '4px' }} onClick={() => this.setState({ ModalOpen: true })}>
                                                     Filters
@@ -310,13 +294,12 @@ export class CoachSearchPage extends React.Component<RouteComponentProps<{}>, Mo
                 </Modal>
 
                 <div >
-                    <div id="coachScroller" 
+                    <div id="coachScroller"
                         style={{
                             height: OnMobile() ? 'calc(100vh - 70px - 80px - 60px)' : 'calc(100vh - 85px - 60px)',
                             margin: '2px',
                             overflowY: 'auto'
                         }}>
-
 
                         <InfiniteScroll
                             initialLoad={this.state.InitialLoad}
@@ -362,6 +345,4 @@ export class CoachSearchPage extends React.Component<RouteComponentProps<{}>, Mo
 
         </div>;
     }
-
-   
 }

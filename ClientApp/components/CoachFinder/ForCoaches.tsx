@@ -9,23 +9,12 @@ import { Loader } from '../Widgets/Loaders';
 import { CoachFinderCoachView } from './CoachFinderCoachView';
 import { Icon, IconType, CenterTitleWithLine, Footer } from '../Widgets/Widgets';
 
-
-
 export class ForCoaches extends React.Component<RouteComponentProps<{}>, {}> {
-
     constructor(props) {
         super(props);
-
-        
-       
     }
 
-   
-
-
     public render() {
-
-
         let backgroundStyle: React.CSSProperties = {
             height: `calc(80vh - ${CSSValues.TopBarHeight}`,
             position: 'absolute',
@@ -64,7 +53,7 @@ export class ForCoaches extends React.Component<RouteComponentProps<{}>, {}> {
 
         </div>
 
-        return <div style={{ backgroundColor: 'rgb(243, 243, 243)', minHeight: '100%', paddingBottom: '70px', paddingTop: OnMobile() ? null :'1px' }}>
+        return <div style={{ backgroundColor: 'rgb(243, 243, 243)', minHeight: '100%', paddingBottom: '70px', paddingTop: OnMobile() ? null : '1px' }}>
 
             <HeaderSearchBarArea Props={this.props} />
 
@@ -75,7 +64,6 @@ export class ForCoaches extends React.Component<RouteComponentProps<{}>, {}> {
                 top: 'calc(80vh - 60px)',
                 backgroundColor: 'white'
             }}>
-
 
                 <div className="forCoaches-sections"
                     style={{
@@ -88,13 +76,11 @@ export class ForCoaches extends React.Component<RouteComponentProps<{}>, {}> {
 
                 <div className="max-width">
 
-
-                    <div style={{ paddingTop:'45px' }}>
+                    <div style={{ paddingTop: '45px' }}>
                         <CenterTitleWithLine LineColour="var(--black)" Title="Why Gym Bay?" />
-                        </div>
+                    </div>
 
                     <div className="row forCoaches-sections">
-
 
                         <div className='col-md-6' >
 
@@ -129,16 +115,16 @@ export class ForCoaches extends React.Component<RouteComponentProps<{}>, {}> {
 
                     <div className="forCoaches-sections text-center">
 
-                        <p  style={{ margin: OnMobile()? '10px' : 'auto', maxWidth: '600px' }}>
-                            Stand out from the others. With Gym Bay, you 
-                            can take it up a level with professionalism and integrity. Show your clients what you can do, and prove that you're 
+                        <p style={{ margin: OnMobile() ? '10px' : 'auto', maxWidth: '600px' }}>
+                            Stand out from the others. With Gym Bay, you
+                            can take it up a level with professionalism and integrity. Show your clients what you can do, and prove that you're
                             at the top of your game.
                         </p>
 
-                        <br/>
+                        <br />
 
                         <p style={{ margin: OnMobile() ? '10px' : 'auto', maxWidth: '600px' }}>
-                            By collecting top ratings and reviews from clients, your Gym Bay profile will stand out and put you 
+                            By collecting top ratings and reviews from clients, your Gym Bay profile will stand out and put you
                             head and shoulders above the rest.
                         </p>
 
@@ -152,14 +138,12 @@ export class ForCoaches extends React.Component<RouteComponentProps<{}>, {}> {
 
                         <div className='col-md-6 align-middle' >
 
-
                             <img className="img-fluid img-centred"
                                 style={{
                                     boxShadow: '0px 0px 8px -4px #444',
                                     border: '1px solid var(--grey)'
                                 }}
                                 src='/dist/images/coachfinder/examples/workout.jpeg' />
-
 
                         </div>
                         <div className='col-md-6 order-first order-md-6 align-middle'>
@@ -202,24 +186,22 @@ export class ForCoaches extends React.Component<RouteComponentProps<{}>, {}> {
                     <div className="forCoaches-sections">
 
                         <p className="text-center" style={{ margin: OnMobile() ? '10px' : 'auto', maxWidth: '600px' }}>
-                           Gym Bay is for everyone. It doesn't matter if you're just getting started or are a seasoned professional.
+                            Gym Bay is for everyone. It doesn't matter if you're just getting started or are a seasoned professional.
                         </p>
-                        <br/>
+                        <br />
                         <h3 className="text-center">
                             <Link to={{
-                            pathname: Pages.dashboard,
-                            state: { returnPath: Pages.profile }
-                        }}
-                            hidden={UserLoggedIn()} >
-                            Join Today
+                                pathname: Pages.dashboard,
+                                state: { returnPath: Pages.profile }
+                            }}
+                                hidden={UserLoggedIn()} >
+                                Join Today
                     </Link></h3>
                     </div>
 
-
-                   
                 </div>
-               
-                    <Footer />
+
+                <Footer />
             </div>
 
             <Link to={{
@@ -232,9 +214,4 @@ export class ForCoaches extends React.Component<RouteComponentProps<{}>, {}> {
 
         </div>
     }
-
-   
-  
 }
-
-

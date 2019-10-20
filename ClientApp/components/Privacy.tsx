@@ -1,17 +1,11 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import {  Footer } from './Widgets/Widgets';
+import { Footer } from './Widgets/Widgets';
 import { HeaderSearchBarArea } from './Widgets/HeaderSearchArea';
 import '../css/about.css';
 
-
-
 export class Privacy extends React.Component<RouteComponentProps<{}>, {}> {
-
     public render() {
-
-       
-
         let backGround = <div id="about-background">
 
         </div>
@@ -23,12 +17,9 @@ export class Privacy extends React.Component<RouteComponentProps<{}>, {}> {
             {backGround}
             <div id="about-text-area" className="max-width">
 
-                
-
                 <h1>Privacy Policy for Gym-Bay.com</h1>
 
                 <p>At Gym-Bay.com, accessible from https://gym-bay.com/, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Gym-Bay.com and how we use it.</p>
-
 
                 <h2>Log Files</h2>
 
@@ -37,8 +28,6 @@ export class Privacy extends React.Component<RouteComponentProps<{}>, {}> {
                 <h2>Cookies and Web Beacons</h2>
 
                 <p>Like any other website, Gym-Bay.com uses 'cookies'. These cookies are used to store information including visitors' preferences, and the pages on the website that the visitor accessed or visited. The information is used to optimize the users' experience by customizing our web page content based on visitors' browser type and/or other information.</p>
-
-
 
                 <h2>Privacy Policies</h2>
 
@@ -70,7 +59,7 @@ export class Privacy extends React.Component<RouteComponentProps<{}>, {}> {
 
             </div>
 
-            <Footer/>
+            <Footer />
 
         </div>
     }

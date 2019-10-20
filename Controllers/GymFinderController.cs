@@ -1,253 +1,28 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using GymBay.Helpers;
 using GymBay.Models.DbClasses;
 using GymBay.Models.General;
 using GymBay.Models.GymFinder;
 using ImageMagick;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NetTopologySuite;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GymBay.Controllers
 {
     [Route("api/GymFinder")]
     public class GymFinderController : Controller
     {
-        readonly GymBayContext db = new GymBayContext();
-       
+        #region Private Fields
 
-        [HttpPost("Search")]
-        public async Task<HttpResult> Search([FromBody] GymSearch q)
-        {
-            try
-            {
-                
-                int takeAmount = 10;
-                int pageNum = q.Page;
+        private readonly GymBayContext db = new GymBayContext();
 
-                string k = q.Keywords.ToLower().Trim();
-                //if (string.IsNullOrEmpty(k))
-                //    k = " ";
-                ////for some reason search takes less time if given keyword is not empty...
+        #endregion Private Fields
 
-                List<string> queryWords = k.Replace(',', ' ').Split(' ').Where(x => x.Length > 0).ToList();
-
-               
-
-                IQueryable<GymFinderGym> gyms = (from g in db.GymFinderGym
-                            //let citySearch = city.Id > 0
-                            where
-                            (
-                            (g.Status == q.Status || q.Status == (int)Enums.GymStatus.Any)
-                            &&
-                            (
-                              string.IsNullOrEmpty(k)
-                              || queryWords.Any(w => g.Name.ToLower().Contains(w))
-                              || queryWords.Any(w => g.StreetAddress.ToLower().Contains(w))
-                              || queryWords.Any(w => g.LocationCityName.ToLower().Contains(w))
-                              || queryWords.Any(w => g.LocationCountryName.ToLower().Contains(w))
-                              || queryWords.All(w => g.Description.ToLower().Contains(w))
-                            )
-                            //&&
-                            //(
-                            //      q.CityID == city.Id || !citySearch
-                            //)
-                            &&
-                            (q.Cafe == g.Cafe || q.Cafe != 1)
-                            &&
-                            (q.CardioMachines == g.CardioMachines || q.CardioMachines != 1)
-                            &&
-                            (q.ChangingRooms == g.ChangingRooms || q.ChangingRooms != 1)
-                            &&
-                            (q.ClassesAvailable == g.ClassesAvailable || q.ClassesAvailable != 1)
-                            &&
-                            (q.Crossfit == g.Crossfit || q.Crossfit != 1)
-                            &&
-                            (q.FreeWeightsBarsPlates == g.FreeWeightsBarsPlates || q.FreeWeightsBarsPlates != 1)
-                            &&
-                            (q.FreeWeightsDumbbells == g.FreeWeightsDumbbells || q.FreeWeightsDumbbells != 1)
-                            &&
-                            (q.MembersOnly == g.MembersOnly || q.MembersOnly != 1)
-                            &&
-                            (q.NoMembershipRequired == g.NoMembershipRequired || q.NoMembershipRequired != 1)
-                            &&
-                            (q.OlympicLifting == g.OlympicLifting || q.OlympicLifting != 1)
-                            &&
-                            (q.Physio == g.Physio || q.Physio != 1)
-                            &&
-                            (q.Powerlifting == g.Powerlifting || q.Powerlifting != 1)
-                            &&
-                            (q.ResistanceMachines == g.ResistanceMachines || q.ResistanceMachines != 1)
-                            &&
-                            (q.Sauna == g.Sauna || q.Sauna != 1)
-                            &&
-                            (q.SwimmingPool == g.SwimmingPool || q.SwimmingPool != 1)
-                            &&
-                            (q.Toilets == g.Toilets || q.Toilets != 1)
-                            &&
-                            (q.TwentyFourHour == g.TwentyFourHour || q.TwentyFourHour != 1)
-                            &&
-                            (q.VendingMachine == g.VendingMachine || q.VendingMachine != 1)
-                             &&
-                            (q.Strongman == g.Strongman || q.Strongman != 1)
-                             &&
-                            (q.Lockers == g.Lockers || q.Lockers != 1)
-                            )
-                            select g);
-
-
-                int total = gyms.Count();
-
-                CityGeo city = await db.CityGeo.FindAsync(q.CityID);
-                //if (city == null)
-                //    city = new CityGeo { Id = 0 };
-
-                if (city != null)
-                {//sort by distance first if city selected
-
-                    GeoAPI.Geometries.IGeometryFactory geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
-                    GeoAPI.Geometries.IPoint cityLocation = geometryFactory.CreatePoint(new GeoAPI.Geometries.Coordinate((double)city.Latitude, (double)city.Longitude));
-
-                    gyms = gyms
-                        .OrderBy(x => new GeoAPI.Geometries.Coordinate(x.LocationLat, x.LocationLong).Distance(cityLocation.Coordinate))
-                        .ThenByDescending(x => x.CreationDate);
-                              
-                }
-                else if(!string.IsNullOrEmpty(k))
-                {//else sort by keyword relevance only
-
-                    gyms = gyms
-                        .OrderByDescending(x => x.Name.ToLower().StartsWith(k))
-                        .ThenByDescending(x => x.CreationDate);
-                }
-                else
-                {//else sort by rating
-
-                    gyms = gyms.OrderByDescending(x => x.AverageRating);
-                }
-
-                gyms = gyms.Skip(pageNum * takeAmount).Take(takeAmount);
-
-                return new HttpResult(true, new { gyms, total }, "");
-            }
-            catch (Exception e)
-            {
-                return new HttpResult(false, null, Functions.ErrorMessage(e));
-
-            }
-
-        }
-
-        [HttpGet("GetGym")]
-        public HttpResult GetGym([FromQuery]int gymID)
-        {
-            try
-            {
-
-                var gym = db.GymFinderGym.Find(gymID);
-
-                if (gym == null)
-                    throw new Exception("No gym found.");
-
-
-                return new HttpResult(true, gym, "");
-            }
-            catch (Exception e)
-            {
-                return new HttpResult(false, null, Functions.ErrorMessage(e));
-
-            }
-
-        }
-
-        [HttpGet("GetMyGym")]
-        public HttpResult GetMyGym()
-        {
-            try
-            {
-                if (!Functions.UserLoggedIn(Request, out User thisUser))
-                    throw new Exception("Not logged in.");
-
-                var gym = db.GymFinderGym.FirstOrDefault(x => x.OwnerId == thisUser.Id);
-
-                if (gym == null)
-                    throw new Exception("No gym found.");
-
-
-                return new HttpResult(true, gym, "");
-            }
-            catch (Exception e)
-            {
-                return new HttpResult(false, new GymFinderGym(), Functions.ErrorMessage(e));
-
-            }
-
-        }
-
-        [HttpGet("QuickSearch")]
-        public IEnumerable<GymFinderBasic> QuickSearch([FromQuery] string q)
-        {
-            if (!string.IsNullOrEmpty(q))
-            {
-                q = q.ToLower().Trim();
-
-                List<string> queryWords = q.Replace(',', ' ').Split(' ').Where(x => x.Length > 0).ToList();
-
-
-
-                IQueryable<GymFinderBasic> gyms = (from g in db.GymFinderGym
-                                                   where (g.Status == (int)Enums.GymStatus.Live)
-                                                   && (
-                                                     string.IsNullOrEmpty(q)
-                                                     || queryWords.Any(w => g.Name.ToLower().Contains(w))
-                                                     || queryWords.Any(w => g.StreetAddress.ToLower().Contains(w))
-                                                     || queryWords.Any(w => g.LocationCityName.ToLower().Contains(w))
-                                                     || queryWords.Any(w => g.LocationCountryName.ToLower().Contains(w))
-                                                     )
-                                                   select new GymFinderBasic
-                                                   {
-                                                       Id = g.Id,
-                                                       CityName = g.LocationCityName,
-                                                       CountryName = g.LocationCountryName,
-                                                       Name = g.Name,
-                                                       Logo = g.ImageLocationLogo
-                                                   })
-                                                   .OrderByDescending(x => x.Name.ToLower()
-                                                   .StartsWith(q))
-                                                   .Take(20);
-                return gyms;
-
-            }
-            else
-            {
-                return new List<GymFinderBasic>();
-
-            }
-        }
-
-        [HttpGet("GetAllGyms")]
-        public IEnumerable<GymFinderBasic> GetAllGyms()
-        {
-
-            IQueryable<GymFinderBasic> gyms = (from g in db.GymFinderGym
-                                               where (g.Status == (int)Enums.GymStatus.Live)
-                                               select new GymFinderBasic
-                                               {
-                                                   Id = g.Id,
-                                                   CityName = g.LocationCityName,
-                                                   CountryName = g.LocationCountryName,
-                                                   Name = g.Name,
-                                                   Logo = g.ImageLocationLogo
-                                               })
-                                               .OrderByDescending(x => x.Name.ToLower());
-            return gyms;
-        }
-
+        #region Public Methods
 
         [HttpPost("AddUpdateGymFinderGym")]
         public async Task<HttpResult> AddUpdateGymFinderGym([FromBody] GymFinderGym gym)
@@ -267,18 +42,17 @@ namespace GymBay.Controllers
                 //    throw new Exception("Not logged in!");
                 //}
 
-                if(gym.Id > 0 && !userLoggedIn && !adminLoggedIn)
+                if (gym.Id > 0 && !userLoggedIn && !adminLoggedIn)
                 {
                     //gym belongs to someone but no user logged in
                     throw new Exception("Not logged in!");
                 }
-                else if(gym.Id > 0 && !adminLoggedIn && userLoggedIn && editor.Id != gym.OwnerId)
+                else if (gym.Id > 0 && !adminLoggedIn && userLoggedIn && editor.Id != gym.OwnerId)
                 {
                     //user is not admin, and gym does not belong to this user
                     throw new Exception("Not logged in!");
                 }
                 //all okay, gym belongs to user, or user is admin.
-
 
                 DateTime now = DateTime.Now;
                 CityGeo city = db.CityGeo.Find(gym.LocationCityId);
@@ -313,7 +87,6 @@ namespace GymBay.Controllers
                     {
                         gym.Linkedin = "https://" + gym.Instagram;
                     }
-
 
                     updating.Phone = gym.Phone;
                     updating.Website = gym.Website;
@@ -361,7 +134,6 @@ namespace GymBay.Controllers
                     updating.Skype = gym.Skype;
                     updating.Youtube = gym.Youtube;
 
-
                     db.Entry(updating).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
 
                     await db.SaveChangesAsync();
@@ -380,8 +152,6 @@ namespace GymBay.Controllers
                     db.GymFinderGym.Add(gym);
 
                     await db.SaveChangesAsync();
-
-                   
                 }
 
                 return new HttpResult(true, gym, "");
@@ -390,108 +160,22 @@ namespace GymBay.Controllers
             {
                 return new HttpResult(false, null, Functions.ErrorMessage(e));
             }
-
-        }
-
-        [HttpPost("ToggleGymStatus/{gymID}")]
-        public async Task<HttpResult> ToggleGymStatus([FromRoute] int gymID)
-        {
-            try
-            {
-                if (!Functions.AdminLoggedIn(Request, out _))
-                    throw new Exception("Not logged in!");
-
-                GymFinderGym updating = db.GymFinderGym.Find(gymID);
-                if (updating == null)
-                    throw new Exception("No gym found!");
-
-
-                updating.Status = updating.Status == (int)Enums.GymStatus.Live ? (int)Enums.GymStatus.Pending : (int)Enums.GymStatus.Live;
-                updating.ModifiedDate = DateTime.Now;
-
-                db.Entry(updating).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-
-                await db.SaveChangesAsync();
-               
-
-                return new HttpResult(true, updating.Status == (int)Enums.GymStatus.Live, "");
-            }
-            catch (Exception e)
-            {
-                return new HttpResult(false, null, Functions.ErrorMessage(e));
-            }
-
-        }
-
-        [HttpPost("ToggleFeatured/{gymID}")]
-        public async Task<HttpResult> ToggleFeatured([FromRoute] int gymID)
-        {
-            try
-            {
-                if (!Functions.AdminLoggedIn(Request, out _))
-                    throw new Exception("Not logged in!");
-
-                GymFinderGym updating = db.GymFinderGym.Find(gymID);
-                if (updating == null)
-                    throw new Exception("No gym found!");
-
-
-                updating.Featured = updating.Featured == (int)Enums.FeaturedState.NotFeatured ? (int)Enums.FeaturedState.Featured: (int)Enums.FeaturedState.NotFeatured;
-                updating.ModifiedDate = DateTime.Now;
-
-                db.Entry(updating).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-
-                await db.SaveChangesAsync();
-
-
-                return new HttpResult(true, updating.Featured == (int)Enums.FeaturedState.Featured, "");
-            }
-            catch (Exception e)
-            {
-                return new HttpResult(false, null, Functions.ErrorMessage(e));
-            }
-
-        }
-
-        [HttpGet("GetFeaturedGyms")]
-        public HttpResult GetFeaturedGyms()
-        {
-            try
-            {
-                IEnumerable<FeaturedGym> featured = db.GymFinderGym.Where(x => x.Featured == 1)
-                    .AsEnumerable()
-                    .Select(gym => new FeaturedGym {
-                        GymId = gym.Id,
-                        GymName = gym.Name,
-                        Location = string.Format("{0}, {1}", gym.LocationCityName, gym.LocationCountryName),
-                        ImageUrl = string.IsNullOrEmpty(gym.ImageLocationLogo)
-                        ? "/dist/images/gymfinder/default-gym.svg"
-                        : gym.ImageLocationLogo
-                    });
-                return new HttpResult(true, featured, "");
-            }
-            catch (Exception e)
-            {
-                return new HttpResult(false, null, Functions.ErrorMessage(e));
-            }
         }
 
         [HttpPost("AddUpdateGymImages")]
-       public async Task<HttpResult> AddUpdateGymImages([FromQuery] int gymID)
+        public async Task<HttpResult> AddUpdateGymImages([FromQuery] int gymID)
         {
             GymFinderGym gym = await db.GymFinderGym.FindAsync(gymID);
-            if(gym == null)
+            if (gym == null)
                 return new HttpResult(false, null, "Gym not found!");
 
             if (Request.Form.Files.Count > 0)
             {
-                
                 try
                 {
                     DateTime now = DateTime.Now;
 
                     string appPath = Path.Combine(Environment.CurrentDirectory, "wwwroot", "dist", "uploads", "images", "gymfinder", "gyms");
-
 
                     for (int i = 0; i < Request.Form.Files.Count(); i++)
                     {
@@ -508,7 +192,7 @@ namespace GymBay.Controllers
                             continue;
                         //skip files that are unchanged
 
-                        int imageNumber = i+1; // image number 1/2/3 etc matches client side image store
+                        int imageNumber = i + 1; // image number 1/2/3 etc matches client side image store
 
                         if (imageFile.Length == 0)
                         {//delete files that are gone
@@ -518,9 +202,11 @@ namespace GymBay.Controllers
                                 case 1:
                                     gym.ImageLocation1 = string.Empty;
                                     break;
+
                                 case 2:
                                     gym.ImageLocation2 = string.Empty;
                                     break;
+
                                 case 3:
                                     gym.ImageLocation3 = string.Empty;
                                     break;
@@ -528,9 +214,8 @@ namespace GymBay.Controllers
                             db.Entry(gym).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                             _ = await db.SaveChangesAsync();
 
-                            continue; 
+                            continue;
                         }
-
 
                         byte[] postedImg = Functions.ConvertToBytes(imageFile);
 
@@ -570,9 +255,11 @@ namespace GymBay.Controllers
                             case 1:
                                 gym.ImageLocation1 = string.Format("/dist/uploads/images/gymfinder/gyms/{0}", fileName);
                                 break;
+
                             case 2:
                                 gym.ImageLocation2 = string.Format("/dist/uploads/images/gymfinder/gyms/{0}", fileName); ;
                                 break;
+
                             case 3:
                                 gym.ImageLocation3 = string.Format("/dist/uploads/images/gymfinder/gyms/{0}", fileName); ;
                                 break;
@@ -586,12 +273,10 @@ namespace GymBay.Controllers
                     //update to latest entry, otherwise logo/images may not be correct as the two upload simultaneously
                     gym = db.GymFinderGym.Find(gym.Id);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     return new HttpResult(false, null, Functions.ErrorMessage(e));
                 }
-
-
             }
 
             return new HttpResult(true, gym, "");
@@ -607,10 +292,8 @@ namespace GymBay.Controllers
             if (Request.Form.Files.Count > 0 && Request.Form.Files[0].FileName != gym.ImageLocationLogo && Request.Form.Files[0].Length > 0)
             {
                 var imageFile = Request.Form.Files[0];
-                    
 
                 string appPath = Path.Combine(Environment.CurrentDirectory, "wwwroot", "dist", "uploads", "images", "gymfinder", "logos");
-
 
                 byte[] postedImg = Functions.ConvertToBytes(imageFile);
                 if (crop.Width > 0 && crop.Height > 0)
@@ -650,7 +333,6 @@ namespace GymBay.Controllers
 
                 gym.ImageLocationLogo = string.Format("/dist/uploads/images/gymfinder/logos/{0}", fileName);
 
-
                 db.Entry(gym).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
 
                 _ = await db.SaveChangesAsync();
@@ -658,7 +340,7 @@ namespace GymBay.Controllers
                 //update to latest entry, otherwise logo/images may not be correct as the two upload almost simultaneously
                 gym = db.GymFinderGym.Find(gym.Id);
             }
-            else if(Request.Form.Files[0].FileName == "delete")
+            else if (Request.Form.Files[0].FileName == "delete")
             {
                 DeleteGymLogo(gym.Id);
                 gym.ImageLocationLogo = string.Empty;
@@ -695,23 +377,294 @@ namespace GymBay.Controllers
             {
                 return new HttpResult(false, null, Functions.ErrorMessage(e));
             }
-
         }
 
-        private void DeleteSingleGymImage(int gymID, int imageNum)
+        [HttpGet("GetAllGyms")]
+        public IEnumerable<GymFinderBasic> GetAllGyms()
         {
-            //Delete gym images
-            string imgsPath = Path.Combine(Environment.CurrentDirectory, "wwwroot", "dist", "uploads", "images", "gymfinder", "gyms");
-
-            string imgFileNameStart = string.Format("{0}_gymimage_{1}", gymID, imageNum);
-
-            DirectoryInfo imgsDirectory = new DirectoryInfo(imgsPath);
-
-            FileInfo imgDelete = imgsDirectory.GetFiles().FirstOrDefault(x => x.Name.StartsWith(imgFileNameStart));
-
-            if (imgDelete != null)
-                imgDelete.Delete();
+            IQueryable<GymFinderBasic> gyms = (from g in db.GymFinderGym
+                                               where (g.Status == (int)Enums.GymStatus.Live)
+                                               select new GymFinderBasic
+                                               {
+                                                   Id = g.Id,
+                                                   CityName = g.LocationCityName,
+                                                   CountryName = g.LocationCountryName,
+                                                   Name = g.Name,
+                                                   Logo = g.ImageLocationLogo
+                                               })
+                                               .OrderByDescending(x => x.Name.ToLower());
+            return gyms;
         }
+
+        [HttpGet("GetFeaturedGyms")]
+        public HttpResult GetFeaturedGyms()
+        {
+            try
+            {
+                IEnumerable<FeaturedGym> featured = db.GymFinderGym.Where(x => x.Featured == 1)
+                    .AsEnumerable()
+                    .Select(gym => new FeaturedGym
+                    {
+                        GymId = gym.Id,
+                        GymName = gym.Name,
+                        Location = string.Format("{0}, {1}", gym.LocationCityName, gym.LocationCountryName),
+                        ImageUrl = string.IsNullOrEmpty(gym.ImageLocationLogo)
+                        ? "/dist/images/gymfinder/default-gym.svg"
+                        : gym.ImageLocationLogo
+                    });
+                return new HttpResult(true, featured, "");
+            }
+            catch (Exception e)
+            {
+                return new HttpResult(false, null, Functions.ErrorMessage(e));
+            }
+        }
+
+        [HttpGet("GetGym")]
+        public HttpResult GetGym([FromQuery]int gymID)
+        {
+            try
+            {
+                var gym = db.GymFinderGym.Find(gymID);
+
+                if (gym == null)
+                    throw new Exception("No gym found.");
+
+                return new HttpResult(true, gym, "");
+            }
+            catch (Exception e)
+            {
+                return new HttpResult(false, null, Functions.ErrorMessage(e));
+            }
+        }
+
+        [HttpGet("GetMyGym")]
+        public HttpResult GetMyGym()
+        {
+            try
+            {
+                if (!Functions.UserLoggedIn(Request, out User thisUser))
+                    throw new Exception("Not logged in.");
+
+                var gym = db.GymFinderGym.FirstOrDefault(x => x.OwnerId == thisUser.Id);
+
+                if (gym == null)
+                    throw new Exception("No gym found.");
+
+                return new HttpResult(true, gym, "");
+            }
+            catch (Exception e)
+            {
+                return new HttpResult(false, new GymFinderGym(), Functions.ErrorMessage(e));
+            }
+        }
+
+        [HttpGet("QuickSearch")]
+        public IEnumerable<GymFinderBasic> QuickSearch([FromQuery] string q)
+        {
+            if (!string.IsNullOrEmpty(q))
+            {
+                q = q.ToLower().Trim();
+
+                List<string> queryWords = q.Replace(',', ' ').Split(' ').Where(x => x.Length > 0).ToList();
+
+                IQueryable<GymFinderBasic> gyms = (from g in db.GymFinderGym
+                                                   where (g.Status == (int)Enums.GymStatus.Live)
+                                                   && (
+                                                     string.IsNullOrEmpty(q)
+                                                     || queryWords.Any(w => g.Name.ToLower().Contains(w))
+                                                     || queryWords.Any(w => g.StreetAddress.ToLower().Contains(w))
+                                                     || queryWords.Any(w => g.LocationCityName.ToLower().Contains(w))
+                                                     || queryWords.Any(w => g.LocationCountryName.ToLower().Contains(w))
+                                                     )
+                                                   select new GymFinderBasic
+                                                   {
+                                                       Id = g.Id,
+                                                       CityName = g.LocationCityName,
+                                                       CountryName = g.LocationCountryName,
+                                                       Name = g.Name,
+                                                       Logo = g.ImageLocationLogo
+                                                   })
+                                                   .OrderByDescending(x => x.Name.ToLower()
+                                                   .StartsWith(q))
+                                                   .Take(20);
+                return gyms;
+            }
+            else
+            {
+                return new List<GymFinderBasic>();
+            }
+        }
+
+        [HttpPost("Search")]
+        public async Task<HttpResult> Search([FromBody] GymSearch q)
+        {
+            try
+            {
+                int takeAmount = 10;
+                int pageNum = q.Page;
+
+                string k = q.Keywords.ToLower().Trim();
+                //if (string.IsNullOrEmpty(k))
+                //    k = " ";
+                ////for some reason search takes less time if given keyword is not empty...
+
+                List<string> queryWords = k.Replace(',', ' ').Split(' ').Where(x => x.Length > 0).ToList();
+
+                IQueryable<GymFinderGym> gyms = (from g in db.GymFinderGym
+                                                     //let citySearch = city.Id > 0
+                                                 where
+                                                 (
+                                                 (g.Status == q.Status || q.Status == (int)Enums.GymStatus.Any)
+                                                 &&
+                                                 (
+                                                   string.IsNullOrEmpty(k)
+                                                   || queryWords.Any(w => g.Name.ToLower().Contains(w))
+                                                   || queryWords.Any(w => g.StreetAddress.ToLower().Contains(w))
+                                                   || queryWords.Any(w => g.LocationCityName.ToLower().Contains(w))
+                                                   || queryWords.Any(w => g.LocationCountryName.ToLower().Contains(w))
+                                                   || queryWords.All(w => g.Description.ToLower().Contains(w))
+                                                 )
+                                                 //&&
+                                                 //(
+                                                 //      q.CityID == city.Id || !citySearch
+                                                 //)
+                                                 &&
+                                                 (q.Cafe == g.Cafe || q.Cafe != 1)
+                                                 &&
+                                                 (q.CardioMachines == g.CardioMachines || q.CardioMachines != 1)
+                                                 &&
+                                                 (q.ChangingRooms == g.ChangingRooms || q.ChangingRooms != 1)
+                                                 &&
+                                                 (q.ClassesAvailable == g.ClassesAvailable || q.ClassesAvailable != 1)
+                                                 &&
+                                                 (q.Crossfit == g.Crossfit || q.Crossfit != 1)
+                                                 &&
+                                                 (q.FreeWeightsBarsPlates == g.FreeWeightsBarsPlates || q.FreeWeightsBarsPlates != 1)
+                                                 &&
+                                                 (q.FreeWeightsDumbbells == g.FreeWeightsDumbbells || q.FreeWeightsDumbbells != 1)
+                                                 &&
+                                                 (q.MembersOnly == g.MembersOnly || q.MembersOnly != 1)
+                                                 &&
+                                                 (q.NoMembershipRequired == g.NoMembershipRequired || q.NoMembershipRequired != 1)
+                                                 &&
+                                                 (q.OlympicLifting == g.OlympicLifting || q.OlympicLifting != 1)
+                                                 &&
+                                                 (q.Physio == g.Physio || q.Physio != 1)
+                                                 &&
+                                                 (q.Powerlifting == g.Powerlifting || q.Powerlifting != 1)
+                                                 &&
+                                                 (q.ResistanceMachines == g.ResistanceMachines || q.ResistanceMachines != 1)
+                                                 &&
+                                                 (q.Sauna == g.Sauna || q.Sauna != 1)
+                                                 &&
+                                                 (q.SwimmingPool == g.SwimmingPool || q.SwimmingPool != 1)
+                                                 &&
+                                                 (q.Toilets == g.Toilets || q.Toilets != 1)
+                                                 &&
+                                                 (q.TwentyFourHour == g.TwentyFourHour || q.TwentyFourHour != 1)
+                                                 &&
+                                                 (q.VendingMachine == g.VendingMachine || q.VendingMachine != 1)
+                                                  &&
+                                                 (q.Strongman == g.Strongman || q.Strongman != 1)
+                                                  &&
+                                                 (q.Lockers == g.Lockers || q.Lockers != 1)
+                                                 )
+                                                 select g);
+
+                int total = gyms.Count();
+
+                CityGeo city = await db.CityGeo.FindAsync(q.CityID);
+                //if (city == null)
+                //    city = new CityGeo { Id = 0 };
+
+                if (city != null)
+                {//sort by distance first if city selected
+                    GeoAPI.Geometries.IGeometryFactory geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
+                    GeoAPI.Geometries.IPoint cityLocation = geometryFactory.CreatePoint(new GeoAPI.Geometries.Coordinate((double)city.Latitude, (double)city.Longitude));
+
+                    gyms = gyms
+                        .OrderBy(x => new GeoAPI.Geometries.Coordinate(x.LocationLat, x.LocationLong).Distance(cityLocation.Coordinate))
+                        .ThenByDescending(x => x.CreationDate);
+                }
+                else if (!string.IsNullOrEmpty(k))
+                {//else sort by keyword relevance only
+                    gyms = gyms
+                        .OrderByDescending(x => x.Name.ToLower().StartsWith(k))
+                        .ThenByDescending(x => x.CreationDate);
+                }
+                else
+                {//else sort by rating
+                    gyms = gyms.OrderByDescending(x => x.AverageRating);
+                }
+
+                gyms = gyms.Skip(pageNum * takeAmount).Take(takeAmount);
+
+                return new HttpResult(true, new { gyms, total }, "");
+            }
+            catch (Exception e)
+            {
+                return new HttpResult(false, null, Functions.ErrorMessage(e));
+            }
+        }
+
+        [HttpPost("ToggleFeatured/{gymID}")]
+        public async Task<HttpResult> ToggleFeatured([FromRoute] int gymID)
+        {
+            try
+            {
+                if (!Functions.AdminLoggedIn(Request, out _))
+                    throw new Exception("Not logged in!");
+
+                GymFinderGym updating = db.GymFinderGym.Find(gymID);
+                if (updating == null)
+                    throw new Exception("No gym found!");
+
+                updating.Featured = updating.Featured == (int)Enums.FeaturedState.NotFeatured ? (int)Enums.FeaturedState.Featured : (int)Enums.FeaturedState.NotFeatured;
+                updating.ModifiedDate = DateTime.Now;
+
+                db.Entry(updating).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+
+                await db.SaveChangesAsync();
+
+                return new HttpResult(true, updating.Featured == (int)Enums.FeaturedState.Featured, "");
+            }
+            catch (Exception e)
+            {
+                return new HttpResult(false, null, Functions.ErrorMessage(e));
+            }
+        }
+
+        [HttpPost("ToggleGymStatus/{gymID}")]
+        public async Task<HttpResult> ToggleGymStatus([FromRoute] int gymID)
+        {
+            try
+            {
+                if (!Functions.AdminLoggedIn(Request, out _))
+                    throw new Exception("Not logged in!");
+
+                GymFinderGym updating = db.GymFinderGym.Find(gymID);
+                if (updating == null)
+                    throw new Exception("No gym found!");
+
+                updating.Status = updating.Status == (int)Enums.GymStatus.Live ? (int)Enums.GymStatus.Pending : (int)Enums.GymStatus.Live;
+                updating.ModifiedDate = DateTime.Now;
+
+                db.Entry(updating).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+
+                await db.SaveChangesAsync();
+
+                return new HttpResult(true, updating.Status == (int)Enums.GymStatus.Live, "");
+            }
+            catch (Exception e)
+            {
+                return new HttpResult(false, null, Functions.ErrorMessage(e));
+            }
+        }
+
+        #endregion Public Methods
+
+        #region Private Methods
 
         private void DeleteAllGymImages(int gymID)
         {
@@ -744,5 +697,22 @@ namespace GymBay.Controllers
             if (logoDelete != null)
                 logoDelete.Delete();
         }
+
+        private void DeleteSingleGymImage(int gymID, int imageNum)
+        {
+            //Delete gym images
+            string imgsPath = Path.Combine(Environment.CurrentDirectory, "wwwroot", "dist", "uploads", "images", "gymfinder", "gyms");
+
+            string imgFileNameStart = string.Format("{0}_gymimage_{1}", gymID, imageNum);
+
+            DirectoryInfo imgsDirectory = new DirectoryInfo(imgsPath);
+
+            FileInfo imgDelete = imgsDirectory.GetFiles().FirstOrDefault(x => x.Name.StartsWith(imgFileNameStart));
+
+            if (imgDelete != null)
+                imgDelete.Delete();
+        }
+
+        #endregion Private Methods
     }
 }

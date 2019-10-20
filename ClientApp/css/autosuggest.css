@@ -1,27 +1,31 @@
 .container {
-    padding:0;
+    padding: 0;
     margin-bottom: 5px;
 }
-.containerOpen{
-    
-}
-.input{
 
+.containerOpen {
 }
-.inputOpen{
 
+.input {
 }
+
+.inputOpen {
+}
+
 .inputDisabled {
     pointer-events: none;
     background-color: #eee;
 }
+
 .inputFocused {
 }
+
 .suggestionsContainer {
 }
-.suggestionsContainerOpen{
 
+.suggestionsContainerOpen {
 }
+
 .suggestionsList {
     padding: 0 5px;
     max-height: 200px;
@@ -30,33 +34,34 @@
     width: 90%;
     background-color: #666;
 }
-   
+
 .suggestion {
     list-style: none;
     padding-left: 10px;
     border-bottom: 1px solid#eee;
     background-color: #eaeaea;
 }
-    .suggestion:hover{
+
+    .suggestion:hover {
         background-color: #999;
     }
+
     .suggestion[aria-selected="true"] {
         background-color: white;
-        color:cornflowerblue;
+        color: cornflowerblue;
     }
-    
-.suggestionFirst{
 
+.suggestionFirst {
 }
-.suggestionHighlighted{
 
+.suggestionHighlighted {
 }
-.sectionContainer{
 
+.sectionContainer {
 }
-.sectionContainerFirst{
 
+.sectionContainerFirst {
 }
-.sectionTitle{
 
+.sectionTitle {
 }

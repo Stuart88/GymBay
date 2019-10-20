@@ -1,23 +1,79 @@
-﻿using GeoAPI.Geometries;
-using GymBay.Models.DbClasses;
+﻿using GymBay.Models.DbClasses;
 using ImageMagick;
 using Microsoft.AspNetCore.Http;
-using NetTopologySuite;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace GymBay.Helpers
 {
     public static class Functions
     {
-        public static string ErrorMessage(Exception e)
+        #region Private Fields
+
+        private static char[] digits = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
+
+        #endregion Private Fields
+
+        #region Public Methods
+
+        public static bool AdminLoggedIn(HttpRequest request, out User user)
         {
-            return e.Message + (e.InnerException != null ? e.InnerException.Message : "") + (e.InnerException != null && e.InnerException.InnerException != null ? e.InnerException.InnerException.Message : ""); ;
+            user = new User();
+
+            try
+            {
+                using (GymBayContext db = new GymBayContext())
+                {
+                    string sessionID = "";
+                    int userID = 0;
+                    if (request.Cookies["AdminUserID"] != null)
+                    {
+                        userID = int.Parse(request.Cookies["AdminUserID"]);
+                    }
+
+                    user = db.User.Find(userID);
+
+                    if (request.Cookies["AdminSessionID"] != null)
+                    {
+                        sessionID = request.Cookies["AdminSessionID"];
+                    }
+
+                    if (user == null)
+                        throw new Exception("User not found!");
+
+                    if (user.SessionToken != sessionID)
+                        throw new Exception("Not logged in!");
+
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public static bool CheckAuthorisation(string authorisation, out string email, out string password)
+        {
+            if (authorisation != null && authorisation.StartsWith("Basic"))
+            {
+                string encodedEmailPassword = authorisation.Substring("Basic ".Length).Trim();
+                Encoding encoding = Encoding.GetEncoding("iso-8859-1");
+                List<string> emailPassword = encoding.GetString(Convert.FromBase64String(encodedEmailPassword)).Split(':').ToList();
+                email = emailPassword[0];
+                password = emailPassword[1];
+                return true;
+            }
+            else
+            {
+                email = "";
+                password = "";
+                return false;
+            }
         }
 
         public static void CheckNull(object obj)
@@ -26,24 +82,14 @@ namespace GymBay.Helpers
                 throw new Exception("Null object found!");
         }
 
-        public static string GetImagePath(string folderPathEnd, int imageID)
+        public static byte[] ConvertToBytes(IFormFile file)
         {
-            string currentDir = Environment.CurrentDirectory;
-
-            string webFolder = "\\dist\\uploads\\images\\" + folderPathEnd;
-
-            string imageName = imageID.ToString() + ".jpg";
-             
-            string rootPath = CreateRootPath(folderPathEnd, imageName);
-
-            if (File.Exists(rootPath))
+            byte[] CoverImageBytes = null;
+            using (BinaryReader reader = new BinaryReader(file.OpenReadStream()))
             {
-                return Path.Combine(webFolder, imageName);
+                CoverImageBytes = reader.ReadBytes((int)file.Length);
             }
-            else
-            {
-                return "dist/images/General/default_candidate_avatar.png";
-            }
+            return CoverImageBytes;
         }
 
         /// <summary>
@@ -57,20 +103,10 @@ namespace GymBay.Helpers
             return Path.Combine(Environment.CurrentDirectory, "wwwroot", "\\dist\\uploads\\", folderPathEnd, fileName);
         }
 
-        public static byte[] ConvertToBytes(IFormFile file)
-        {
-            byte[] CoverImageBytes = null;
-            using (BinaryReader reader = new BinaryReader(file.OpenReadStream()))
-            {
-                CoverImageBytes = reader.ReadBytes((int)file.Length);
-            }
-            return CoverImageBytes;
-        }
-
-        /// <summary> 
+        /// <summary>
         /// Returns a cropped version of the given image.
         /// All parameters are pixel values based on user's screen.
-        /// imgW is compared against the width of the actual image stored in the database, 
+        /// imgW is compared against the width of the actual image stored in the database,
         /// to make a ratio which is used to scale all other parameters accordingly.
         /// A Rectangle object is then use to set an area from which to crop from the full image.
         /// Returns cropped image to save in database.
@@ -92,8 +128,121 @@ namespace GymBay.Helpers
             return image.ToByteArray();
         }
 
+        public static void ErrorLogger(string errorLocation, Exception exception)
+        {
+            try
+            {
+                string exceptionString = exception.Message + (exception.InnerException != null ? exception.InnerException.Message : "");
+                string appPath = Path.Combine(Environment.CurrentDirectory, "wwwroot", "errorLogs");
+
+                if (!Directory.Exists(appPath))
+                {
+                    Directory.CreateDirectory(appPath);
+                }
+
+                string filePath = Path.Combine(appPath, DateTime.Now.ToShortDateString().Replace('/', '-').Replace(':', '-') + ".txt");
+
+                if (!File.Exists(filePath))
+                {
+                    File.CreateText(filePath).Dispose();
+                }
+
+                using (StreamWriter file = new StreamWriter(filePath, true))
+                {
+                    file.WriteLine(string.Format("Error at {0}: {1}", errorLocation, exceptionString));
+                }
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message + (ex.InnerException == null ? "" : ex.InnerException.Message);
+            }
+        }
+
+        public static string ErrorMessage(Exception e)
+        {
+            return e.Message + (e.InnerException != null ? e.InnerException.Message : "") + (e.InnerException != null && e.InnerException.InnerException != null ? e.InnerException.InnerException.Message : ""); ;
+        }
+
+        public static string GetEmailHandle(string email)
+        {
+            string handle = "";
+            foreach (char c in email)
+            {
+                if (c == '@')
+                    break;
+                else
+                    handle += c;
+            }
+
+            return handle;
+        }
+
+        public static string GetImagePath(string folderPathEnd, int imageID)
+        {
+            string currentDir = Environment.CurrentDirectory;
+
+            string webFolder = "\\dist\\uploads\\images\\" + folderPathEnd;
+
+            string imageName = imageID.ToString() + ".jpg";
+
+            string rootPath = CreateRootPath(folderPathEnd, imageName);
+
+            if (File.Exists(rootPath))
+            {
+                return Path.Combine(webFolder, imageName);
+            }
+            else
+            {
+                return "dist/images/General/default_candidate_avatar.png";
+            }
+        }
+
+        public static bool IsEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public static string MakeUrlSafe(string url, bool forSiteMap = false)
+        {
+            if (forSiteMap)
+            {//sitemap libary performs url encoding autamtically, but it's ugly, with loads of %%FF334 like that so change the most common econoded characters to '-'
+             //This is only used in arbitrary page titles (blog title, job title, resource title etc), so will never effect any required URL parameters
+
+                return url.Replace(' ', '-').Replace('?', '-').Replace(';', '-')
+                    .Replace('/', '-').Replace(':', '-').Replace('@', '-').Replace('&', '-')
+                    .Replace('=', '-').Replace('+', '-').Replace('$', '-').Replace(',', '-');
+            }
+            else
+            {
+                return System.Web.HttpUtility.UrlEncode(url.Replace(' ', '-'));
+            }
+        }
+
+        public static string RandomString(int length)
+        {
+            Random rand = new Random();
+            string randString = "";
+
+            int i = 0;
+            while (i < length)
+            {
+                randString += digits[rand.Next(digits.Count())];
+                i++;
+            }
+
+            return randString;
+        }
+
         /// <summary>
-        /// Attempts to reduce given image to less than desired size. 
+        /// Attempts to reduce given image to less than desired size.
         /// </summary>
         /// <param name="image">Image to reduce</param>
         /// <param name="desiredSize">Desired size (bytes)</param>
@@ -118,46 +267,13 @@ namespace GymBay.Helpers
 
                 image = magickImage.ToByteArray();
             }
-                
         }
 
-        public static bool AdminLoggedIn(HttpRequest request, out User user)
+        public static string StripHTML(string inputString)
         {
-            user = new User();
+            string HTML_TAG_PATTERN = "<.*?>";
 
-            try
-            {
-                using (GymBayContext db = new GymBayContext())
-                {
-                   
-                    string sessionID = "";
-                    int userID = 0;
-                    if (request.Cookies["AdminUserID"] != null)
-                    {
-                        userID = int.Parse(request.Cookies["AdminUserID"]);
-                    }
-
-                    user = db.User.Find(userID);
-                   
-                    if (request.Cookies["AdminSessionID"] != null)
-                    {
-                        sessionID = request.Cookies["AdminSessionID"];
-                    }
-
-                    if (user == null)
-                        throw new Exception("User not found!");
-
-                    if (user.SessionToken != sessionID)
-                        throw new Exception("Not logged in!");
-
-                    return true;
-                }
-
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return Regex.Replace(inputString, HTML_TAG_PATTERN, string.Empty);
         }
 
         public static bool UserLoggedIn(HttpRequest request, out User user)
@@ -168,7 +284,6 @@ namespace GymBay.Helpers
             {
                 using (GymBayContext db = new GymBayContext())
                 {
-
                     string sessionID = "";
                     int userID = 0;
                     if (request.Cookies["UserID"] != null)
@@ -191,123 +306,13 @@ namespace GymBay.Helpers
 
                     return true;
                 }
-
             }
             catch (Exception)
             {
                 return false;
             }
         }
-        public static bool CheckAuthorisation(string authorisation, out string email, out string password)
-        {
-            if (authorisation != null && authorisation.StartsWith("Basic"))
-            {
-                string encodedEmailPassword = authorisation.Substring("Basic ".Length).Trim();
-                Encoding encoding = Encoding.GetEncoding("iso-8859-1");
-                List<string> emailPassword = encoding.GetString(Convert.FromBase64String(encodedEmailPassword)).Split(':').ToList();
-                email = emailPassword[0];
-                password = emailPassword[1];
-                return true;
-            }
-            else
-            {
-                email = "";
-                password = "";
-                return false;
-            }
-        }
 
-        private static char[] digits = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
-        public static string RandomString(int length)
-        {
-            Random rand = new Random();
-            string randString = "";
-
-            int i = 0;
-            while (i < length)
-            {
-                randString += digits[rand.Next(digits.Count())];
-                i++;
-            }
-
-            return randString;
-        }
-        public static bool IsEmail(string email)
-        {
-            try
-            {
-                var addr = new System.Net.Mail.MailAddress(email);
-                return addr.Address == email;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-        public static string GetEmailHandle(string email)
-        {
-            string handle = "";
-            foreach (char c in email)
-            {
-                if (c == '@')
-                    break;
-                else
-                    handle += c;
-            }
-
-            return handle;
-        }
-        public static string MakeUrlSafe(string url, bool forSiteMap = false)
-        {
-            if (forSiteMap)
-            {//sitemap libary performs url encoding autamtically, but it's ugly, with loads of %%FF334 like that so change the most common econoded characters to '-'
-             //This is only used in arbitrary page titles (blog title, job title, resource title etc), so will never effect any required URL parameters
-
-                return url.Replace(' ', '-').Replace('?', '-').Replace(';', '-')
-                    .Replace('/', '-').Replace(':', '-').Replace('@', '-').Replace('&', '-')
-                    .Replace('=', '-').Replace('+', '-').Replace('$', '-').Replace(',', '-');
-            }
-            else
-            {
-                return System.Web.HttpUtility.UrlEncode(url.Replace(' ', '-'));
-            }
-        }
-        public static void ErrorLogger(string errorLocation, Exception exception)
-        {
-            try
-            {
-                string exceptionString = exception.Message + (exception.InnerException != null ? exception.InnerException.Message : "");
-                string appPath = Path.Combine(Environment.CurrentDirectory, "wwwroot", "errorLogs");
-
-                if (!Directory.Exists(appPath))
-                {
-                    Directory.CreateDirectory(appPath);
-                }
-
-                string filePath = Path.Combine(appPath, DateTime.Now.ToShortDateString().Replace('/', '-').Replace(':', '-') + ".txt");
-
-                if (!File.Exists(filePath))
-                {
-                    File.CreateText(filePath).Dispose();
-                }
-
-                using (StreamWriter file = new StreamWriter(filePath, true))
-                {
-                    file.WriteLine(string.Format("Error at {0}: {1}", errorLocation, exceptionString));
-                }
-
-            }
-            catch (Exception ex)
-            {
-                string error = ex.Message + (ex.InnerException == null ? "" : ex.InnerException.Message);
-            }
-        }
-
-        public static string StripHTML(string inputString)
-        {
-            string HTML_TAG_PATTERN = "<.*?>";
-
-            return Regex.Replace(inputString, HTML_TAG_PATTERN, string.Empty);
-        }
+        #endregion Public Methods
     }
 }

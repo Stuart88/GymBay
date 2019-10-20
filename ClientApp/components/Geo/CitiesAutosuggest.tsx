@@ -12,16 +12,13 @@ interface ModuleState {
     LoadingCities: boolean
     SearchTerm: string
     LastSearchTerm: string
-
 }
 
 interface ModuleProps {
     CitySelected: Function
 }
 
-
 export class CitiesAutosuggest extends React.Component<ModuleProps, ModuleState> {
-
     constructor(props) {
         super(props);
 
@@ -37,8 +34,6 @@ export class CitiesAutosuggest extends React.Component<ModuleProps, ModuleState>
         this.QueryCities = this.QueryCities.bind(this);
         this.onSearch = this.onSearch.bind(this);
         this.SearchPoll = this.SearchPoll.bind(this);
-
-        
     }
 
     componentDidMount() {
@@ -46,8 +41,6 @@ export class CitiesAutosuggest extends React.Component<ModuleProps, ModuleState>
 
         setInterval(function () { component.SearchPoll(); }, 900);
     }
-
-    
 
     private SearchPoll() {
         if (this.state.SearchTerm != this.state.LastSearchTerm && this.state.SearchTerm.length > 0) {
@@ -57,7 +50,6 @@ export class CitiesAutosuggest extends React.Component<ModuleProps, ModuleState>
     }
 
     private QueryCities(q: string) {
-
         if (q.length > 0) {
             this.setState({
                 LoadingCities: true
@@ -66,19 +58,13 @@ export class CitiesAutosuggest extends React.Component<ModuleProps, ModuleState>
             fetch(`api/Geo/QueryCities?q=${q}`)
                 .then(response => response.json() as Promise<Array<CityGeoBasic>>)
                 .then(data => {
-
                     this.setState({
                         Cities: data,
                         LoadingCities: false,
                     });
-
-
                 });
         }
-
-
     }
-
 
     private onSearch(searchTerm: string, metadata: { action, lastSearchTerm, originalEvent?}) {
         //if (searchTerm != metadata.lastSearchTerm && searchTerm.length > 0) {
@@ -86,11 +72,10 @@ export class CitiesAutosuggest extends React.Component<ModuleProps, ModuleState>
         //}
         this.setState({ SearchTerm: searchTerm })
     }
-   
-    public render() {
 
+    public render() {
         let GroupHeading = ({ item }) => (
-            <strong style={{color: 'orange'}}>{item}</strong>
+            <strong style={{ color: 'orange' }}>{item}</strong>
         );
 
         let ListItem = ({ item }) => (
@@ -105,8 +90,8 @@ export class CitiesAutosuggest extends React.Component<ModuleProps, ModuleState>
             emptyList: "",
             emptyFilter: this.state.LoadingCities ? "Loading..." : "No results",
             filterPlaceholder: "Type to search cities"
-    }
-       
+        }
+
         return <div>
 
             <DropdownList
@@ -130,8 +115,5 @@ export class CitiesAutosuggest extends React.Component<ModuleProps, ModuleState>
                 containerClassName="form-control searchInput"
             />
         </div>
-
     }
-
 }
-

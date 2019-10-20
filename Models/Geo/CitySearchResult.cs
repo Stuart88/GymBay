@@ -1,15 +1,14 @@
-﻿using GymBay.Models.DbClasses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace GymBay.Models.Geo
+﻿namespace GymBay.Models.Geo
 {
     public class CitySearchResult
     {
+        #region Public Properties
+
         public int CityID { get; set; }
         public string CityName { get; set; }
-        public string NearestCity { get; set; } 
+        public string NearestCity { get; set; }
+
+        #endregion Public Properties
+
     }
 }

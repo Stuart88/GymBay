@@ -29,7 +29,6 @@ interface ModuleState {
 }
 
 export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> {
-
     constructor(props) {
         super(props);
 
@@ -39,7 +38,7 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
             toggleChecked: this.props.Gym.status == GymStatus.Live,
             featuredToggleChecked: this.props.Gym.featured == FeaturedState.Featured
         }
-        
+
         this.ToggleStatus = this.ToggleStatus.bind(this);
         this.ToggleFeatured = this.ToggleFeatured.bind(this);
         this.Delete = this.Delete.bind(this);
@@ -50,7 +49,6 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
     }
 
     public render() {
-
         let g = this.props.Gym;
 
         let ratingStars: Array<JSX.Element> = [];
@@ -59,10 +57,8 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
             ratingStars.push(<span className={`ratingStar ${i <= g.averageRating ? 'ratingStarHighlighted' : ''}`} >★</span>);
         }
 
-
-
         let photos = this.props.imageViewerSRCs.length > 0
-            ? <div style={{ padding: '1px', height: '100%'}}>
+            ? <div style={{ padding: '1px', height: '100%' }}>
                 <div className="gymInfoBox" style={{ padding: '5px' }}>
                     <div className="row" style={{ margin: '10px 0' }}>
                         {
@@ -75,7 +71,6 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
                                 }}>
                                     <LazyLoad offsetVertical={500}>
 
-
                                         <img key={img.src} className="img-fluid hover-pointer gymImage img-centred"
                                             style={{
                                                 maxHeight: OnMobile() ? '60px' : '72px'
@@ -83,7 +78,6 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
                                             onClick={() => this.setState({ imageViewerOpen: true, imageViewerIndex: i })}
                                             src={img.src} />
                                     </LazyLoad>
-
 
                                 </div>
 
@@ -96,7 +90,7 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
 
         return <div id={`gymSearchRow-${g.id}`} className="gymSearchRow max-width" style={{ backgroundColor: this.props.BackgroundColor }}>
 
-            <div hidden={g.status != GymStatus.Pending} 
+            <div hidden={g.status != GymStatus.Pending}
                 style={{
                     padding: '5px',
                     backgroundColor: '#eee',
@@ -113,14 +107,11 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
                         </td>
                     </tr>
                 </table>
-                
-            </div>
 
-           
+            </div>
 
             <div id={`gymviewArea-${g.id}`} style={{ display: this.props.Hidden ? 'none' : 'initial' }}>
 
-               
                 {
                     AdminLoggedIn() && location.href.indexOf(Pages.mygym) == -1
                         ? <div style={{
@@ -189,11 +180,10 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
                                 </div>
                             </div>
 
-                            
                         </div>
 
                     </div>
-                    <div className={OnMobile() ? 'col-9' : 'col-4'} style={{ padding: '1px'}}>
+                    <div className={OnMobile() ? 'col-9' : 'col-4'} style={{ padding: '1px' }}>
 
                         <div className="gymInfoBox" style={{ padding: '10px' }}>
                             <table className={`gymInfo ${OnMobile() ? 'full-width' : ''}`}>
@@ -289,8 +279,6 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
                             </div>
                         </div>
 
-
-
                     </div>
 
                     {
@@ -302,7 +290,6 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
                     }
 
                 </div>
-
 
                 {OnMobile() ? photos : null}
 
@@ -325,7 +312,7 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
                         About {g.name}
                     </div>
 
-                    <hr/>
+                    <hr />
 
                     <div className="row">
                         <div className="col-md-3">
@@ -364,7 +351,7 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
                                             </div>
                                         </td>
                                     </tr>
-                                    
+
                                 </tbody>
                             </table>
 
@@ -402,8 +389,6 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
                                 </a>
                             </div>
 
-
-
                         </div>
                         <div className="col-md-9">
                             <div className="allGymIcons text-center">
@@ -416,7 +401,7 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
                                     <span className="gymIconLabel">Bars/Plates</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.freeWeightsDumbbells != 1}>
-                                     <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Dumbbells" />
+                                    <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Dumbbells" />
                                     <span className="gymIconLabel">Dumbbells</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.strongman != 1}>
@@ -424,63 +409,63 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
                                     <span className="gymIconLabel">Strongman</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.resistanceMachines != 1}>
-                                     <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Resistance-Machines" />
+                                    <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Resistance-Machines" />
                                     <span className="gymIconLabel">Resistance Machines</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.cardioMachines != 1}>
-                                     <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Cardio" />
+                                    <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Cardio" />
                                     <span className="gymIconLabel">Cardio</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.crossfit != 1}>
-                                     <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Crossfit" />
+                                    <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Crossfit" />
                                     <span className="gymIconLabel">Crossfit</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.olympicLifting != 1}>
-                                     <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Olympic-Lifting" />
+                                    <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Olympic-Lifting" />
                                     <span className="gymIconLabel">Olympic Lifting</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.powerlifting != 1}>
-                                     <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Powerlifting" />
+                                    <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Powerlifting" />
                                     <span className="gymIconLabel">Powerlifting</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.physio != 1}>
-                                     <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Physio" />
+                                    <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Physio" />
                                     <span className="gymIconLabel">Physio</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.classesAvailable != 1}>
-                                     <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Classes" />
+                                    <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Classes" />
                                     <span className="gymIconLabel">Classes</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.sauna != 1}>
-                                     <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Sauna" />
+                                    <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Sauna" />
                                     <span className="gymIconLabel">Sauna</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.swimmingPool != 1}>
-                                     <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Pool" />
+                                    <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Pool" />
                                     <span className="gymIconLabel">Pool</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.changingRooms != 1}>
-                                     <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Changing-Rooms" />
+                                    <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Changing-Rooms" />
                                     <span className="gymIconLabel">Changing Rooms</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.toilets != 1}>
-                                     <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Toilets" />
+                                    <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Toilets" />
                                     <span className="gymIconLabel">Toilets</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.vendingMachine != 1}>
-                                     <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Food-Drink" />
+                                    <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Food-Drink" />
                                     <span className="gymIconLabel">Food & Drink Available</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.cafe != 1}>
-                                     <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Cafe" />
+                                    <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Cafe" />
                                     <span className="gymIconLabel">Cafe</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.membersOnly != 1}>
-                                     <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Members-only" />
+                                    <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Members-only" />
                                     <span className="gymIconLabel">Members Only</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.noMembershipRequired != 1}>
-                                     <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Day-Pass-available" />
+                                    <Icon Hidden={false} Class="smallGymIcon" Type={IconType.GymFinder} Name="Day-Pass-available" />
                                     <span className="gymIconLabel">Day Passes Available</span>
                                 </div>
                                 <div className="gymIconContainer" hidden={g.lockers != 1}>
@@ -492,12 +477,8 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
                                 {g.description}
                             </div>
 
-                            
-
                         </div>
                     </div>
-
-
 
                 </div>
 
@@ -532,7 +513,6 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
             })
             .then(response => response.json() as Promise<HttpResult<boolean>>)
             .then(res => {
-
                 if (res.ok) {
                     this.setState({
                         toggleChecked: res.data
@@ -544,7 +524,6 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
             })
             .catch((e: Error) => alert(e.message));
     }
-
 
     private ToggleFeatured() {
         fetch('api/GymFinder/ToggleFeatured/' + this.props.Gym.id,
@@ -558,7 +537,6 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
             })
             .then(response => response.json() as Promise<HttpResult<boolean>>)
             .then(res => {
-
                 if (res.ok) {
                     this.setState({
                         featuredToggleChecked: res.data
@@ -573,8 +551,6 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
 
     private Delete() {
         if (confirm("Delete: Are you sure?")) {
-
-
             fetch('api/GymFinder/DeleteGymFinderGym/' + this.props.Gym.id,
                 {
                     method: 'POST',
@@ -586,11 +562,9 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
                 })
                 .then(response => response.json() as Promise<HttpResult<any>>)
                 .then(res => {
-
                     if (res.ok) {
                         $(`#gymSearchRow-${this.props.Gym.id}`).html('');
                         $(`#gymSearchRow-${this.props.Gym.id}`).removeClass('gymSearchRow');
-                        
                     }
                     else {
                         alert(res.message);
@@ -600,5 +574,3 @@ export class GymFinderGymView extends React.Component<ModuleProps, ModuleState> 
         }
     }
 }
-
-

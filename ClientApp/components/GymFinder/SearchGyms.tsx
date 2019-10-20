@@ -32,7 +32,6 @@ interface ModuleState {
 }
 
 export class GymFinderSearch extends React.Component<RouteComponentProps<{}>, ModuleState> {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -54,21 +53,16 @@ export class GymFinderSearch extends React.Component<RouteComponentProps<{}>, Mo
             this.state = GymSearchState.GetState();
         }
 
-
         this.SearchGyms = this.SearchGyms.bind(this);
         this.CitySelected = this.CitySelected.bind(this);
         this.ClearFilters = this.ClearFilters.bind(this);
     }
 
-
-
     componentDidMount() {
         if (!GymSearchState.HasState()) {
             this.SearchGyms();
-
         }
     }
-
 
     private CitySelected(city: CityGeoBasic) {
         this.state.Query.cityId = city.cityGeoId;
@@ -81,20 +75,13 @@ export class GymFinderSearch extends React.Component<RouteComponentProps<{}>, Mo
         GymSearchState.SetState(this.state);
     }
 
-
-    
     private SearchGyms(incrementPage: boolean = false) {
-
         let t = this;
         //
         this.setState({
             ValidationString: "",
             ModalOpen: false
         });
-
-       
-
-       
 
         if (!this.state.LoadingGyms) {
             if (!incrementPage)
@@ -117,12 +104,10 @@ export class GymFinderSearch extends React.Component<RouteComponentProps<{}>, Mo
                 })
                 .then(response => response.json() as Promise<HttpResult<{ gyms: GymFinderGym[], total: number }>>)
                 .then(data => {
-
                     if (data.ok) {
                         let gymsList = new Array<GymFinderGym>();
 
                         if (incrementPage) {
-
                             gymsList = this.state.Gyms.concat(data.data.gyms);
                         }
                         else {
@@ -163,11 +148,9 @@ export class GymFinderSearch extends React.Component<RouteComponentProps<{}>, Mo
                     GymSearchState.SetState(this.state);
                 });
         }
-       
     }
 
     private ClearFilters() {
-
         let q = this.state.Query;
 
         q.cafe = 0;
@@ -196,9 +179,7 @@ export class GymFinderSearch extends React.Component<RouteComponentProps<{}>, Mo
         })
     }
 
-
     public render() {
-
         const modalStyles = {
             content: {
                 top: '55%',
@@ -219,15 +200,13 @@ export class GymFinderSearch extends React.Component<RouteComponentProps<{}>, Mo
                 Hidden={g.status == GymStatus.Pending}
             />)
             : this.state.Gyms.length == 0 && this.state.LoadingGyms
-                ? <div className = "text-center" >
+                ? <div className="text-center" >
                     <Loader CentreAlign ContainerMargin="20px 0 20px 0" Height="80px" />
                     Searching...
                     </div>
                 : <div className="text-center" >
-                    
-                </div>
 
-        
+                </div>
 
         return <div>
             <HeaderSearchBarArea Props={this.props} />
@@ -243,7 +222,6 @@ export class GymFinderSearch extends React.Component<RouteComponentProps<{}>, Mo
 
                     <div className="row max-width">
                         <div className="col-md-6">
-
 
                             <div>
                                 <table className="full-width">
@@ -312,7 +290,7 @@ export class GymFinderSearch extends React.Component<RouteComponentProps<{}>, Mo
 
                 <Modal
                     isOpen={this.state.ModalOpen}
-                    onRequestClose={() =>  this.setState({ ModalOpen: false })}
+                    onRequestClose={() => this.setState({ ModalOpen: false })}
                     style={modalStyles}
                     contentLabel="Example Modal"
                 >
@@ -322,15 +300,13 @@ export class GymFinderSearch extends React.Component<RouteComponentProps<{}>, Mo
                 </Modal>
 
                 <div>
-                    <div id="gymScroller"  
+                    <div id="gymScroller"
                         style={{
                             height: OnMobile() ? 'calc(100vh - 70px - 80px - 60px)' : 'calc(100vh - 85px - 60px)',
                             padding: '2px',
                             overflowY: 'auto',
-
                         }}
-                       >
-
+                    >
 
                         <InfiniteScroll
                             key={this.state.Gyms.length}
@@ -340,7 +316,7 @@ export class GymFinderSearch extends React.Component<RouteComponentProps<{}>, Mo
                             hasMore={this.state.Gyms.length != this.state.MaxResults}
                             loader={<div className="text-center"><Loader CentreAlign ContainerMargin="20px 0 20px 0" Height="40px" /></div>}
                             useWindow={false}
-                            
+
                         >
                             {gymsList}
                         </InfiniteScroll>
@@ -360,7 +336,7 @@ export class GymFinderSearch extends React.Component<RouteComponentProps<{}>, Mo
                                             <img id="searchpage-logo" src='/dist/images/Gym-Bay_logo.png' />
                                             'No results!'
                                     </div>
-                                        :null
+                                        : null
                             }
                         </div>
                     </div>
@@ -369,7 +345,7 @@ export class GymFinderSearch extends React.Component<RouteComponentProps<{}>, Mo
                 <Link to={{
                     pathname: Pages.dashboard,
                     state: { returnPath: Pages.mygym }
-                }} 
+                }}
                     hidden={UserLoggedIn()} className="btn btn-lg specialLoginBtn">
                     Add My Gym
                     </Link>
@@ -377,6 +353,4 @@ export class GymFinderSearch extends React.Component<RouteComponentProps<{}>, Mo
 
         </div>;
     }
-
-   
 }

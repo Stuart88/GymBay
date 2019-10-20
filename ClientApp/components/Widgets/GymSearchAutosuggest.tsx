@@ -13,16 +13,13 @@ interface ModuleState {
     LoadingGyms: boolean
     SearchTerm: string
     LastSearchTerm: string
-
 }
 
 interface ModuleProps {
     GymSelected: Function
 }
 
-
 export class GymSearchAutosuggest extends React.Component<ModuleProps, ModuleState> {
-
     constructor(props) {
         super(props);
 
@@ -38,8 +35,6 @@ export class GymSearchAutosuggest extends React.Component<ModuleProps, ModuleSta
         this.QueryGyms = this.QueryGyms.bind(this);
         this.onSearch = this.onSearch.bind(this);
         this.SearchPoll = this.SearchPoll.bind(this);
-
-        
     }
 
     componentDidMount() {
@@ -49,8 +44,6 @@ export class GymSearchAutosuggest extends React.Component<ModuleProps, ModuleSta
 
         //this.GetAllGyms();
     }
-
-    
 
     private SearchPoll() {
         if (this.state.SearchTerm != this.state.LastSearchTerm && this.state.SearchTerm.length > 0) {
@@ -63,28 +56,22 @@ export class GymSearchAutosuggest extends React.Component<ModuleProps, ModuleSta
         fetch(`api/GymFinder/GetAllGyms`)
             .then(response => response.json() as Promise<Array<GymFinderBasic>>)
             .then(data => {
-
                 this.setState({
                     Gyms: data,
                     LoadingGyms: false,
                 });
-
             });
     }
 
     private QueryGyms(q: string) {
-
         if (q.length > 0) {
             this.setState({
                 LoadingGyms: true
             });
 
-
-
             fetch(`api/GymFinder/QuickSearch?q=${q}`)
                 .then(response => response.json() as Promise<Array<GymFinderBasic>>)
                 .then(data => {
-
                     for (let i = 0; i < data.length; i++) {
                         data[i].allData = `${data[i].name} ${data[i].cityName} ${data[i].countryName}`;
                     }
@@ -93,32 +80,26 @@ export class GymSearchAutosuggest extends React.Component<ModuleProps, ModuleSta
                         Gyms: data,
                         LoadingGyms: false,
                     });
-
                 });
         }
-
     }
 
-
-    private onSearch(searchTerm: string):void {
-
+    private onSearch(searchTerm: string): void {
         //let f = this.state.Gyms.filter(x =>
         //    x.name.indexOf(searchTerm) > -1
         //    || x.cityName.indexOf(searchTerm) > -1
         //    || x.countryName.indexOf(searchTerm) > -1
         //).slice(0,50);
-            
 
         this.setState({
             SearchTerm: searchTerm,
             //FilteredGyms: f
         })
     }
-   
-    public render() {
 
+    public render() {
         let GroupHeading = ({ item }) => (
-            <strong style={{color: 'orange'}}>{item}</strong>
+            <strong style={{ color: 'orange' }}>{item}</strong>
         );
 
         let ListItem = ({ item }) => (
@@ -133,7 +114,7 @@ export class GymSearchAutosuggest extends React.Component<ModuleProps, ModuleSta
                         </td>
                         <td>
                             <div style={{ color: 'var(--black)' }}>{item.name}</div>
-                            <div style={{ color: '#666', fontSize:'13px' }}>{item.cityName}, {item.countryName}</div>
+                            <div style={{ color: '#666', fontSize: '13px' }}>{item.cityName}, {item.countryName}</div>
                         </td>
                     </tr>
                 </tbody>
@@ -145,8 +126,8 @@ export class GymSearchAutosuggest extends React.Component<ModuleProps, ModuleSta
             emptyList: "",
             emptyFilter: this.state.LoadingGyms ? "Loading..." : "No results",
             filterPlaceholder: "enter gym name or location"
-    }
-       
+        }
+
         return <div>
 
             <DropdownList
@@ -170,8 +151,5 @@ export class GymSearchAutosuggest extends React.Component<ModuleProps, ModuleSta
                 containerClassName="form-control searchInput"
             />
         </div>
-
     }
-
 }
-

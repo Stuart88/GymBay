@@ -1,21 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using GymBay.Helpers;
 using GymBay.Models.DbClasses;
 using GymBay.Models.General;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 
 namespace GymBay.Controllers
 {
     [Route("api/Admin")]
     public class AdminController : Controller
     {
-        readonly GymBayContext db = new GymBayContext();
-        private readonly string adminPass = "gymmo123";
+        #region Private Fields
 
+        private readonly string adminPass = "gymmo123";
+        private readonly GymBayContext db = new GymBayContext();
+
+        #endregion Private Fields
+
+        #region Public Methods
 
         [HttpPost("AdminLogin")]
         public HttpResult AdminLogin([FromHeader] string authorisation)
@@ -24,7 +26,6 @@ namespace GymBay.Controllers
             {
                 if (Functions.CheckAuthorisation(authorisation, out string email, out string adminPass))
                 {
-
                     if (adminPass != this.adminPass)
                         throw new Exception("Password incorrect!");
 
@@ -52,7 +53,6 @@ namespace GymBay.Controllers
             {
                 return new HttpResult(false, null, Functions.ErrorMessage(e));
             }
-
         }
 
         [HttpPost("AdminLogout")]
@@ -82,17 +82,13 @@ namespace GymBay.Controllers
                 {
                     return new HttpResult(true, null, "");
                 }
-
             }
             catch (Exception e)
             {
                 return new HttpResult(false, null, Functions.ErrorMessage(e));
             }
-
         }
 
-     
-       
+        #endregion Public Methods
     }
-
 }

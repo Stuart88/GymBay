@@ -1,26 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using GymBay.Helpers;
-using GymBay.Models;
 using GymBay.Models.DbClasses;
 using GymBay.Models.General;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GymBay.Controllers
 {
     [Route("api/Shops")]
     public class ShopController : Controller
     {
-        readonly GymBayContext db = new GymBayContext();
+        #region Private Fields
 
-        [HttpGet("GetAllShops")]
-        public IEnumerable<Seller> GetAllShops()
-        {
-            return db.Seller.AsEnumerable();
-        }
+        private readonly GymBayContext db = new GymBayContext();
+
+        #endregion Private Fields
+
+        #region Public Methods
 
         [HttpPost("AddUpdateShopAsync")]
         public async Task<HttpResult> AddUpdateShopAsync([FromBody] Seller shop)
@@ -65,11 +63,16 @@ namespace GymBay.Controllers
                     return new HttpResult(true, shop, "");
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return new HttpResult(false, null, Functions.ErrorMessage(e));
             }
-           
+        }
+
+        [HttpGet("GetAllShops")]
+        public IEnumerable<Seller> GetAllShops()
+        {
+            return db.Seller.AsEnumerable();
         }
 
         [HttpGet("ProfilePicture/{shopID}")]
@@ -78,6 +81,6 @@ namespace GymBay.Controllers
             return File(Functions.GetImagePath("shops\\profiles", shopID), "image/png");
         }
 
-
+        #endregion Public Methods
     }
 }

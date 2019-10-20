@@ -13,7 +13,6 @@ interface ModuleState {
 }
 
 export class Admin extends React.Component<RouteComponentProps<{}>, ModuleState> {
-
     constructor(props) {
         super(props);
 
@@ -28,7 +27,6 @@ export class Admin extends React.Component<RouteComponentProps<{}>, ModuleState>
     }
 
     public render() {
-
         let adminLinkStyle: React.CSSProperties = {
             color: 'white',
             background: 'var(--blue)',
@@ -37,65 +35,59 @@ export class Admin extends React.Component<RouteComponentProps<{}>, ModuleState>
             display: 'block'
         }
 
-        return<div>
+        return <div>
             <HeaderSearchBarArea Props={this.props} />
-        <div className="max-width full-centred" style={{ height: '100%' }}>
+            <div className="max-width full-centred" style={{ height: '100%' }}>
 
+                <div style={{ margin: 'auto' }} className="text-center">
+                    <h1>Admin Login</h1>
+                    <form hidden={AdminLoggedIn()}>
+                        <input className="form-control" type="text"
+                            placeholder="Email"
+                            value={this.state.Email} onChange={(e) => this.setState({ Email: e.target.value })}
+                            onKeyUp={(e) => { if (e.keyCode == 13) this.AdminLogin() }}
+                            autoComplete="username"
+                        />
 
+                        <input className="form-control" type="password"
+                            placeholder="Password"
+                            value={this.state.Password} onChange={(e) => this.setState({ Password: e.target.value })}
+                            onKeyUp={(e) => { if (e.keyCode == 13) this.AdminLogin() }}
+                            autoComplete="current-password"
+                        />
 
-            <div style={{ margin: 'auto' }} className="text-center">
-                <h1>Admin Login</h1>
-                <form hidden={AdminLoggedIn()}>
-                    <input className="form-control" type="text"
-                        placeholder="Email"
-                        value={this.state.Email} onChange={(e) => this.setState({ Email: e.target.value })}
-                        onKeyUp={(e) => { if (e.keyCode == 13) this.AdminLogin() }}
-                        autoComplete="username"
-                         />
+                        <br />
+                        <br />
 
-                    <input className="form-control" type="password"
-                        placeholder="Password"
-                        value={this.state.Password} onChange={(e) => this.setState({ Password: e.target.value })}
-                        onKeyUp={(e) => { if (e.keyCode == 13) this.AdminLogin() }}
-                        autoComplete="current-password"
-                    />
+                        <button type="button" className="btn btn-primary" onClick={this.AdminLogin}>Submit</button>
+
+                    </form>
 
                     <br />
                     <br />
 
-                    <button type="button" className="btn btn-primary" onClick={this.AdminLogin}>Submit</button>
+                    <div style={{ color: 'blue' }}>{this.state.ResponseMessage}</div>
 
-                </form>
+                    <br />
+                    <br />
 
-                <br />
-                <br />
+                    <div hidden={!AdminLoggedIn()} style={{ color: 'blue' }}>
 
-                <div style={{ color: 'blue' }}>{this.state.ResponseMessage}</div>
+                        You are logged in.<br />
 
-                <br />
-                <br />
-
-                <div hidden={!AdminLoggedIn()} style={{ color: 'blue' }}>
-
-                    You are logged in.<br />
-
-
-
-                    <div style={{ margin: '10px auto', padding: '10px' }}>
+                        <div style={{ margin: '10px auto', padding: '10px' }}>
 
                             <Link style={adminLinkStyle} to={Pages.newsfeedpost}>Add Newsfeed Post</Link>
 
                             <Link style={adminLinkStyle} to={Pages.mygym}>Add Gym</Link>
 
-                        <Link style={adminLinkStyle} to={Pages.home} onClick={() => LogoutAdmin(this.Reset)}>Logout</Link>
+                            <Link style={adminLinkStyle} to={Pages.home} onClick={() => LogoutAdmin(this.Reset)}>Logout</Link>
 
+                        </div>
                     </div>
+
                 </div>
-                
             </div>
-            </div>
-
-
 
         </div>;
     }
@@ -108,9 +100,7 @@ export class Admin extends React.Component<RouteComponentProps<{}>, ModuleState>
         })
     }
     private AdminLogin() {
-
         if (this.state.Email.length > 0 && this.state.Password.length > 0) {
-
             this.setState({
                 ResponseMessage: "Logging in..."
             })
@@ -118,7 +108,6 @@ export class Admin extends React.Component<RouteComponentProps<{}>, ModuleState>
             fetch('api/Admin/AdminLogin', CreateAuthHeaderObject(this.state.Email, this.state.Password, null))
                 .then(response => response.json() as Promise<HttpResult<any>>)
                 .then(data => {
-
                     this.setState({
                         ResponseMessage: data.ok ? "Success! You can now see admin controls on the site." : data.message
                     })

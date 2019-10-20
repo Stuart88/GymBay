@@ -1,6 +1,4 @@
-﻿
-
-.profilePicContainer {
+﻿.profilePicContainer {
     padding: 3px;
     border: 1px solid rgba(0,0,0,0.4);
     border-radius: 4px;
@@ -13,8 +11,7 @@
 }
 
 .imageCropContainer {
-   
-     width:auto;
+    width: auto;
     margin: 5px auto;
     border: 1px solid rgba(0,0,0,0.4);
     border-radius: 4px;
@@ -30,7 +27,6 @@
 
     .imageCropContainer .ReactCrop__image {
         max-height: inherit;
-       
     }
 
 .profilepicImage {
@@ -51,6 +47,7 @@
     padding: 0px 20px;
     display: flex;
 }
+
     .profileimgBrowseLabel button {
         padding: 1px 10px;
         margin-right: 5px;
@@ -68,6 +65,7 @@
     padding: 4px;
     border-radius: 15px;
 }
+
 .profile-save-btn-div {
     position: fixed;
     right: 20px;
@@ -77,6 +75,7 @@
     max-width: 211px;
     box-shadow: 2px 2px 13px -5px #444;
 }
+
 .profile-coachToggleInfo {
     font-size: 14px;
     color: #666;
@@ -88,12 +87,14 @@
     vertical-align: middle;
     padding: 5px;
 }
+
 .clipboardCopyBtn {
     vertical-align: middle;
     margin: 5px 5px 5px 0;
     color: var(--black);
     display: table-cell;
 }
+
     .clipboardCopyBtn span {
         border-radius: 10px;
         cursor: pointer;
@@ -101,8 +102,9 @@
         padding: 5px;
         border: solid 2px #eee;
     }
+
         .clipboardCopyBtn span:hover {
             border: solid 2px white;
             transition: border 250ms;
-            color:white;
+            color: white;
         }

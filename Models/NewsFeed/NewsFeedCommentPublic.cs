@@ -1,15 +1,17 @@
 ﻿using GymBay.Models.DbClasses;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using static GymBay.Helpers.Enums;
 
 namespace GymBay.Models.NewsFeed
 {
     public class NewsFeedCommentPublic
     {
-        public NewsFeedCommentPublic() { }
+        #region Public Constructors
+
+        public NewsFeedCommentPublic()
+        {
+        }
+
         public NewsFeedCommentPublic(NewsFeedComment c, User u)
         {
             CreationDate = c.CreationDate;
@@ -30,16 +32,22 @@ namespace GymBay.Models.NewsFeed
             {
                 Comment = "Deleted by user";
             }
-
         }
-        public DateTime CreationDate { get; set; }
-        public int Id { get; set; }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
         public int AuthorId { get; set; }
         public string AuthorName { get; set; }
         public string AuthorPic { get; set; }
         public string Comment { get; set; }
-        public int Status { get; set; }
+        public DateTime CreationDate { get; set; }
+        public int Id { get; set; }
         public int PostId { get; set; }
+        public int Status { get; set; }
         public string Upvotes { get; set; }
+
+        #endregion Public Properties
     }
 }

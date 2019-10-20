@@ -1,11 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace GymBay.Models.DbClasses
 {
     public partial class GymBayContext : DbContext
     {
+        #region Public Constructors
+
         public GymBayContext()
         {
         }
@@ -14,6 +14,10 @@ namespace GymBay.Models.DbClasses
             : base(options)
         {
         }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         public virtual DbSet<Admin> Admin { get; set; }
         public virtual DbSet<Category> Category { get; set; }
@@ -41,6 +45,10 @@ namespace GymBay.Models.DbClasses
         public virtual DbSet<Seller> Seller { get; set; }
         public virtual DbSet<ShoeSize> ShoeSize { get; set; }
         public virtual DbSet<User> User { get; set; }
+
+        #endregion Public Properties
+
+        #region Protected Methods
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -839,5 +847,7 @@ namespace GymBay.Models.DbClasses
                 entity.Property(e => e.Youtube).HasMaxLength(150);
             });
         }
+
+        #endregion Protected Methods
     }
 }

@@ -1,7 +1,7 @@
-﻿
-#addCoachWholePage .searchInput {
+﻿#addCoachWholePage .searchInput {
     margin: 5px 0px;
 }
+
 .addCoachImageContainer {
     padding: 5px;
     border: 1px solid rgba(0,0,0,0.4);
@@ -11,30 +11,36 @@
     margin: auto;
     margin-top: 5px;
     background-color: #f1f1f1;
-    display:flex;
+    display: flex;
 }
+
 .imgBrowseLabel {
     text-align: left;
     width: 150px;
     margin: auto;
     display: block;
 }
-.imgBrowseLabel button {
-    padding: 1px 10px;
-    margin-right: 5px;
-}
+
+    .imgBrowseLabel button {
+        padding: 1px 10px;
+        margin-right: 5px;
+    }
+
 .logoImage {
     height: 150px;
     width: 150px;
 }
+
 .addCoachImage {
     max-height: 150px;
     margin: auto;
     display: block;
 }
-.imgSelectInput{
+
+.imgSelectInput {
     width: 0;
 }
+
 .addCoachCheckBoxArea {
     display: table-cell;
     margin: 4px;
@@ -42,22 +48,26 @@
     padding: 7px 15px 0px;
     border-radius: 25px;
 }
+
     .addCoachCheckBoxArea:hover {
         cursor: pointer;
         box-shadow: rgba(0,0,0,0.4) 0px 0px 22px 4px inset;
         transition: box-shadow 250ms;
     }
+
     .addCoachCheckBoxArea input[type=checkbox] {
         display: none;
     }
-    .addCoachCheckBoxArea input:hover, .addCoachCheckBoxArea label:hover{
+
+    .addCoachCheckBoxArea input:hover, .addCoachCheckBoxArea label:hover {
         cursor: pointer;
     }
-    .addCoachCheckBoxAreaChecked {
-        background-color: #444;
-        color: white;
-    }
-    /*.addCoachCheckBoxAreaChecked:hover {
+
+.addCoachCheckBoxAreaChecked {
+    background-color: #444;
+    color: white;
+}
+/*.addCoachCheckBoxAreaChecked:hover {
         background-color: #eaeaea;
         color: #444;
         transition: color 250ms;
@@ -67,6 +77,7 @@
     .addCoachImageContainer {
         width: 90%;
     }
+
     .addCoachImageContainerLogo {
         width: 160px;
     }

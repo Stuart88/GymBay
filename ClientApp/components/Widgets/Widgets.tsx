@@ -1,10 +1,7 @@
 ﻿import * as React from 'react';
 import { OnMobile } from '../../Helpers/Functions';
-import { NavLink} from 'react-router-dom';
-import { Pages} from '../../Helpers/Globals';
-
-
-
+import { NavLink } from 'react-router-dom';
+import { Pages } from '../../Helpers/Globals';
 
 interface IconProps {
     Name: string
@@ -22,12 +19,9 @@ export enum IconType {
 }
 
 export class Icon extends React.Component<IconProps, {}> {
-
     constructor(props) {
         super(props);
-        
     }
-
 
     public render() {
         //let iconStlye: React.CSSProperties = {
@@ -35,10 +29,9 @@ export class Icon extends React.Component<IconProps, {}> {
         //    height: '16px'
         //}
 
-
         switch (this.props.Type) {
             case IconType.Iconic:
-                return <img src={`/dist/iconic/svg/${this.props.Name}.svg`}  className={this.props.Class} alt={this.props.Name} />;
+                return <img src={`/dist/iconic/svg/${this.props.Name}.svg`} className={this.props.Class} alt={this.props.Name} />;
             case IconType.GymFinder:
                 return <img src={`/dist/images/gymfinder/${this.props.Name}.png`} className={this.props.Class} alt={this.props.Name} />
             case IconType.CoachFinder:
@@ -50,7 +43,6 @@ export class Icon extends React.Component<IconProps, {}> {
             default:
                 return null;
         }
-        
     }
 }
 
@@ -59,15 +51,11 @@ interface CenterTitleProps {
     LineColour: string
 }
 export class CenterTitleWithLine extends React.Component<CenterTitleProps, {}> {
-
     constructor(props) {
         super(props);
-
     }
 
-
     public render() {
-
         let titleStyle: React.CSSProperties = {
             color: '#666',
             fontSize: '18px',
@@ -89,29 +77,23 @@ export class CenterTitleWithLine extends React.Component<CenterTitleProps, {}> {
             <table style={titleStyle}>
                 <tbody>
                     <tr>
-                        <td style={{ padding: '0 20px'}}>
+                        <td style={{ padding: '0 20px' }}>
                             {this.props.Title}
                         </td>
                     </tr>
                 </tbody>
             </table>
 
-            </div>
-
+        </div>
     }
 }
 
-
 export class Footer extends React.Component<{}, {}> {
-
     constructor(props) {
         super(props);
-
     }
 
-
     public render() {
-
         let footerStyle: React.CSSProperties = {
             backgroundColor: 'var(--black)',
             color: 'white',
@@ -173,7 +155,5 @@ export class Footer extends React.Component<{}, {}> {
             </div>
 
         </div>
-
     }
 }
-

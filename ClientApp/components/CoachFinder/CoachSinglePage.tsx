@@ -8,7 +8,6 @@ import { Pages } from '../../Helpers/Globals';
 import { Loader } from '../Widgets/Loaders';
 import { CoachFinderCoachView } from './CoachFinderCoachView';
 
-
 interface ModuleState {
     Coach: UserProfile
     Reviews: Array<CoachReviewPublic>
@@ -17,7 +16,6 @@ interface ModuleState {
 }
 
 export class CoachSinglePage extends React.Component<RouteComponentProps<{}>, ModuleState> {
-
     constructor(props) {
         super(props);
 
@@ -27,7 +25,7 @@ export class CoachSinglePage extends React.Component<RouteComponentProps<{}>, Mo
             CoachID: Number(this.props.match.params["coachID"]),
             Loading: true
         }
-        
+
         this.GetCoach = this.GetCoach.bind(this);
         this.GetReviews = this.GetReviews.bind(this);
     }
@@ -37,43 +35,33 @@ export class CoachSinglePage extends React.Component<RouteComponentProps<{}>, Mo
     }
 
     componentDidUpdate(prevProps, prevSate) {
-
-
         if (Number(this.props.match.params["coachID"]) != prevSate.CoachID) {
             this.setState({
                 CoachID: Number(this.props.match.params["coachID"])
             })
             this.GetCoach();
         }
-           
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-
-        
         return this.props.match.params["coachID"] != nextProps.match.params["coachID"]
             || this.state != nextState;
     }
 
     public render() {
-
-
         let c = this.state.Coach;
 
         let r = this.state.Reviews;
 
-
-        return <div style={{ backgroundColor: 'rgb(243, 243, 243)', minHeight: '100%', paddingBottom: '70px', paddingTop: OnMobile() ? null :'30px' }}>
+        return <div style={{ backgroundColor: 'rgb(243, 243, 243)', minHeight: '100%', paddingBottom: '70px', paddingTop: OnMobile() ? null : '30px' }}>
 
             <HeaderSearchBarArea Props={this.props} />
 
             <div hidden={this.state.Loading} className="max-width" style={{ marginBottom: '100px' }}>
 
-               
+                <CoachFinderCoachView BackgroundColor="white" coach={c} ListView={false} />
 
-                <CoachFinderCoachView  BackgroundColor="white" coach={c} ListView={false} />
-
-                <br/>
+                <br />
                 <h3 className="text-center">Reviews</h3>
 
                 <div className="reviewContainer text-center" hidden={c.id == GetUserID()}>
@@ -96,7 +84,6 @@ export class CoachSinglePage extends React.Component<RouteComponentProps<{}>, Mo
                         : 'Add Review'}
                     </Link>
 
-                   
                 </div>
 
                 {
@@ -121,7 +108,6 @@ export class CoachSinglePage extends React.Component<RouteComponentProps<{}>, Mo
     }
 
     private GetCoach() {
-
         this.setState({
             Loading: true
         });
@@ -129,7 +115,6 @@ export class CoachSinglePage extends React.Component<RouteComponentProps<{}>, Mo
         fetch('/api/User/GetCoach?userID=' + this.state.CoachID)
             .then(response => response.json() as Promise<HttpResult<UserProfile>>)
             .then(data => {
-
                 if (data.ok) {
                     this.setState({
                         Coach: data.data,
@@ -141,17 +126,13 @@ export class CoachSinglePage extends React.Component<RouteComponentProps<{}>, Mo
                     console.log("GetCoach: " + data.message);
                     this.props.history.push(Pages.coachfinder)
                 }
-
-
             });
     }
 
     private GetReviews() {
-
         fetch('/api/Reviews/GetCoachReviews?coachID=' + this.state.CoachID)
             .then(response => response.json() as Promise<HttpResult<CoachReviewPublic[]>>)
             .then(data => {
-
                 if (data.ok) {
                     this.setState({
                         Reviews: data.data,
@@ -161,12 +142,6 @@ export class CoachSinglePage extends React.Component<RouteComponentProps<{}>, Mo
                 else {
                     console.log("Get Reviews: " + data.message);
                 }
-
-
             });
     }
-
-  
 }
-
-

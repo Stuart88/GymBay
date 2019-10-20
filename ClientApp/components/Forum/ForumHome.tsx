@@ -19,10 +19,7 @@ interface ModuleState {
     Category: ForumCategory,
 }
 
-
-
 export class ForumHome extends React.Component<RouteComponentProps<{}>, ModuleState> {
-
     constructor(props) {
         super(props);
 
@@ -45,14 +42,10 @@ export class ForumHome extends React.Component<RouteComponentProps<{}>, ModuleSt
     }
 
     public render() {
-
-
         let threads = this.state.Threads;
 
-
-        return <div style={{ backgroundColor: '#f3f3f3'}}>
+        return <div style={{ backgroundColor: '#f3f3f3' }}>
             <HeaderSearchBarArea Props={this.props} />
-
 
             <div className="max-width forumContainer">
 
@@ -67,22 +60,19 @@ export class ForumHome extends React.Component<RouteComponentProps<{}>, ModuleSt
                 }
 
             </div>
-      
+
         </div>;
     }
 
-
     private NextPage() {
-
         if (this.state.PageNum < this.state.PageTotal) {
             this.setState({
                 PageNum: this.state.PageNum + 1
             });
             this.GetThreads;
-        }  
+        }
     }
     private PreviousPage() {
-
         if (this.state.PageNum >= 0) {
             this.setState({
                 PageNum: this.state.PageNum - 1
@@ -92,19 +82,15 @@ export class ForumHome extends React.Component<RouteComponentProps<{}>, ModuleSt
     }
 
     private GetThreads() {
-
         if (!this.state.Loading) {
-            
             this.setState({
                 Loading: true,
             });
 
             fetch(`api/Forum/GetThreads?page=${this.state.PageNum}&category=${this.state.Category}`)
-                .then(response => response.json() as Promise<HttpResult<{ threads: ForumPostPublic[], total: number, pages: number}>>)
+                .then(response => response.json() as Promise<HttpResult<{ threads: ForumPostPublic[], total: number, pages: number }>>)
                 .then(data => {
-
                     if (data.ok) {
-                        
                         this.setState({
                             Threads: data.data.threads,
                             Loading: false,
@@ -126,8 +112,5 @@ export class ForumHome extends React.Component<RouteComponentProps<{}>, ModuleSt
                     alert(e.message);
                 });
         }
-
     }
-
-    
 }

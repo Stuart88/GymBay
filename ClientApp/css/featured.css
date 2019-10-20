@@ -16,5 +16,5 @@
     .featuredItemHomeSingleContainer:hover {
         border: 1px solid var(--blue);
         transition: border 200ms;
-        cursor:pointer;
+        cursor: pointer;
     }

@@ -18,7 +18,6 @@ interface Modulestate {
 }
 
 export class CoachReviewComponent extends React.Component<ModuleProps, Modulestate> {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -26,9 +25,7 @@ export class CoachReviewComponent extends React.Component<ModuleProps, Modulesta
         }
     }
 
-
     public render() {
-
         let r = this.state.Review;
 
         return <div className="reviewContainer">
@@ -60,13 +57,11 @@ export class CoachReviewComponent extends React.Component<ModuleProps, Modulesta
                 {r.review.rating} / {SiteDetails.MaxRating}
             </div>
 
-          
-
             <div className="mainReview hasLineBreaks">
                 {r.review.mainReview}
             </div>
 
-            <hr/>
+            <hr />
 
             <div className="row">
                 <div className="col-md-6">
@@ -91,11 +86,10 @@ export class CoachReviewComponent extends React.Component<ModuleProps, Modulesta
                 </div>
             </div>
 
-            <div  style={{ display:'flow-root' }}>
+            <div style={{ display: 'flow-root' }}>
                 <UpvoteComponent ItemID={r.review.id} UpvoteItem={UpvoteItems.CoachReview} Upvotes={r.review.upvotes} BelongsToUser={r.review.reviewerId == GetUserID()}
                     onVoteComplete={(voteString) => { this.state.Review.review.upvotes = voteString; this.setState({ Review: this.state.Review }) }} />
             </div>
         </div>
-        
     }
 }
