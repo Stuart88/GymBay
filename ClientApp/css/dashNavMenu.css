@@ -1,0 +1,43 @@
+
+
+.dashmenuContainer {
+    display: table;
+    width: 100%;
+    
+}
+.dashboardNavItem {
+    
+}
+
+.dashMenuLink {
+    display: table-cell;
+    text-align: center;
+    width: 20%;
+    padding: 5px;
+    background-color: var(--light);
+    border: 2px solid #eee;
+    color: var(--blue);
+    font-weight: bold;
+    vertical-align: middle;
+    min-height: 50px;
+}
+    .dashMenuLink:hover {
+        text-decoration: none;
+        color: white;
+        background-color: #999;
+    }
+
+.dashMenuActive {
+    color: white;
+    background-color: var(--dark);
+}
+
+@media (max-width: 767px) {
+    .dashmenuContainer {
+        top:unset;
+        bottom: 0;
+    }
+    .dashMenuLink {
+        font-size: 12px;
+    }
+}

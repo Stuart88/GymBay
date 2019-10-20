@@ -1,0 +1,76 @@
+﻿
+#addGymWholePage .searchInput {
+    margin: 5px 0px;
+}
+.addGymImageContainer {
+    padding: 5px;
+    border: 1px solid rgba(0,0,0,0.4);
+    border-radius: 4px;
+    height: 160px;
+    width: 160px;
+    margin: auto;
+    margin-top: 5px;
+    background-color: #f1f1f1;
+    display:flex;
+}
+.imgBrowseLabel {
+    text-align: left;
+    width: 150px;
+    margin: auto;
+    display: block;
+}
+.imgBrowseLabel button {
+    padding: 1px 10px;
+    margin-right: 5px;
+}
+.logoImage {
+    height: 150px;
+    width: 150px;
+}
+.addGymImage {
+    max-height: 150px;
+    margin: auto;
+    display: block;
+}
+.imgSelectInput{
+    width: 0;
+}
+.addGymCheckBoxArea {
+    display: table-cell;
+    margin: 4px auto;
+    background-color: #eee;
+    padding: 7px 15px 0px;
+    border-radius: 25px;
+}
+    .addGymCheckBoxArea:hover {
+        cursor: pointer;
+        box-shadow: rgba(0,0,0,0.4) 0px 0px 22px 4px inset;
+        transition: box-shadow 250ms;
+    }
+    .addGymCheckBoxArea input[type=checkbox] {
+        display: none;
+    }
+    .addGymCheckBoxArea input:hover, .addGymCheckBoxArea label:hover{
+        cursor: pointer;
+    }
+    .addGymCheckBoxAreaChecked {
+        background-color: #444;
+        color: white;
+    }
+    /*.addGymCheckBoxAreaChecked:hover {
+        background-color: #eaeaea;
+        color: #444;
+        transition: color 250ms;
+    }*/
+
+@media (max-width: 767px) {
+    .addGymImageContainer {
+        width: 90%;
+    }
+    .addGymImageContainerLogo {
+        width: 160px;
+    }
+    .addGymCheckBoxArea{
+        margin: 4px;
+    }
+}

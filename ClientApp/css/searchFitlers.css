@@ -1,0 +1,37 @@
+﻿
+.filtersContainer {
+    max-width: 360px;
+    width: 100vw;
+    margin: auto;
+}
+
+.filterOptionContainer {
+    margin: 3px;
+    background-color: #eee;
+    padding: 1px 9px 0px;
+    border-radius: 25px;
+    font-size: 11px;
+    display: inline-flex;
+    cursor: pointer;
+}
+.filterOptionContainer input[type=checkbox]{
+    display:none;
+}
+    .filterOptionContainer:hover{
+        cursor:pointer;
+    }
+
+    .filterOptionContainer label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .filterOptionContainer label :hover {
+        cursor:pointer;
+    }
+
+.filterOptionContainerChecked {
+    background-color: #444;
+    color: white;
+}

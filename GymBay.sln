@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29123.88
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GymBay", "GymBay.csproj", "{706A25D5-527A-4672-8BD5-2A2B1402CDF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymBayTests", "..\GymBayTests\GymBayTests.csproj", "{C1DEB3B1-09F5-4A32-A200-C359D46DF622}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{706A25D5-527A-4672-8BD5-2A2B1402CDF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{706A25D5-527A-4672-8BD5-2A2B1402CDF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{706A25D5-527A-4672-8BD5-2A2B1402CDF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{706A25D5-527A-4672-8BD5-2A2B1402CDF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1DEB3B1-09F5-4A32-A200-C359D46DF622}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1DEB3B1-09F5-4A32-A200-C359D46DF622}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1DEB3B1-09F5-4A32-A200-C359D46DF622}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1DEB3B1-09F5-4A32-A200-C359D46DF622}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {28D88D58-680D-4D11-B350-C84CF65CB2DF}
+	EndGlobalSection
+EndGlobal

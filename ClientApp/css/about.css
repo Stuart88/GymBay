@@ -1,0 +1,26 @@
+﻿
+#about-background {
+    background-image: url(/dist/images/Gym-Bay_logo-transparent.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 0.02;
+    width: 400px;
+    height: 400px;
+    position: absolute;
+    background-size: contain;
+    margin: auto;
+    align-self: center;
+    display: flex;
+    top: calc(50vh - 200px);
+    left: calc(50% - 200px);
+    z-index: 1;
+    filter: grayscale(1);
+}
+
+#about-text-area {
+    color: var(--black);
+    margin-top: 5vh;
+    padding: 5%;
+    z-index: 2;
+    position: relative;
+}

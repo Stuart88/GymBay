@@ -1,0 +1,7 @@
+Scaffold-DbContext "Data Source=STUART\SQLEXPRESS2017;Initial Catalog=GymBay;Integrated Security=True" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models/DbClasses -Tables CityGeo, CountryGeo, Seller, User, Category, ItemAccessory, ItemBars, ItemBeltSleeve, ItemClothing, ItemCoachClass, ItemFootwear, ItemGeneral, ItemResistanceMachine, ItemShaker, ItemGym, ItemSupplement, ItemWeights, ShoeSize, GymFinderGym, CityGeoBasic, Admin, NewsFeedPost, GymReview, CoachReview, NewsFeedComment, ForumPost
+
+//local
+                _ = optionsBuilder.UseSqlServer("Data Source=STUART\\SQLEXPRESS2017;Initial Catalog=GymBay;Integrated Security=True", x => x.UseNetTopologySuite());
+
+                //server
+                //_ = optionsBuilder.UseSqlServer("Data Source=localhost\\SQLEXPRESS2017;Initial Catalog=GymBay;Integrated Security=True", x => x.UseNetTopologySuite());

@@ -1,0 +1,108 @@
+﻿
+
+.profilePicContainer {
+    padding: 3px;
+    border: 1px solid rgba(0,0,0,0.4);
+    border-radius: 4px;
+    height: 210px;
+    width: 210px;
+    margin: auto;
+    margin-top: 5px;
+    background-color: #f1f1f1;
+    display: flex;
+}
+
+.imageCropContainer {
+   
+     width:auto;
+    margin: 5px auto;
+    border: 1px solid rgba(0,0,0,0.4);
+    border-radius: 4px;
+    background-color: #f1f1f1;
+    padding: 3px;
+}
+
+    .imageCropContainer .ReactCrop {
+        max-height: 300px;
+        /*display: block;*/
+        margin: auto;
+    }
+
+    .imageCropContainer .ReactCrop__image {
+        max-height: inherit;
+       
+    }
+
+.profilepicImage {
+    height: 200px;
+    width: 200px;
+}
+
+.inputLabel {
+    font-size: 15px;
+    color: #9a9a9a;
+    margin-top: 10px;
+    padding-left: 15px;
+}
+
+.profileimgBrowseLabel {
+    text-align: left;
+    width: 100%;
+    padding: 0px 20px;
+    display: flex;
+}
+    .profileimgBrowseLabel button {
+        padding: 1px 10px;
+        margin-right: 5px;
+    }
+
+.socialInputContainer {
+    display: flex;
+    align-items: center;
+}
+
+.isCoachToggleLabel {
+    margin: 15px 0 0 0;
+    display: inline-flex;
+    background-color: #eee;
+    padding: 4px;
+    border-radius: 15px;
+}
+.profile-save-btn-div {
+    position: fixed;
+    right: 20px;
+    bottom: 5px;
+    border: 1px solid #eee;
+    padding: 5px;
+    max-width: 211px;
+    box-shadow: 2px 2px 13px -5px #444;
+}
+.profile-coachToggleInfo {
+    font-size: 14px;
+    color: #666;
+}
+
+.profileURL {
+    color: cornflowerblue;
+    display: table-cell;
+    vertical-align: middle;
+    padding: 5px;
+}
+.clipboardCopyBtn {
+    vertical-align: middle;
+    margin: 5px 5px 5px 0;
+    color: var(--black);
+    display: table-cell;
+}
+    .clipboardCopyBtn span {
+        border-radius: 10px;
+        cursor: pointer;
+        background: var(--grey);
+        padding: 5px;
+        border: solid 2px #eee;
+    }
+        .clipboardCopyBtn span:hover {
+            border: solid 2px white;
+            transition: border 250ms;
+            color:white;
+        }

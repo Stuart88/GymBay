@@ -1,0 +1,181 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="7.14.1" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="2.2.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
+    <Compile Remove="Database Stuff\**" />
+    <Compile Remove="Publish\**" />
+    <Content Remove="ClientApp\**" />
+    <Content Remove="Database Stuff\**" />
+    <Content Remove="Publish\**" />
+    <EmbeddedResource Remove="Database Stuff\**" />
+    <EmbeddedResource Remove="Publish\**" />
+    <None Remove="Database Stuff\**" />
+    <None Remove="Publish\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\components\CoachFinder\CoachFinderCoachView.tsx" />
+    <None Remove="ClientApp\components\CoachFinder\CoachSinglePage.tsx" />
+    <None Remove="ClientApp\components\CoachFinder\ForCoaches.tsx" />
+    <None Remove="ClientApp\components\CoachFinder\SearchCoaches.tsx" />
+    <None Remove="ClientApp\components\Dashboard\EditCoachReview.tsx" />
+    <None Remove="ClientApp\components\Dashboard\EditGymReview.tsx" />
+    <None Remove="ClientApp\components\Geo\CitiesAutosuggest.tsx" />
+    <None Remove="ClientApp\components\Geo\Countries.ts" />
+    <None Remove="ClientApp\components\Geo\CountriesAutosuggest.tsx" />
+    <None Remove="ClientApp\components\Geo\GeoHelper.tsx" />
+    <None Remove="ClientApp\components\GymFinder\GymFinderGymView.tsx" />
+    <None Remove="ClientApp\components\GymFinder\GymSinglePage.tsx" />
+    <None Remove="ClientApp\components\GymFinder\MyGym.tsx" />
+    <None Remove="ClientApp\components\GymFinder\SearchGyms.tsx" />
+    <None Remove="ClientApp\components\Home\FeaturedCoaches.tsx" />
+    <None Remove="ClientApp\components\Home\FeaturedGyms.tsx" />
+    <None Remove="ClientApp\components\NewsFeed\NewsItemSinglePage.tsx" />
+    <None Remove="ClientApp\components\Reviews\CoachReviewComponent.tsx" />
+    <None Remove="ClientApp\components\Reviews\GymReviewComponent.tsx" />
+    <None Remove="ClientApp\components\Widgets\CoachSearchAutosuggest.tsx" />
+    <None Remove="ClientApp\components\Widgets\GymSearchAutosuggest.tsx" />
+    <None Remove="ClientApp\components\Widgets\Loaders.tsx" />
+    <None Remove="ClientApp\components\Widgets\UpvoteComponent.tsx" />
+    <None Remove="ClientApp\components\Widgets\Widgets.tsx" />
+    <None Remove="ClientApp\data\serverModels.tsx" />
+    <None Remove="ClientApp\Helpers\Functions.tsx" />
+    <None Remove="ClientApp\Helpers\Globals.tsx" />
+    <None Remove="Website-menu-options %281%29.xlsx" />
+    <None Remove="Website-menu-options.xlsx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\components\CoachFinder\ForCoaches.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\CoachFinder\CoachSinglePage.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\Home\FeaturedCoaches.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\Home\FeaturedGyms.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\NewsFeed\NewsItemSinglePage.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\Reviews\EditCoachReview.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\Reviews\EditGymReview.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\Geo\Countries.ts" />
+    <TypeScriptCompile Include="ClientApp\components\Geo\CitiesAutosuggest.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\Geo\GeoHelper.tsx" />
+    <TypeScriptCompile Include="ClientApp\components\Geo\CountriesAutosuggest.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\CoachFinder\CoachFinderCoachView.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\CoachFinder\SearchCoaches.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\GymFinder\GymSinglePage.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\GymFinder\GymFinderGymView.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\GymFinder\SearchGyms.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\Dashboard\MyGym.tsx" />
+    <TypeScriptCompile Include="ClientApp\components\Reviews\CoachReviewComponent.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\Reviews\GymReviewComponent.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\Widgets\CoachSearchAutosuggest.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\Widgets\GymSearchAutosuggest.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\Widgets\UpvoteComponent.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\Widgets\Widgets.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\components\Widgets\Loaders.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\data\serverModels.tsx" />
+    <TypeScriptCompile Include="ClientApp\Helpers\Globals.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\Helpers\Functions.tsx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\dist\images\gymfinder\" />
+    <Folder Include="wwwroot\dist\uploads\images\gymfinder\" />
+    <Folder Include="wwwroot\dist\uploads\images\shops\profiles\" />
+  </ItemGroup>
+
+  <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+
+    <!-- In development, the dist files won't exist on the first run or when cloning to
+         a different machine, so rebuild them if not already present. -->
+    <Message Importance="high" Text="Performing first-run Webpack build..." />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js" />
+  </Target>
+
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+    <Exec Command="npm install" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js --env.prod" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --env.prod" />
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="wwwroot\dist\**; ClientApp\dist\**" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+</Project>

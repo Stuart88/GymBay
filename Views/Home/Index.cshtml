@@ -1,0 +1,166 @@
+@model Microsoft.AspNetCore.Http.HttpRequest
+
+@{
+    
+
+    @using GymBay.Helpers
+
+    string siteName = "Gym Bay";
+    string siteURL = "https://gym-bay.com";
+    string metaDescription = "Gyms, coaches, reviews and more at gym-bay.com";
+
+    //meta tags
+    //defaults
+    string shareImageURL = "https://gym-bay.com/dist/images/gymbay-default-share.png";
+    string ogTitle = siteName + " - Home Page";
+    string ogDescription = metaDescription;
+    string imgH = "400";
+    string imgW = "680";
+    string keywords = "";
+
+    GymBay.Models.DbClasses.GymBayContext db = new GymBay.Models.DbClasses.GymBayContext();
+
+    try
+    {
+        if (Model.Path.HasValue)
+        {
+            List<string> pathData = Model.Path.Value.Split('/').Where(x => !string.IsNullOrEmpty(x) && !x.Contains("gym-bay.com")).ToList();
+
+            if (Model.Path.Value.Contains("viewgym/") && int.TryParse(pathData[1], out int gymID))
+            {
+                //Path: /viewgym/9000/gymName
+
+                var gym = db.GymFinderGym.Find(gymID);
+                ogTitle = string.Format("{0}", gym.Name);
+                ogDescription = string.Format("in {0}, {1}. See reviews and more on gym-bay.com", gym.LocationCityName, gym.LocationCountryName);
+
+                if (!string.IsNullOrEmpty(gym.ImageLocationLogo))
+                {
+                    shareImageURL = string.Format("{0}/api/Images/GymShareImage?gymid={1}", siteURL, gymID);
+                }
+
+                keywords = string.Format("{0}, gyms in {1}, gyms in {2}", gym.Name, gym.LocationCityName, gym.LocationCountryName);
+
+              
+
+            }
+            else if (Model.Path.Value.Contains("viewCoach/") && int.TryParse(pathData[1], out int coachID))
+            {
+                //Path: /viewCoach/9000/coachName
+
+                var coach = db.User.FirstOrDefault(x => x.Id == coachID && x.IsVerified == 1);
+                ogTitle = string.Format("{0} {1}", coach.FirstName, coach.LastName);
+                ogDescription = string.Format("based in {0}, {1}. See reviews and more on gym-bay.com", coach.CityName, coach.CountryName);
+
+                if (!string.IsNullOrEmpty(coach.ProfilePic))
+                {
+                     shareImageURL = string.Format("{0}/api/Images/CoachShareImage?coachid={1}", siteURL, coachID);
+                }
+
+                keywords = string.Format("{0} {1}, coaches in {2}, coaches in {3}", coach.FirstName, coach.LastName, coach.CityName, coach.CountryName);
+
+              
+
+            }
+            else if (Model.Path.Value.Contains("newsItem/") && int.TryParse(pathData[1], out int newsItemID))
+            {
+                //Path: /newsItem/9000/title
+
+                var item = db.NewsFeedPost.FirstOrDefault(x => x.Id == newsItemID);
+                ogTitle = string.Format("{0}", item.Title);
+
+                string htmlStripped = Functions.StripHTML(item.Content);
+                ogDescription = htmlStripped.Length > 155 ? htmlStripped.Substring(0, 155) : htmlStripped;
+
+                if (!string.IsNullOrEmpty(item.ImageUrl))
+                {
+                    shareImageURL = item.ImageUrl;
+                }
+
+                keywords = string.Format("{0}, gym news, training news", item.Title);
+
+            }
+             else if (Model.Path.Value.Contains("gymfinder"))
+            {
+                ogTitle = "Gym Bay - Gym Finder";
+                ogDescription = "Find and review the best gyms near you, or add your own!";
+            }
+            else if (Model.Path.Value.Contains("coachfinder"))
+            {
+                ogTitle = "Gym Bay - Coach Finder";
+                ogDescription = "Find and review the best coaches near you!";
+            }
+            else
+            {//home page
+                @section structuredData{
+                    <script type="application/ld+json">
+                        {
+                        "@("@")context": "https://schema.org",
+                        "@("@")type": "Organization",
+                        "mainEntityOfPage": {
+                            "@("@")type": "WebPage",
+                        "@("@")id": "https://gym-bay.com/"
+                        },
+                        "url": "https://gym-bay.com/",
+                        "logo": "@shareImageURL"
+                        }
+                    </script>
+                }
+            }
+
+        }
+    }
+    catch (Exception e)
+    {
+        Functions.ErrorLogger("index.cshtml", e);
+    }
+
+}
+
+
+
+
+@section head  {
+    <meta http-equiv="content-language" content="en">
+    <title>@siteName</title>
+    <meta name="description" content="@ogDescription" />
+    <meta name="keywords" content="gym, fitness, powerlifting, weightlifting, gym reviews, coach reviews, crossfit trainer, crossfit, olympic lifting, strongman, strongman training, strongman trainer, powerlifting trainer, @keywords" />
+    <meta name="author" content="@siteName" />
+    <meta name="copyright" content="@siteName" />
+    <meta name="application-name" content="@siteName" />
+
+    <meta property="fb:app_id" content="423472821732462" />
+    <meta property="og:image:height" content="@imgH" />
+    <meta property="og:image:width" content="@imgW" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:title" content="@ogTitle" />
+    <meta property="og:description" content="@ogDescription" />
+    <meta property="og:url" content="@siteURL@Model.Path.Value.Replace(" ", "-")" />
+    <meta property="og:image" content="@shareImageURL" />
+    <meta property="og:image:secure_url" content="@shareImageURL" />
+
+    <link rel="canonical" href="@Model.Path.Value.Replace(" ", "-")" />
+
+}
+
+
+<div id="react-app">
+
+    <div style="display:flex;align-items:center;height:100vh;width:100vw">
+        <div style="margin:auto; text-align:center">
+            <img style="margin:auto;height:200px;width:200px;display:block" src='/dist/images/Gym-Bay_logo.png' />
+            @*<div style="margin:auto;color:var(--blue);font-size:49px;font-weight:bold">
+                    Gym Bay
+                </div>*@
+            <img class="img-fluid" style="width:80px" src="~/dist/general/loading.svg" />
+            <div>
+                loading...
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts {
+    <script src="~/dist/main.js" asp-append-version="true"></script>
+}

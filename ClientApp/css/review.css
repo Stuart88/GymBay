@@ -1,0 +1,50 @@
+﻿
+.reviewContainer {
+    margin: 10px auto;
+    box-shadow: 0px 0px 8px -4px #444;
+    border: 1px solid #eaeaea;
+    padding: 4%;
+    max-width: 650px;
+    background-color:white;
+}
+
+.reviewerName{
+    float:right;
+}
+
+
+.reviewStarsContainer{
+    display: grid;
+}
+#ratingsGroup{
+    margin:auto;
+}
+.ratingLabel, .ratingStar {
+    display: table-cell;
+    width: calc(100% / 10);
+    padding: 1px;
+    color: var(--grey);
+    font-size: 50px;
+}
+.ratingSelected, .ratingStarHighlighted {
+    color: var(--yellow);
+}
+
+.reviewScore{
+    width:100px;
+}
+.mainReview{
+    font: var(--black);
+    font-size: 15px;
+    margin: 10px;
+}
+
+.ratingStar {
+    font-size: 20px;
+}
+
+@media (max-width: 767px) {
+    .ratingLabel {
+        font-size: calc((100vw  - 10px) / 10);
+    }
+}

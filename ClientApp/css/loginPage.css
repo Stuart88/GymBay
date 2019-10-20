@@ -1,0 +1,117 @@
+
+.loginContainer {
+    max-width: 360px;
+    margin: auto;
+    display: grid;
+    margin-top: 5%;
+    top: 10%;
+    padding:10px;
+}
+
+.gymbayLoginLogo{
+    margin:auto;
+    height:160px;
+}
+
+.googleLoginArea {
+    width: 270px;
+    background-color: rgb(234, 39, 39) !important;
+    opacity: 0.9 !important;
+    color: rgb(255, 255, 255) !important;
+    font-size: 18px !important;
+    margin: auto;
+}
+.googleLoginArea:hover{
+    cursor:pointer;
+    opacity: 1;
+
+}
+.facebookLoginArea {
+    width: 270px;
+    margin: auto;
+    background-color: #475993;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px;
+}
+.facebookLoginArea {
+    background-color: #475993;
+}
+.kep-login-facebook.small {
+    padding: 0px!important;
+}
+.kep-login-facebook {
+    padding: 0px !important;
+    background-color: #475993!important;
+    border:none!important;
+}
+.facebookIcon {
+    height: 40px;
+    width: 40px;
+    background-color: white;
+    border-radius: 10px;
+}
+.linkedinLoginArea {
+    width: 270px;
+    margin: auto;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px;
+}
+.linkedinloginImg{
+    width: 270px;
+}
+
+
+.noPasswordDiv {
+    color: #777;
+    font-size: 14px;
+    padding: 10px 0;
+}
+    .noPasswordDiv span {
+        color: #333;
+    }
+
+.browserSuggestDiv {
+    color: white;
+    font-size: 14px;
+    padding: 10px 7px;
+    background-color: #0077d8b0;
+    box-shadow: 0px 0px 9px -4px var(--black);
+    width: 270px;
+    margin: auto;
+}
+    .browserSuggestDiv  span{
+       font-weight:bold;
+    }
+
+.specialLoginBtn {
+    position: absolute;
+    right: 5%;
+    bottom: 7%;
+    color: white;
+    background: #13ff13;
+    font-weight: bold;
+    transition: transform 200ms, border 200ms;
+    box-shadow: 3px 3px 9px -2px var(--black);
+}
+
+    .specialLoginBtn:hover {
+        transform: scale(1.1);
+        border: 2px solid white;
+        color: white;
+    }
+
+@media (max-width: 767px) {
+
+    .gymbayLoginLogo {
+        height: 110px;
+    }
+
+
+    .specialLoginBtn {
+        bottom: 50px;
+        font-size: 13px;
+        padding: 4px 7px;
+    }
+
+    .loginContainer {
+        margin-top:0;
+    }
+}

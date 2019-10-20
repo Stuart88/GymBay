@@ -1,0 +1,141 @@
+﻿.searchBarDesktopRow {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+}
+    .searchBarDesktopRow > div {
+        margin: auto;
+        align-self: center;
+        align-items:center;
+        display: flex;
+    }
+
+.homeSearchBar {
+    height: 60px;
+    width: 100%;
+    background-color: var(--blue);
+    padding: 0 15px 0 15px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0px -5px 9px 8px var(--black);
+}
+
+.searchBarLogo {
+    height: 40px;
+    width: 40px;
+    display: block;
+    margin: auto;
+}
+
+.homeSearchBarIcon {
+    height: 50px;
+    width: 50px;
+    display: block;
+}
+
+.avatarIcon {
+    height: 40px;
+    width: 40px;
+    display: block;
+    margin: auto;
+    background: white;
+    border-radius: 20px;
+    border: 2px solid var(--black);
+}
+
+.homeGymToggle {
+    /*margin-right: 5px;*/
+}
+
+    .homeGymToggle.react-toggle--checked .react-toggle-track {
+        background-color: var(--blue);
+    }
+
+    .homeGymToggle.react-toggle--checked:hover:not(.react-toggle--disabled) .react-toggle-track {
+        background-color: var(--blue);
+    }
+
+.homeGymToggleIcon {
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    color: white;
+    font-weight: bold;
+}
+.homeToggleLabel {
+    margin: 3px 5px 5px 5px;
+    display: inline-flex;
+    background-color: #eee;
+    padding: 4px;
+    border-radius: 15px;
+}
+
+.loginBtn {
+    color: white;
+    background: transparent;
+    border: 2px solid white;
+    padding: 5px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+    .loginBtn:hover {
+        background: white;
+        color: var(--blue);
+        text-decoration: underline;
+        transition: background 200ms, color 200ms, text-decoration 200ms;
+    }
+
+.logoutBtn {
+    color: white;
+    font-size: 16px;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.searchBarLink {
+    color: white;
+    font-weight: bold;
+    font-size: 19px;
+    margin: 0 5px;
+    min-width: 80px;
+    text-align: center;
+    padding: 11px;
+    transition: transform .2s
+}
+
+.searchBarLinkActive {
+    color: var(--blue);
+    background: white;
+    border-radius: 16px;
+    text-decoration:none;
+}
+.searchBarLink:hover {
+    color: var(--blue);
+    background: white;
+    border-radius: 16px;
+    text-decoration: none;
+    transform: scale(1.1);
+}
+
+.socialBtnsContainer img {
+    border-radius: 25px;
+}
+.socialBtnsContainer img:hover{
+    border: 1px solid white;
+}
+
+@media (max-width: 767px) {
+    .homeSearchBar {
+        padding: 0;
+        position: fixed;
+        top: 50px;
+    }
+    
+
+}
